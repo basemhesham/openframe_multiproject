@@ -1,75 +1,173 @@
-# OpenFrame Overview
+<div align="center">
 
-The OpenFrame Project provides an empty harness chip that differs significantly from the Caravel and Caravan designs. Unlike Caravel and Caravan, which include integrated SoCs and additional features, OpenFrame offers only the essential padframe, providing users with a clean slate for their custom designs.
+<img src="https://umsousercontent.com/lib_lnlnuhLgkYnZdkSC/hj0vk05j0kemus1i.png" alt="ChipFoundry Logo" height="140" />
 
-<img width="256" alt="Screenshot 2024-06-24 at 12 53 39 PM" src="https://github.com/efabless/openframe_timer_example/assets/67271180/ff58b58b-b9c8-4d5e-b9bc-bf344355fa80">
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Inter&size=44&duration=3000&pause=600&color=4C6EF5&center=true&vCenter=true&width=1100&lines=OpenFrame+User+Project+Template;OpenLane+%2B+ChipFoundry+Flow;Verification+and+Shuttle-Ready)](https://git.io/typing-svg)
 
-## Key Characteristics of OpenFrame
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![ChipFoundry Marketplace](https://img.shields.io/badge/ChipFoundry-Marketplace-6E40C9.svg)](https://platform.chipfoundry.io/marketplace)
 
-1. **Minimalist Design:** 
-   - No integrated SoC or additional circuitry.
-   - Only includes the padframe, a power-on-reset circuit, and a digital ROM containing the 32-bit project ID.
+</div>
 
-2. **Padframe Compatibility:**
-   - The padframe design and pin placements match those of the Caravel and Caravan chips, ensuring compatibility and ease of transition between designs.
-   - Pin types are identical, with power and ground pins positioned similarly and the same power domains available.
+## Table of Contents
+- [Overview](#overview)
+- [Documentation & Resources](#documentation--resources)
+- [Prerequisites](#prerequisites)
+- [Project Structure](#project-structure)
+- [Starting Your Project](#starting-your-project)
+- [Development Flow](#development-flow)
+- [Local Precheck](#local-precheck)
+- [Checklist for Shuttle Submission](#checklist-for-shuttle-submission)
 
-3. **Flexibility:**
-   - Provides full access to all GPIO controls.
-   - Maximizes the user project area, allowing for greater customization and integration of alternative SoCs or user-specific projects at the same hierarchy level.
+## Overview
+OpenFrame is a ChipFoundry project template that provides only a bare padframe (no integrated SoC), giving you a 15 mm² user area and 44 GPIOs to design your own custom chip. You are free to implement your design and directly connect it to the available GPIOs throught the pins provided on the openframe wrapper.
 
-4. **Simplified I/O:**
-   - Pins that previously connected to CPU functions (e.g., flash controller interface, SPI interface, UART) are now repurposed as general-purpose I/O, offering flexibility for various applications.
+---
 
-The OpenFrame harness is ideal for those looking to implement custom SoCs or integrate user projects without the constraints of an existing SoC.
+## Documentation & Resources
+For detailed hardware specifications and design guidelines, refer to the following official documents:
 
-## Features
+* **[ChipFoundry Marketplace](https://platform.chipfoundry.io/marketplace)**: Access additional IP blocks, EDA tools, and shuttle services.
 
-1. 44 configurable GPIOs.
-2. User area of approximately 15mm².
-3. Supports digital, analog, or mixed-signal designs.
+---
 
-# openframe_timer_example
+## Prerequisites
+Ensure your environment meets the following requirements:
 
-This example implements a simple timer and connects it to the GPIOs.
+1. **Docker** [Linux](https://docs.docker.com/desktop/setup/install/linux/ubuntu/) | [Windows](https://docs.docker.com/desktop/setup/install/windows-install/) | [Mac](https://docs.docker.com/desktop/setup/install/mac-install/)
+2. **Python 3.8+** with `pip`.
+3. **Git**: For repository management.
 
-## Installation and Setup
+---
 
-First, clone the repository:
+## Project Structure
+A successful OpenFrame project requires a specific directory layout for the automated tools to function:
+
+| Directory | Description |
+| :--- | :--- |
+| `openlane/` | Configuration files for hardening macros and the wrapper. |
+| `verilog/rtl/` | Source Verilog code for the project. |
+| `verilog/gl/` | Gate-level netlists (generated after hardening). |
+| `verilog/dv/` | Design Verification (cocotb and Verilog testbenches). |
+| `gds/` | Final GDSII binary files for fabrication. |
+| `lef/` | Library Exchange Format files for the macros. |
+
+---
+
+## Starting Your Project
+
+### 1. Repository Setup
+Create a new repository based on the `openframe_user_project` template and clone it to your local machine:
 
 ```bash
-git clone https://github.com/efabless/openframe_user_project.git
-cd openframe_user_project
+git clone <your-github-repo-URL>
+pip install chipfoundry-cli
+cd <project_name>
 ```
 
-Then, download all dependencies:
+### 2. Project Initialization
+
+> [!IMPORTANT]
+> Run this first! Initialize your project configuration:
 
 ```bash
-make setup
+cf init
 ```
 
-## Hardening the Design
+This creates `.cf/project.json` with project metadata. **This must be run before any other commands**
 
-In this example, we will harden the timer. You will need to harden your own design similarly.
+### 3. Environment Setup
+Install the ChipFoundry CLI tool and set up the local environment (PDKs, OpenLane, and OpenFrame):
 
 ```bash
-make user_proj_timer
+cf setup
 ```
 
-Once you have hardened your design, integrate it into the OpenFrame wrapper:
+The `cf setup` command installs:
+
+- OpenFrame: The OpenFrame harness template.
+- OpenLane: The RTL-to-GDS hardening flow.
+- PDK: Skywater 130nm process design kit.
+- Timing Scripts: For Static Timing Analysis (STA).
+
+---
+
+## Development Flow
+
+### Hardening the Design
+Hardening is the process of synthesizing your RTL and performing Place & Route (P&R) to create a GDSII layout.
+
+#### Macro Hardening
+Create a subdirectory for each custom macro under `openlane/` containing your `config.json`.
 
 ```bash
-make openframe_project_wrapper
+cf harden --list         # List detected configurations
+cf harden <macro_name>   # Harden a specific macro
 ```
 
-## Important Notes
+#### Integration
+Instantiate your module(s) in `verilog/rtl/openframe_project_wrapper.v`.
 
-1. **Connecting to Power:**
+Update `openlane/openframe_project_wrapper/config.json` environment variables (`VERILOG_FILES_BLACKBOX`, `EXTRA_LEFS`, `EXTRA_GDS_FILES`) to point to your new macros.
+
+#### Wrapper Hardening
+Finalize the top-level user project:
+
+```bash
+cf harden openframe_project_wrapper
+```
+
+### Important Notes
+
+**Connecting to Power:**
    - Ensure your design is connected to power using the power pins on the wrapper.
    - Use the `vccd1_connection` and `vssd1_connection` macros, which contain the necessary vias and nets for power connections.
 
-2. **Flattening the Design:**
-   - If you plan to flatten your design within the `openframe_project_wrapper`, do not buffer the analog pins using standard cells.
+### Verification
 
-3. **Running Custom Steps:**
-   - Execute the custom step in OpenLane that copies the power pins from the template DEF. If this step is skipped, the precheck will fail, and your design will not be powered.
+#### 1. Simulation
+We use cocotb for functional verification. Ensure your file lists are updated in `verilog/includes/`.
+
+Run RTL Simulation:
+
+```bash
+cf verify <test_name>
+```
+
+Run Gate-Level (GL) Simulation:
+
+```bash
+cf verify <test_name> --sim gl
+```
+
+Run all tests:
+
+```bash
+cf verify --all
+```
+
+---
+
+## Local Precheck
+Before submitting your design for fabrication, run the local precheck to ensure it complies with all shuttle requirements:
+
+```bash
+cf precheck
+```
+
+You can also run specific checks or disable LVS:
+
+```bash
+cf precheck --disable-lvs                    # Skip LVS check
+cf precheck --checks license --checks makefile  # Run specific checks only
+```
+---
+
+## Checklist for Shuttle Submission
+- [ ] Top-level macro is named openframe_project_wrapper.
+- [ ] Full Chip Simulation passes for both RTL and GL.
+- [ ] Hardened Macros are LVS and DRC clean.
+- [ ] openframe_project_wrapper matches the required pin order/template.
+- [ ] Design is properly connected to power (vccd1/vssd1).
+- [ ] Design passes the local cf precheck.
+- [ ] Documentation (this README) is updated with project-specific details.
