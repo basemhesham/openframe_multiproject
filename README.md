@@ -1,173 +1,164 @@
-<div align="center">
-
-<img src="https://umsousercontent.com/lib_lnlnuhLgkYnZdkSC/hj0vk05j0kemus1i.png" alt="ChipFoundry Logo" height="140" />
-
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Inter&size=44&duration=3000&pause=600&color=4C6EF5&center=true&vCenter=true&width=1100&lines=OpenFrame+User+Project+Template;OpenLane+%2B+ChipFoundry+Flow;Verification+and+Shuttle-Ready)](https://git.io/typing-svg)
+# OpenFrame Multi-Project Chip (MP-SoC)
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![ChipFoundry Marketplace](https://img.shields.io/badge/ChipFoundry-Marketplace-6E40C9.svg)](https://platform.chipfoundry.io/marketplace)
 
-</div>
+A configurable **multi-project wrapper** for the eFabless OpenFrame, hosting up to 20 independent user designs in a single chip. A scan-chain-configurable MUX tree routes 38 GPIOs to the selected project at runtime.
 
-## Table of Contents
-- [Overview](#overview)
-- [Documentation & Resources](#documentation--resources)
-- [Prerequisites](#prerequisites)
-- [Project Structure](#project-structure)
-- [Starting Your Project](#starting-your-project)
-- [Development Flow](#development-flow)
-- [Local Precheck](#local-precheck)
-- [Checklist for Shuttle Submission](#checklist-for-shuttle-submission)
+## Key Features
 
-## Overview
-OpenFrame is a ChipFoundry project template that provides only a bare padframe (no integrated SoC), giving you a 15 mm² user area and 44 GPIOs to design your own custom chip. You are free to implement your design and directly connect it to the available GPIOs throught the pins provided on the openframe wrapper.
+- **Parameterizable grid**: COLS x ROWS project slots (default 3x4 = 12 projects)
+- **38 routable GPIOs** across 3 chip edges (15 right, 9 top, 14 left)
+- **Scan chain security**: 8-bit magic word (0xA5) locks/unlocks configuration
+- **Per-project clock gating and reset isolation** via ICG cells
+- **Technology-portable**: all PDK cells behind 3 abstraction wrappers
+- **Target process**: Sky130 (via OpenLane)
 
----
+## Architecture Overview
 
-## Documentation & Resources
-For detailed hardware specifications and design guidelines, refer to the following official documents:
+```
+                        ┌──────────────────┐
+                        │   Top Orange      │ ── R→L ──> Left Purple ──> gpio[37:24]
+                        └──────────────────┘
+  ┌──────────┐         ┌──────────────────┐         ┌──────────────────┐
+  │  Green    │──clk──> │                  │ ──────> │  Right Orange     │
+  │  (gate/  │──rst──> │  PROJECT MACRO   │         │                   │ ── B→T
+  │   reset) │──por──> │  (user design)   │         │                   │   ──> Top Purple
+  └──────────┘         └──────────────────┘         └──────────────────┘      ──> gpio[23:15]
+                        ┌──────────────────┐
+                        │  Bottom Orange    │ ── L→R ──> Right Purple ──> gpio[14:0]
+                        └──────────────────┘
+```
 
-* **[ChipFoundry Marketplace](https://platform.chipfoundry.io/marketplace)**: Access additional IP blocks, EDA tools, and shuttle services.
+Each grid cell contains: 1 Green (clock/reset gate) + 3 Oranges (GPIO MUX) + 1 Project macro.
 
----
-
-## Prerequisites
-Ensure your environment meets the following requirements:
-
-1. **Docker** [Linux](https://docs.docker.com/desktop/setup/install/linux/ubuntu/) | [Windows](https://docs.docker.com/desktop/setup/install/windows-install/) | [Mac](https://docs.docker.com/desktop/setup/install/mac-install/)
-2. **Python 3.8+** with `pip`.
-3. **Git**: For repository management.
-
----
+Three Purple aggregators at chip edges select which row/column reaches the pads.
 
 ## Project Structure
-A successful OpenFrame project requires a specific directory layout for the automated tools to function:
 
-| Directory | Description |
-| :--- | :--- |
-| `openlane/` | Configuration files for hardening macros and the wrapper. |
-| `verilog/rtl/` | Source Verilog code for the project. |
-| `verilog/gl/` | Gate-level netlists (generated after hardening). |
-| `verilog/dv/` | Design Verification (cocotb and Verilog testbenches). |
-| `gds/` | Final GDSII binary files for fabrication. |
-| `lef/` | Library Exchange Format files for the macros. |
+```
+verilog/rtl/
+  tech_lib/                     # Technology abstraction (buf, clkbuf, clkgate)
+  scan_macro_node.v             # Parameterized shift register + shadow latch
+  green_macro.v                 # Per-project clock gating and reset isolation
+  orange_macro.v                # 15-wide GPIO MUX (chain/local select)
+  purple_macro.v                # Edge aggregator (port select + master enable)
+  scan_controller_macro.v       # Magic-word security gate
+  project_macro.v               # User design sandbox (replace with your logic)
+  openframe_project_wrapper.v   # Top-level wrapper (grid + scan chain + purples)
 
----
+openlane/
+  green_macro/                  # OpenLane config + pin_order for each macro
+  orange_macro_h/               # Horizontal orange (bottom, L→R chain)
+  orange_macro_h_top/           # Horizontal orange (top, R→L chain, swapped edges)
+  orange_macro_v/               # Vertical orange (right, B→T chain)
+  purple_macro_p3/              # Purple with PORTS=3 (Top Purple for 3-column grid)
+  purple_macro_p4/              # Purple with PORTS=4 (Left/Right Purple for 4-row grid)
+  project_macro/                # User project macro
+  scan_controller_macro/        # Scan controller
+  openframe_project_wrapper/    # Top-level wrapper hardening
 
-## Starting Your Project
+verilog/dv/
+  common/scan_tasks.vh          # Shared verification tasks
+  unit/                         # 5 unit tests (scan_node, scan_ctrl, green, orange, purple)
+  integration/                  # 5 integration tests (scan_chain, project_select, gpio_routing, ...)
+  regression/                   # Makefile to run all tests
 
-### 1. Repository Setup
-Create a new repository based on the `openframe_user_project` template and clone it to your local machine:
+scripts/
+  bitstream_gen.py              # Compute scan chain bitstream for a target project
 
-```bash
-git clone <your-github-repo-URL>
-pip install chipfoundry-cli
-cd <project_name>
+Caravel_OF_MPC.md              # Full architecture specification
 ```
 
-### 2. Project Initialization
+## Scan Chain
 
-> [!IMPORTANT]
-> Run this first! Initialize your project configuration:
+Single 57-bit chain (for 3x4 grid), row-major serpentine order:
 
-```bash
-cf init
+```
+Scan Controller ──> Purple_Left (3b) ──> Purple_Top (3b) ──> Purple_Right (3b)
+  ──> Row 3 R→L: [3,2] [3,1] [3,0]
+  ──> Row 2 L→R: [2,0] [2,1] [2,2]
+  ──> Row 1 R→L: [1,2] [1,1] [1,0]
+  ──> Row 0 L→R: [0,0] [0,1] [0,2] ──> Scan Controller (readback)
 ```
 
-This creates `.cf/project.json` with project metadata. **This must be run before any other commands**
+Within each cell: Green (1b) → Bottom Orange (1b) → Right Orange (1b) → Top Orange (1b).
 
-### 3. Environment Setup
-Install the ChipFoundry CLI tool and set up the local environment (PDKs, OpenLane, and OpenFrame):
+## Selecting a Project
 
-```bash
-cf setup
+```python
+# Generate the bitstream to enable project at row 2, column 1:
+python3 scripts/bitstream_gen.py --rows 4 --cols 3 --row 2 --col 1
 ```
 
-The `cf setup` command installs:
+The external controller:
+1. Shifts in magic word (0xA5) to unlock the chain
+2. Shifts in 57 configuration bits (project enables + orange selects + purple port selects)
+3. Pulses latch — shadow registers capture, chain auto-locks
 
-- OpenFrame: The OpenFrame harness template.
-- OpenLane: The RTL-to-GDS hardening flow.
-- PDK: Skywater 130nm process design kit.
-- Timing Scripts: For Static Timing Analysis (STA).
-
----
-
-## Development Flow
-
-### Hardening the Design
-Hardening is the process of synthesizing your RTL and performing Place & Route (P&R) to create a GDSII layout.
-
-#### Macro Hardening
-Create a subdirectory for each custom macro under `openlane/` containing your `config.json`.
+## Running Verification
 
 ```bash
-cf harden --list         # List detected configurations
-cf harden <macro_name>   # Harden a specific macro
+# Run all 10 tests (5 unit + 5 integration):
+make -C verilog/dv/regression all
+
+# Run unit tests only:
+make -C verilog/dv/unit all
+
+# Run integration tests only:
+make -C verilog/dv/integration all
+
+# Run a single test:
+make -C verilog/dv/unit tb_green
 ```
 
-#### Integration
-Instantiate your module(s) in `verilog/rtl/openframe_project_wrapper.v`.
+Requires **Icarus Verilog** (`iverilog`) and **VVP**.
 
-Update `openlane/openframe_project_wrapper/config.json` environment variables (`VERILOG_FILES_BLACKBOX`, `EXTRA_LEFS`, `EXTRA_GDS_FILES`) to point to your new macros.
+## Hardening (OpenLane)
 
-#### Wrapper Hardening
-Finalize the top-level user project:
+Harden macros bottom-up, then the wrapper:
 
 ```bash
+# 1. Harden leaf macros (order doesn't matter among these):
+cf harden green_macro
+cf harden orange_macro_h
+cf harden orange_macro_h_top
+cf harden orange_macro_v
+cf harden purple_macro_p3
+cf harden purple_macro_p4
+cf harden scan_controller_macro
+cf harden project_macro
+
+# 2. Harden the top-level wrapper:
 cf harden openframe_project_wrapper
 ```
 
-### Important Notes
+## User Project Development
 
-**Connecting to Power:**
-   - Ensure your design is connected to power using the power pins on the wrapper.
-   - Use the `vccd1_connection` and `vssd1_connection` macros, which contain the necessary vias and nets for power connections.
+1. Replace the tie-offs in `verilog/rtl/project_macro.v` with your design logic
+2. Your module receives: `clk`, `reset_n`, `por_n`, and 38 GPIOs (15 bottom + 9 right + 14 top)
+3. Each GPIO has: `_in` (input from pad), `_out` (output to pad), `_oeb` (output enable bar), `_dm` (3-bit drive mode)
+4. Default drive mode `3'b110` = strong digital push-pull
 
-### Verification
+## GPIO Drive Modes
 
-#### 1. Simulation
-We use cocotb for functional verification. Ensure your file lists are updated in `verilog/includes/`.
+| dm[2:0] | Mode |
+|---------|------|
+| 3'b000  | High-Z / Analog |
+| 3'b001  | Input only |
+| 3'b010  | Input with pull-down |
+| 3'b011  | Input with pull-up |
+| 3'b110  | Strong push-pull output (default) |
+| 3'b101  | Open-drain output |
 
-Run RTL Simulation:
+## Documentation
 
-```bash
-cf verify <test_name>
-```
+See **[Caravel_OF_MPC.md](Caravel_OF_MPC.md)** for the full architecture specification including:
+- Detailed module port tables
+- Scan chain bit position map
+- Floorplan analysis and macro dimensions
+- GPIO MUX tree data flow
+- Reset behavior (POR vs sys_reset_n)
 
-Run Gate-Level (GL) Simulation:
+## License
 
-```bash
-cf verify <test_name> --sim gl
-```
-
-Run all tests:
-
-```bash
-cf verify --all
-```
-
----
-
-## Local Precheck
-Before submitting your design for fabrication, run the local precheck to ensure it complies with all shuttle requirements:
-
-```bash
-cf precheck
-```
-
-You can also run specific checks or disable LVS:
-
-```bash
-cf precheck --disable-lvs                    # Skip LVS check
-cf precheck --checks license --checks makefile  # Run specific checks only
-```
----
-
-## Checklist for Shuttle Submission
-- [ ] Top-level macro is named openframe_project_wrapper.
-- [ ] Full Chip Simulation passes for both RTL and GL.
-- [ ] Hardened Macros are LVS and DRC clean.
-- [ ] openframe_project_wrapper matches the required pin order/template.
-- [ ] Design is properly connected to power (vccd1/vssd1).
-- [ ] Design passes the local cf precheck.
-- [ ] Documentation (this README) is updated with project-specific details.
+Apache 2.0
