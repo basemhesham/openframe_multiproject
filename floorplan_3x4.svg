@@ -1,0 +1,224 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-250 -250 3666.63 5266.63" width="1000">
+<defs>
+<style>
+  .label { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 28px; fill: #212121; text-anchor: middle; dominant-baseline: central; }
+  .label-s { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 20px; fill: #212121; text-anchor: middle; dominant-baseline: central; }
+  .label-xs { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 16px; fill: #ffffff; text-anchor: middle; dominant-baseline: central; }
+  .label-dim { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 22px; fill: #616161; text-anchor: middle; dominant-baseline: central; }
+  .label-leg { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 22px; fill: #212121; text-anchor: start; dominant-baseline: central; }
+  .dim-line { stroke: #9E9E9E; stroke-width: 1.5; marker-start: url(#arrow-s); marker-end: url(#arrow-e); }
+  .dim-ext { stroke: #BDBDBD; stroke-width: 1; stroke-dasharray: 6,4; }
+</style>
+<marker id="arrow-s" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto"><path d="M8,0 L0,3 L8,6" fill="none" stroke="#9E9E9E" stroke-width="1.2"/></marker>
+<marker id="arrow-e" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="none" stroke="#9E9E9E" stroke-width="1.2"/></marker>
+</defs>
+<rect x="-250" y="-250" width="3666.63" height="5266.63" fill="white"/>
+<rect x="0" y="0" width="3166.63" height="4766.63" fill="#FAFAFA" stroke="#424242" stroke-width="3" rx="4"/>
+<rect x="50.00" y="0.00" width="3066.63" height="50.00" fill="#9C27B0" fill-opacity="0.85" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1583.3" y="25.0" class="label-xs" fill="white">Purple Top (p3) — 3066.63 × 50</text>
+<rect x="0.00" y="50.00" width="50.00" height="4566.63" fill="#9C27B0" fill-opacity="0.85" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="25" y="2333.3" class="label-xs" transform="rotate(-90, 25, 2333.3)">Purple Left (p4) — 50 × 4566.63</text>
+<rect x="3116.63" y="50.00" width="50.00" height="4566.63" fill="#9C27B0" fill-opacity="0.85" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="3141.6" y="2333.3" class="label-xs" transform="rotate(90, 3141.6, 2333.3)">Purple Right (p4) — 50 × 4566.63</text>
+<rect x="1483.32" y="4666.63" width="200.00" height="100.00" fill="#EF5350" fill-opacity="0.85" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1583.3" y="4702.6" class="label-xs" fill="white">Scan Ctrl</text>
+<text x="1583.3" y="4730.6" class="label-xs" fill="white">200 × 100</text>
+<rect x="95.00" y="3529.97" width="922.21" height="1031.66" fill="#BBDEFB" fill-opacity="0.5" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="556.1" y="4031.8" class="label-s" fill="#212121">Project [0,0]</text>
+<text x="556.1" y="4059.8" class="label-s" fill="#212121">922 × 1032</text>
+<rect x="50.00" y="3529.97" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="72.5" y="4045.8" class="label-xs" fill="white" transform="rotate(-90, 72.5, 4045.8)">Green</text>
+<rect x="95.00" y="4561.63" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="556.1" y="4589.1" class="label-xs" fill="white">Bot Orange (H)</text>
+<rect x="1017.21" y="3529.97" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1044.7" y="4045.8" class="label-xs" fill="white" transform="rotate(90, 1044.7, 4045.8)">Rt Orange (V)</text>
+<rect x="95.00" y="3474.97" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="556.1" y="3502.5" class="label-xs" fill="white">Top Orange (H, FN)</text>
+<rect x="1117.21" y="3529.97" width="922.21" height="1031.66" fill="#BBDEFB" fill-opacity="0.5" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1578.3" y="4031.8" class="label-s" fill="#212121">Project [0,1]</text>
+<text x="1578.3" y="4059.8" class="label-s" fill="#212121">922 × 1032</text>
+<rect x="1072.21" y="3529.97" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1094.7" y="4045.8" class="label-xs" fill="white" transform="rotate(-90, 1094.7, 4045.8)">Green</text>
+<rect x="1117.21" y="4561.63" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1578.3" y="4589.1" class="label-xs" fill="white">Bot Orange (H)</text>
+<rect x="2039.42" y="3529.97" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2066.9" y="4045.8" class="label-xs" fill="white" transform="rotate(90, 2066.9, 4045.8)">Rt Orange (V)</text>
+<rect x="1117.21" y="3474.97" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1578.3" y="3502.5" class="label-xs" fill="white">Top Orange (H, FN)</text>
+<rect x="2139.42" y="3529.97" width="922.21" height="1031.66" fill="#BBDEFB" fill-opacity="0.5" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2600.5" y="4031.8" class="label-s" fill="#212121">Project [0,2]</text>
+<text x="2600.5" y="4059.8" class="label-s" fill="#212121">922 × 1032</text>
+<rect x="2094.42" y="3529.97" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2116.9" y="4045.8" class="label-xs" fill="white" transform="rotate(-90, 2116.9, 4045.8)">Green</text>
+<rect x="2139.42" y="4561.63" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2600.5" y="4589.1" class="label-xs" fill="white">Bot Orange (H)</text>
+<rect x="3061.63" y="3529.97" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="3089.1" y="4045.8" class="label-xs" fill="white" transform="rotate(90, 3089.1, 4045.8)">Rt Orange (V)</text>
+<rect x="2139.42" y="3474.97" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2600.5" y="3502.5" class="label-xs" fill="white">Top Orange (H, FN)</text>
+<rect x="95.00" y="2388.31" width="922.21" height="1031.66" fill="#BBDEFB" fill-opacity="0.5" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="556.1" y="2890.1" class="label-s" fill="#212121">Project [1,0]</text>
+<text x="556.1" y="2918.1" class="label-s" fill="#212121">922 × 1032</text>
+<rect x="50.00" y="2388.31" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="72.5" y="2904.1" class="label-xs" fill="white" transform="rotate(-90, 72.5, 2904.1)">Green</text>
+<rect x="95.00" y="3419.97" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="556.1" y="3447.5" class="label-xs" fill="white">Bot Orange (H)</text>
+<rect x="1017.21" y="2388.31" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1044.7" y="2904.1" class="label-xs" fill="white" transform="rotate(90, 1044.7, 2904.1)">Rt Orange (V)</text>
+<rect x="95.00" y="2333.31" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="556.1" y="2360.8" class="label-xs" fill="white">Top Orange (H, FN)</text>
+<rect x="1117.21" y="2388.31" width="922.21" height="1031.66" fill="#BBDEFB" fill-opacity="0.5" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1578.3" y="2890.1" class="label-s" fill="#212121">Project [1,1]</text>
+<text x="1578.3" y="2918.1" class="label-s" fill="#212121">922 × 1032</text>
+<rect x="1072.21" y="2388.31" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1094.7" y="2904.1" class="label-xs" fill="white" transform="rotate(-90, 1094.7, 2904.1)">Green</text>
+<rect x="1117.21" y="3419.97" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1578.3" y="3447.5" class="label-xs" fill="white">Bot Orange (H)</text>
+<rect x="2039.42" y="2388.31" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2066.9" y="2904.1" class="label-xs" fill="white" transform="rotate(90, 2066.9, 2904.1)">Rt Orange (V)</text>
+<rect x="1117.21" y="2333.31" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1578.3" y="2360.8" class="label-xs" fill="white">Top Orange (H, FN)</text>
+<rect x="2139.42" y="2388.31" width="922.21" height="1031.66" fill="#BBDEFB" fill-opacity="0.5" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2600.5" y="2890.1" class="label-s" fill="#212121">Project [1,2]</text>
+<text x="2600.5" y="2918.1" class="label-s" fill="#212121">922 × 1032</text>
+<rect x="2094.42" y="2388.31" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2116.9" y="2904.1" class="label-xs" fill="white" transform="rotate(-90, 2116.9, 2904.1)">Green</text>
+<rect x="2139.42" y="3419.97" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2600.5" y="3447.5" class="label-xs" fill="white">Bot Orange (H)</text>
+<rect x="3061.63" y="2388.31" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="3089.1" y="2904.1" class="label-xs" fill="white" transform="rotate(90, 3089.1, 2904.1)">Rt Orange (V)</text>
+<rect x="2139.42" y="2333.31" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2600.5" y="2360.8" class="label-xs" fill="white">Top Orange (H, FN)</text>
+<rect x="95.00" y="1246.65" width="922.21" height="1031.66" fill="#BBDEFB" fill-opacity="0.5" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="556.1" y="1748.5" class="label-s" fill="#212121">Project [2,0]</text>
+<text x="556.1" y="1776.5" class="label-s" fill="#212121">922 × 1032</text>
+<rect x="50.00" y="1246.65" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="72.5" y="1762.5" class="label-xs" fill="white" transform="rotate(-90, 72.5, 1762.5)">Green</text>
+<rect x="95.00" y="2278.31" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="556.1" y="2305.8" class="label-xs" fill="white">Bot Orange (H)</text>
+<rect x="1017.21" y="1246.65" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1044.7" y="1762.5" class="label-xs" fill="white" transform="rotate(90, 1044.7, 1762.5)">Rt Orange (V)</text>
+<rect x="95.00" y="1191.66" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="556.1" y="1219.2" class="label-xs" fill="white">Top Orange (H, FN)</text>
+<rect x="1117.21" y="1246.65" width="922.21" height="1031.66" fill="#BBDEFB" fill-opacity="0.5" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1578.3" y="1748.5" class="label-s" fill="#212121">Project [2,1]</text>
+<text x="1578.3" y="1776.5" class="label-s" fill="#212121">922 × 1032</text>
+<rect x="1072.21" y="1246.65" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1094.7" y="1762.5" class="label-xs" fill="white" transform="rotate(-90, 1094.7, 1762.5)">Green</text>
+<rect x="1117.21" y="2278.31" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1578.3" y="2305.8" class="label-xs" fill="white">Bot Orange (H)</text>
+<rect x="2039.42" y="1246.65" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2066.9" y="1762.5" class="label-xs" fill="white" transform="rotate(90, 2066.9, 1762.5)">Rt Orange (V)</text>
+<rect x="1117.21" y="1191.66" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1578.3" y="1219.2" class="label-xs" fill="white">Top Orange (H, FN)</text>
+<rect x="2139.42" y="1246.65" width="922.21" height="1031.66" fill="#BBDEFB" fill-opacity="0.5" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2600.5" y="1748.5" class="label-s" fill="#212121">Project [2,2]</text>
+<text x="2600.5" y="1776.5" class="label-s" fill="#212121">922 × 1032</text>
+<rect x="2094.42" y="1246.65" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2116.9" y="1762.5" class="label-xs" fill="white" transform="rotate(-90, 2116.9, 1762.5)">Green</text>
+<rect x="2139.42" y="2278.31" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2600.5" y="2305.8" class="label-xs" fill="white">Bot Orange (H)</text>
+<rect x="3061.63" y="1246.65" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="3089.1" y="1762.5" class="label-xs" fill="white" transform="rotate(90, 3089.1, 1762.5)">Rt Orange (V)</text>
+<rect x="2139.42" y="1191.66" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2600.5" y="1219.2" class="label-xs" fill="white">Top Orange (H, FN)</text>
+<rect x="95.00" y="105.00" width="922.21" height="1031.66" fill="#BBDEFB" fill-opacity="0.5" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="556.1" y="606.8" class="label-s" fill="#212121">Project [3,0]</text>
+<text x="556.1" y="634.8" class="label-s" fill="#212121">922 × 1032</text>
+<rect x="50.00" y="105.00" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="72.5" y="620.8" class="label-xs" fill="white" transform="rotate(-90, 72.5, 620.8)">Green</text>
+<rect x="95.00" y="1136.66" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="556.1" y="1164.2" class="label-xs" fill="white">Bot Orange (H)</text>
+<rect x="1017.21" y="105.00" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1044.7" y="620.8" class="label-xs" fill="white" transform="rotate(90, 1044.7, 620.8)">Rt Orange (V)</text>
+<rect x="95.00" y="50.00" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="556.1" y="77.5" class="label-xs" fill="white">Top Orange (H, FN)</text>
+<rect x="1117.21" y="105.00" width="922.21" height="1031.66" fill="#BBDEFB" fill-opacity="0.5" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1578.3" y="606.8" class="label-s" fill="#212121">Project [3,1]</text>
+<text x="1578.3" y="634.8" class="label-s" fill="#212121">922 × 1032</text>
+<rect x="1072.21" y="105.00" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1094.7" y="620.8" class="label-xs" fill="white" transform="rotate(-90, 1094.7, 620.8)">Green</text>
+<rect x="1117.21" y="1136.66" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1578.3" y="1164.2" class="label-xs" fill="white">Bot Orange (H)</text>
+<rect x="2039.42" y="105.00" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2066.9" y="620.8" class="label-xs" fill="white" transform="rotate(90, 2066.9, 620.8)">Rt Orange (V)</text>
+<rect x="1117.21" y="50.00" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="1578.3" y="77.5" class="label-xs" fill="white">Top Orange (H, FN)</text>
+<rect x="2139.42" y="105.00" width="922.21" height="1031.66" fill="#BBDEFB" fill-opacity="0.5" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2600.5" y="606.8" class="label-s" fill="#212121">Project [3,2]</text>
+<text x="2600.5" y="634.8" class="label-s" fill="#212121">922 × 1032</text>
+<rect x="2094.42" y="105.00" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2116.9" y="620.8" class="label-xs" fill="white" transform="rotate(-90, 2116.9, 620.8)">Green</text>
+<rect x="2139.42" y="1136.66" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2600.5" y="1164.2" class="label-xs" fill="white">Bot Orange (H)</text>
+<rect x="3061.63" y="105.00" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="3089.1" y="620.8" class="label-xs" fill="white" transform="rotate(90, 3089.1, 620.8)">Rt Orange (V)</text>
+<rect x="2139.42" y="50.00" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.8" stroke="#424242" stroke-width="1.2" rx="2"/>
+<text x="2600.5" y="77.5" class="label-xs" fill="white">Top Orange (H, FN)</text>
+<line x1="0" y1="-60" x2="3166.63" y2="-60" class="dim-line"/>
+<line x1="0" y1="-30" x2="0" y2="-70" class="dim-ext"/>
+<line x1="3166.63" y1="-30" x2="3166.63" y2="-70" class="dim-ext"/>
+<text x="1583.3" y="-80" class="label-dim">3166.63 µm</text>
+<line x1="3226.63" y1="0" x2="3226.63" y2="4766.63" class="dim-line"/>
+<line x1="3196.63" y1="0" x2="3236.63" y2="0" class="dim-ext"/>
+<line x1="3196.63" y1="4766.63" x2="3236.63" y2="4766.63" class="dim-ext"/>
+<text x="3236.63" y="2383.3" class="label-dim" transform="rotate(90, 3236.63, 2383.3)">4766.63 µm</text>
+<line x1="-60" y1="50.00" x2="-60" y2="4616.63" class="dim-line"/>
+<text x="-80" y="2333.3" class="label-dim" font-size="18" transform="rotate(-90, -80, 2333.3)">4566.63</text>
+<line x1="-60" y1="4616.63" x2="-60" y2="4766.63" class="dim-line"/>
+<text x="-100" y="4691.6" class="label-dim" font-size="16">150</text>
+<line x1="95.0" y1="4646.63" x2="1017.21" y2="4646.63" class="dim-line"/>
+<text x="556.1" y="4668.63" class="label-dim" font-size="18">922.21</text>
+<line x1="50.0" y1="4696.63" x2="95.0" y2="4696.63" class="dim-line"/>
+<text x="72.5" y="4718.63" class="label-dim" font-size="14">45</text>
+<line x1="1017.21" y1="4696.63" x2="1072.21" y2="4696.63" class="dim-line"/>
+<text x="1044.7" y="4718.63" class="label-dim" font-size="14">55</text>
+<rect x="80" y="4806.63" width="30" height="20" fill="#4CAF50" fill-opacity="0.85" stroke="#424242" stroke-width="1" rx="2"/>
+<text x="118" y="4816.63" class="label-leg" font-size="18">Green Macro (45 × 1031.66)</text>
+<rect x="1130" y="4806.63" width="30" height="20" fill="#FF9800" fill-opacity="0.85" stroke="#424242" stroke-width="1" rx="2"/>
+<text x="1168" y="4816.63" class="label-leg" font-size="18">Orange Macro H/V (922.21 × 55 / 55 × 1031.66)</text>
+<rect x="2180" y="4806.63" width="30" height="20" fill="#9C27B0" fill-opacity="0.85" stroke="#424242" stroke-width="1" rx="2"/>
+<text x="2218" y="4816.63" class="label-leg" font-size="18">Purple Macro (50 × 4566.63 / 3066.63 × 50)</text>
+<rect x="80" y="4841.63" width="30" height="20" fill="#BBDEFB" fill-opacity="0.85" stroke="#424242" stroke-width="1" rx="2"/>
+<text x="118" y="4851.63" class="label-leg" font-size="18">Project Macro (922.21 × 1031.66)</text>
+<rect x="1130" y="4841.63" width="30" height="20" fill="#EF5350" fill-opacity="0.85" stroke="#424242" stroke-width="1" rx="2"/>
+<text x="1168" y="4851.63" class="label-leg" font-size="18">Scan Controller (200 × 100)</text>
+<text x="1583.315" y="-160" class="label" font-size="34" font-weight="bold">OpenFrame MP-SoC Floorplan — 3×4 Configuration</text>
+<text x="1583.315" y="-120" class="label" font-size="22" fill="#757575">64 macro instances · 12 projects · Sky130</text>
+<line x1="1012.2" y1="4589.1" x2="1122.2" y2="4589.1" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="2034.4" y1="4589.1" x2="2144.4" y2="4589.1" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="3056.6" y1="4589.1" x2="3116.6" y2="4589.1" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="1012.2" y1="3447.5" x2="1122.2" y2="3447.5" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="2034.4" y1="3447.5" x2="2144.4" y2="3447.5" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="3056.6" y1="3447.5" x2="3116.6" y2="3447.5" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="1012.2" y1="2305.8" x2="1122.2" y2="2305.8" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="2034.4" y1="2305.8" x2="2144.4" y2="2305.8" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="3056.6" y1="2305.8" x2="3116.6" y2="2305.8" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="1012.2" y1="1164.2" x2="1122.2" y2="1164.2" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="2034.4" y1="1164.2" x2="2144.4" y2="1164.2" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="3056.6" y1="1164.2" x2="3116.6" y2="1164.2" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="2144.4" y1="3502.5" x2="2034.4" y2="3502.5" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="1122.2" y1="3502.5" x2="1012.2" y2="3502.5" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="100.0" y1="3502.5" x2="50" y2="3502.5" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="2144.4" y1="2360.8" x2="2034.4" y2="2360.8" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="1122.2" y1="2360.8" x2="1012.2" y2="2360.8" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="100.0" y1="2360.8" x2="50" y2="2360.8" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="2144.4" y1="1219.2" x2="2034.4" y2="1219.2" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="1122.2" y1="1219.2" x2="1012.2" y2="1219.2" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="100.0" y1="1219.2" x2="50" y2="1219.2" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="2144.4" y1="77.5" x2="2034.4" y2="77.5" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="1122.2" y1="77.5" x2="1012.2" y2="77.5" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="100.0" y1="77.5" x2="50" y2="77.5" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="1044.7" y1="3535.0" x2="1044.7" y2="3415.0" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="1044.7" y1="2393.3" x2="1044.7" y2="2273.3" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="1044.7" y1="1251.6" x2="1044.7" y2="1131.7" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="1044.7" y1="110.0" x2="1044.7" y2="50.0" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="2066.9" y1="3535.0" x2="2066.9" y2="3415.0" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="2066.9" y1="2393.3" x2="2066.9" y2="2273.3" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="2066.9" y1="1251.6" x2="2066.9" y2="1131.7" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="2066.9" y1="110.0" x2="2066.9" y2="50.0" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="3089.1" y1="3535.0" x2="3089.1" y2="3415.0" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="3089.1" y1="2393.3" x2="3089.1" y2="2273.3" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="3089.1" y1="1251.6" x2="3089.1" y2="1131.7" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+<line x1="3089.1" y1="110.0" x2="3089.1" y2="50.0" stroke="#E65100" stroke-width="2" marker-end="url(#arrow-e)" opacity="0.6"/>
+</svg>

@@ -15,3 +15,9 @@ runs/
 /logs
 lvs_results/
 __pycache__/
+
+# Simulation artifacts
+*.vvp
+*.log
+a.out
+tb_sim

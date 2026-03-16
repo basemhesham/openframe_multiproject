@@ -1,0 +1,300 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-300 -300 3766.63 5486.63" width="1100">
+<defs>
+<style>
+  text { font-family: "Helvetica Neue", Arial, sans-serif; }
+  .lbl { font-size: 20px; fill: #37474F; text-anchor: middle; dominant-baseline: central; }
+  .lbl-s { font-size: 16px; fill: #fff; text-anchor: middle; dominant-baseline: central; }
+  .lbl-idx { font-size: 12px; fill: #1565C0; text-anchor: middle; dominant-baseline: central; font-weight: bold; }
+  .lbl-dim { font-size: 20px; fill: #757575; text-anchor: middle; dominant-baseline: central; }
+  .lbl-leg { font-size: 20px; fill: #212121; text-anchor: start; dominant-baseline: central; }
+  .scan-path { fill: none; stroke: #1565C0; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+  .scan-inter { fill: none; stroke: #E91E63; stroke-width: 3.5; stroke-dasharray: 12,6; stroke-linecap: round; stroke-linejoin: round; }
+  .scan-purple { fill: none; stroke: #7B1FA2; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+<marker id="arr" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+  <polygon points="0,0 10,3.5 0,7" fill="#1565C0"/>
+</marker>
+<marker id="arr-p" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+  <polygon points="0,0 10,3.5 0,7" fill="#7B1FA2"/>
+</marker>
+<marker id="arr-i" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+  <polygon points="0,0 10,3.5 0,7" fill="#E91E63"/>
+</marker>
+</defs>
+<rect x="-300" y="-300" width="3766.63" height="5486.63" fill="white"/>
+<rect x="0" y="0" width="3166.63" height="4766.63" fill="#FAFAFA" stroke="#90A4AE" stroke-width="2.5" rx="4"/>
+<rect x="50.00" y="0.00" width="3066.63" height="50.00" fill="#9C27B0" fill-opacity="0.3" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="1583.315" y="25.0" class="lbl-s" fill="#7B1FA2" fill-opacity="0.8">Purple Top (p3)</text>
+<rect x="0.00" y="50.00" width="50.00" height="4566.63" fill="#9C27B0" fill-opacity="0.3" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="25" y="2333" class="lbl-s" fill="#7B1FA2" fill-opacity="0.8" transform="rotate(-90,25,2333)">Purple Left (p4)</text>
+<rect x="3116.63" y="50.00" width="50.00" height="4566.63" fill="#9C27B0" fill-opacity="0.3" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="3141.63" y="2333" class="lbl-s" fill="#7B1FA2" fill-opacity="0.8" transform="rotate(90,3141.63,2333)">Purple Right (p4)</text>
+<rect x="1483.32" y="4666.63" width="200.00" height="100.00" fill="#EF5350" fill-opacity="0.6" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="1583.32" y="4716.63" class="lbl-s" fill="white" font-size="14">Scan Ctrl</text>
+<rect x="2139.42" y="105.00" width="922.21" height="1031.66" fill="#E3F2FD" fill-opacity="0.25" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="2601" y="621" class="lbl" fill="#90A4AE" font-size="18">[3,2]</text>
+<rect x="2094.42" y="105.00" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2139.42" y="1136.66" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="3061.63" y="105.00" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2139.42" y="50.00" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1117.21" y="105.00" width="922.21" height="1031.66" fill="#E3F2FD" fill-opacity="0.25" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="1578" y="621" class="lbl" fill="#90A4AE" font-size="18">[3,1]</text>
+<rect x="1072.21" y="105.00" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1117.21" y="1136.66" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2039.42" y="105.00" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1117.21" y="50.00" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="95.00" y="105.00" width="922.21" height="1031.66" fill="#E3F2FD" fill-opacity="0.25" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="556" y="621" class="lbl" fill="#90A4AE" font-size="18">[3,0]</text>
+<rect x="50.00" y="105.00" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="95.00" y="1136.66" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1017.21" y="105.00" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="95.00" y="50.00" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="95.00" y="1246.65" width="922.21" height="1031.66" fill="#E3F2FD" fill-opacity="0.25" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="556" y="1762" class="lbl" fill="#90A4AE" font-size="18">[2,0]</text>
+<rect x="50.00" y="1246.65" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="95.00" y="2278.31" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1017.21" y="1246.65" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="95.00" y="1191.66" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1117.21" y="1246.65" width="922.21" height="1031.66" fill="#E3F2FD" fill-opacity="0.25" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="1578" y="1762" class="lbl" fill="#90A4AE" font-size="18">[2,1]</text>
+<rect x="1072.21" y="1246.65" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1117.21" y="2278.31" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2039.42" y="1246.65" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1117.21" y="1191.66" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2139.42" y="1246.65" width="922.21" height="1031.66" fill="#E3F2FD" fill-opacity="0.25" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="2601" y="1762" class="lbl" fill="#90A4AE" font-size="18">[2,2]</text>
+<rect x="2094.42" y="1246.65" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2139.42" y="2278.31" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="3061.63" y="1246.65" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2139.42" y="1191.66" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2139.42" y="2388.31" width="922.21" height="1031.66" fill="#E3F2FD" fill-opacity="0.25" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="2601" y="2904" class="lbl" fill="#90A4AE" font-size="18">[1,2]</text>
+<rect x="2094.42" y="2388.31" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2139.42" y="3419.97" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="3061.63" y="2388.31" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2139.42" y="2333.31" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1117.21" y="2388.31" width="922.21" height="1031.66" fill="#E3F2FD" fill-opacity="0.25" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="1578" y="2904" class="lbl" fill="#90A4AE" font-size="18">[1,1]</text>
+<rect x="1072.21" y="2388.31" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1117.21" y="3419.97" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2039.42" y="2388.31" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1117.21" y="2333.31" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="95.00" y="2388.31" width="922.21" height="1031.66" fill="#E3F2FD" fill-opacity="0.25" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="556" y="2904" class="lbl" fill="#90A4AE" font-size="18">[1,0]</text>
+<rect x="50.00" y="2388.31" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="95.00" y="3419.97" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1017.21" y="2388.31" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="95.00" y="2333.31" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="95.00" y="3529.97" width="922.21" height="1031.66" fill="#E3F2FD" fill-opacity="0.25" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="556" y="4046" class="lbl" fill="#90A4AE" font-size="18">[0,0]</text>
+<rect x="50.00" y="3529.97" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="95.00" y="4561.63" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1017.21" y="3529.97" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="95.00" y="3474.97" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1117.21" y="3529.97" width="922.21" height="1031.66" fill="#E3F2FD" fill-opacity="0.25" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="1578" y="4046" class="lbl" fill="#90A4AE" font-size="18">[0,1]</text>
+<rect x="1072.21" y="3529.97" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1117.21" y="4561.63" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2039.42" y="3529.97" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="1117.21" y="3474.97" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2139.42" y="3529.97" width="922.21" height="1031.66" fill="#E3F2FD" fill-opacity="0.25" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<text x="2601" y="4046" class="lbl" fill="#90A4AE" font-size="18">[0,2]</text>
+<rect x="2094.42" y="3529.97" width="45.00" height="1031.66" fill="#4CAF50" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2139.42" y="4561.63" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="3061.63" y="3529.97" width="55.00" height="1031.66" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<rect x="2139.42" y="3474.97" width="922.21" height="55.00" fill="#FF9800" fill-opacity="0.55" stroke="#78909C" stroke-width="0.8" rx="2"/>
+<path d="M 1583.32,4666.63 L 1583.32,4636.63 L 25,4636.63 L 25,3951.6355" class="scan-purple" marker-end="url(#arr-p)"/>
+<text x="804.16" y="4621.63" class="lbl-idx" font-size="14" fill="#7B1FA2">scan_din → Purple Left</text>
+<path d="M 25,3931.6355 L 25,-15.0 L 1583.315,-15.0 L 1583.315,25.0" class="scan-purple" marker-end="url(#arr-p)"/>
+<path d="M 1583.315,25.0 L 1583.315,-15.0 L 3141.63,-15.0 L 3141.63,734.9945" class="scan-purple" marker-end="url(#arr-p)"/>
+<path d="M 3141.63,734.9945 L 3101.63,734.9945 L 3101.63,620.8300000000003 L 2116.92,620.8300000000003" class="scan-inter" marker-end="url(#arr-i)"/>
+<path d="M 2116.92,620.8300000000003 L 2146.92,620.8300000000003 L 2146.92,1164.1600000000003 L 2600.525,1164.1600000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 2600.525,1164.1600000000003 L 2600.525,1144.1600000000003 L 3089.13,1144.1600000000003 L 3089.13,620.8300000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 3089.13,620.8300000000003 L 3059.13,620.8300000000003 L 3059.13,77.5 L 2600.525,77.5" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 2600.525,77.5 L 2600.525,655.8300000000003 L 1094.71,655.8300000000003 L 1094.71,620.8300000000003" class="scan-inter" marker-end="url(#arr-i)"/>
+<path d="M 1094.71,620.8300000000003 L 1124.71,620.8300000000003 L 1124.71,1164.1600000000003 L 1578.315,1164.1600000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 1578.315,1164.1600000000003 L 1578.315,1144.1600000000003 L 2066.92,1144.1600000000003 L 2066.92,620.8300000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 2066.92,620.8300000000003 L 2036.92,620.8300000000003 L 2036.92,77.5 L 1578.315,77.5" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 1578.315,77.5 L 1578.315,655.8300000000003 L 72.5,655.8300000000003 L 72.5,620.8300000000003" class="scan-inter" marker-end="url(#arr-i)"/>
+<path d="M 72.5,620.8300000000003 L 102.5,620.8300000000003 L 102.5,1164.1600000000003 L 556.105,1164.1600000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 556.105,1164.1600000000003 L 556.105,1144.1600000000003 L 1044.71,1144.1600000000003 L 1044.71,620.8300000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 1044.71,620.8300000000003 L 1014.71,620.8300000000003 L 1014.71,77.5 L 556.105,77.5" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 556.105,77.5 L 556.105,1797.48 L 72.5,1797.48 L 72.5,1762.48" class="scan-inter" marker-end="url(#arr-i)"/>
+<path d="M 72.5,1762.48 L 102.5,1762.48 L 102.5,2305.81 L 556.105,2305.81" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 556.105,2305.81 L 556.105,2285.81 L 1044.71,2285.81 L 1044.71,1762.48" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 1044.71,1762.48 L 1014.71,1762.48 L 1014.71,1219.1600000000003 L 556.105,1219.1600000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 556.105,1219.1600000000003 L 556.105,1797.48 L 1094.71,1797.48 L 1094.71,1762.48" class="scan-inter" marker-end="url(#arr-i)"/>
+<path d="M 1094.71,1762.48 L 1124.71,1762.48 L 1124.71,2305.81 L 1578.315,2305.81" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 1578.315,2305.81 L 1578.315,2285.81 L 2066.92,2285.81 L 2066.92,1762.48" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 2066.92,1762.48 L 2036.92,1762.48 L 2036.92,1219.1600000000003 L 1578.315,1219.1600000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 1578.315,1219.1600000000003 L 1578.315,1797.48 L 2116.92,1797.48 L 2116.92,1762.48" class="scan-inter" marker-end="url(#arr-i)"/>
+<path d="M 2116.92,1762.48 L 2146.92,1762.48 L 2146.92,2305.81 L 2600.525,2305.81" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 2600.525,2305.81 L 2600.525,2285.81 L 3089.13,2285.81 L 3089.13,1762.48" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 3089.13,1762.48 L 3059.13,1762.48 L 3059.13,1219.1600000000003 L 2600.525,1219.1600000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 2600.525,1219.1600000000003 L 2600.525,2939.1400000000003 L 2116.92,2939.1400000000003 L 2116.92,2904.1400000000003" class="scan-inter" marker-end="url(#arr-i)"/>
+<path d="M 2116.92,2904.1400000000003 L 2146.92,2904.1400000000003 L 2146.92,3447.4700000000003 L 2600.525,3447.4700000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 2600.525,3447.4700000000003 L 2600.525,3427.4700000000003 L 3089.13,3427.4700000000003 L 3089.13,2904.1400000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 3089.13,2904.1400000000003 L 3059.13,2904.1400000000003 L 3059.13,2360.81 L 2600.525,2360.81" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 2600.525,2360.81 L 2600.525,2939.1400000000003 L 1094.71,2939.1400000000003 L 1094.71,2904.1400000000003" class="scan-inter" marker-end="url(#arr-i)"/>
+<path d="M 1094.71,2904.1400000000003 L 1124.71,2904.1400000000003 L 1124.71,3447.4700000000003 L 1578.315,3447.4700000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 1578.315,3447.4700000000003 L 1578.315,3427.4700000000003 L 2066.92,3427.4700000000003 L 2066.92,2904.1400000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 2066.92,2904.1400000000003 L 2036.92,2904.1400000000003 L 2036.92,2360.81 L 1578.315,2360.81" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 1578.315,2360.81 L 1578.315,2939.1400000000003 L 72.5,2939.1400000000003 L 72.5,2904.1400000000003" class="scan-inter" marker-end="url(#arr-i)"/>
+<path d="M 72.5,2904.1400000000003 L 102.5,2904.1400000000003 L 102.5,3447.4700000000003 L 556.105,3447.4700000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 556.105,3447.4700000000003 L 556.105,3427.4700000000003 L 1044.71,3427.4700000000003 L 1044.71,2904.1400000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 1044.71,2904.1400000000003 L 1014.71,2904.1400000000003 L 1014.71,2360.81 L 556.105,2360.81" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 556.105,2360.81 L 556.105,4080.8 L 72.5,4080.8 L 72.5,4045.8" class="scan-inter" marker-end="url(#arr-i)"/>
+<path d="M 72.5,4045.8 L 102.5,4045.8 L 102.5,4589.13 L 556.105,4589.13" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 556.105,4589.13 L 556.105,4569.13 L 1044.71,4569.13 L 1044.71,4045.8" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 1044.71,4045.8 L 1014.71,4045.8 L 1014.71,3502.4700000000003 L 556.105,3502.4700000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 556.105,3502.4700000000003 L 556.105,4080.8 L 1094.71,4080.8 L 1094.71,4045.8" class="scan-inter" marker-end="url(#arr-i)"/>
+<path d="M 1094.71,4045.8 L 1124.71,4045.8 L 1124.71,4589.13 L 1578.315,4589.13" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 1578.315,4589.13 L 1578.315,4569.13 L 2066.92,4569.13 L 2066.92,4045.8" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 2066.92,4045.8 L 2036.92,4045.8 L 2036.92,3502.4700000000003 L 1578.315,3502.4700000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 1578.315,3502.4700000000003 L 1578.315,4080.8 L 2116.92,4080.8 L 2116.92,4045.8" class="scan-inter" marker-end="url(#arr-i)"/>
+<path d="M 2116.92,4045.8 L 2146.92,4045.8 L 2146.92,4589.13 L 2600.525,4589.13" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 2600.525,4589.13 L 2600.525,4569.13 L 3089.13,4569.13 L 3089.13,4045.8" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 3089.13,4045.8 L 3059.13,4045.8 L 3059.13,3502.4700000000003 L 2600.525,3502.4700000000003" class="scan-path" marker-end="url(#arr)"/>
+<path d="M 2600.525,3502.4700000000003 L 2600.525,4686.63 L 1623.32,4686.63 L 1623.32,4666.63" class="scan-inter" marker-end="url(#arr-i)"/>
+<text x="2141.9225" y="4671.63" class="lbl-idx" font-size="14">← scan_dout (bit 56)</text>
+<circle cx="25.0" cy="3931.6" r="16" fill="#7B1FA2" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="25.0" y="3931.6" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">PL</text>
+<text x="25.0" y="3909.6" class="lbl-idx" fill="#7B1FA2">#0–2</text>
+<circle cx="1583.3" cy="25.0" r="16" fill="#7B1FA2" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1583.3" y="25.0" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">PT</text>
+<text x="1583.3" y="3.0" class="lbl-idx" fill="#7B1FA2">#3–5</text>
+<circle cx="3141.6" cy="735.0" r="16" fill="#7B1FA2" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="3141.6" y="735.0" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">PR</text>
+<text x="3141.6" y="713.0" class="lbl-idx" fill="#7B1FA2">#6–8</text>
+<circle cx="2116.9" cy="620.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2116.9" y="620.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">G</text>
+<text x="2116.9" y="602.8" class="lbl-idx">#9</text>
+<circle cx="2600.5" cy="1164.2" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2600.5" y="1164.2" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">B</text>
+<circle cx="3089.1" cy="620.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="3089.1" y="620.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">R</text>
+<circle cx="2600.5" cy="77.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2600.5" y="77.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">T</text>
+<text x="2600.5" y="59.5" class="lbl-idx">#12</text>
+<circle cx="1094.7" cy="620.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1094.7" y="620.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">G</text>
+<circle cx="1578.3" cy="1164.2" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1578.3" y="1164.2" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">B</text>
+<circle cx="2066.9" cy="620.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2066.9" y="620.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">R</text>
+<circle cx="1578.3" cy="77.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1578.3" y="77.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">T</text>
+<text x="1578.3" y="59.5" class="lbl-idx">#16</text>
+<circle cx="72.5" cy="620.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="72.5" y="620.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">G</text>
+<circle cx="556.1" cy="1164.2" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="556.1" y="1164.2" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">B</text>
+<circle cx="1044.7" cy="620.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1044.7" y="620.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">R</text>
+<circle cx="556.1" cy="77.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="556.1" y="77.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">T</text>
+<text x="556.1" y="59.5" class="lbl-idx">#20</text>
+<circle cx="72.5" cy="1762.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="72.5" y="1762.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">G</text>
+<circle cx="556.1" cy="2305.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="556.1" y="2305.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">B</text>
+<circle cx="1044.7" cy="1762.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1044.7" y="1762.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">R</text>
+<circle cx="556.1" cy="1219.2" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="556.1" y="1219.2" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">T</text>
+<text x="556.1" y="1201.2" class="lbl-idx">#24</text>
+<circle cx="1094.7" cy="1762.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1094.7" y="1762.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">G</text>
+<circle cx="1578.3" cy="2305.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1578.3" y="2305.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">B</text>
+<circle cx="2066.9" cy="1762.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2066.9" y="1762.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">R</text>
+<circle cx="1578.3" cy="1219.2" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1578.3" y="1219.2" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">T</text>
+<text x="1578.3" y="1201.2" class="lbl-idx">#28</text>
+<circle cx="2116.9" cy="1762.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2116.9" y="1762.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">G</text>
+<circle cx="2600.5" cy="2305.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2600.5" y="2305.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">B</text>
+<circle cx="3089.1" cy="1762.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="3089.1" y="1762.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">R</text>
+<circle cx="2600.5" cy="1219.2" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2600.5" y="1219.2" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">T</text>
+<text x="2600.5" y="1201.2" class="lbl-idx">#32</text>
+<circle cx="2116.9" cy="2904.1" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2116.9" y="2904.1" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">G</text>
+<circle cx="2600.5" cy="3447.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2600.5" y="3447.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">B</text>
+<circle cx="3089.1" cy="2904.1" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="3089.1" y="2904.1" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">R</text>
+<circle cx="2600.5" cy="2360.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2600.5" y="2360.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">T</text>
+<text x="2600.5" y="2342.8" class="lbl-idx">#36</text>
+<circle cx="1094.7" cy="2904.1" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1094.7" y="2904.1" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">G</text>
+<circle cx="1578.3" cy="3447.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1578.3" y="3447.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">B</text>
+<circle cx="2066.9" cy="2904.1" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2066.9" y="2904.1" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">R</text>
+<circle cx="1578.3" cy="2360.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1578.3" y="2360.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">T</text>
+<text x="1578.3" y="2342.8" class="lbl-idx">#40</text>
+<circle cx="72.5" cy="2904.1" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="72.5" y="2904.1" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">G</text>
+<circle cx="556.1" cy="3447.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="556.1" y="3447.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">B</text>
+<circle cx="1044.7" cy="2904.1" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1044.7" y="2904.1" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">R</text>
+<circle cx="556.1" cy="2360.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="556.1" y="2360.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">T</text>
+<text x="556.1" y="2342.8" class="lbl-idx">#44</text>
+<circle cx="72.5" cy="4045.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="72.5" y="4045.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">G</text>
+<circle cx="556.1" cy="4589.1" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="556.1" y="4589.1" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">B</text>
+<circle cx="1044.7" cy="4045.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1044.7" y="4045.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">R</text>
+<circle cx="556.1" cy="3502.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="556.1" y="3502.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">T</text>
+<text x="556.1" y="3484.5" class="lbl-idx">#48</text>
+<circle cx="1094.7" cy="4045.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1094.7" y="4045.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">G</text>
+<circle cx="1578.3" cy="4589.1" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1578.3" y="4589.1" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">B</text>
+<circle cx="2066.9" cy="4045.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2066.9" y="4045.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">R</text>
+<circle cx="1578.3" cy="3502.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="1578.3" y="3502.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">T</text>
+<text x="1578.3" y="3484.5" class="lbl-idx">#52</text>
+<circle cx="2116.9" cy="4045.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2116.9" y="4045.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">G</text>
+<circle cx="2600.5" cy="4589.1" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2600.5" y="4589.1" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">B</text>
+<circle cx="3089.1" cy="4045.8" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="3089.1" y="4045.8" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">R</text>
+<circle cx="2600.5" cy="3502.5" r="12" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="2"/>
+<text x="2600.5" y="3502.5" text-anchor="middle" dominant-baseline="central" font-size="10" fill="white" font-weight="bold" font-family="Helvetica Neue, Arial, sans-serif">T</text>
+<text x="2600.5" y="3484.5" class="lbl-idx">#56</text>
+<text x="3246.63" y="4046" class="lbl-dim" font-size="18" font-weight="bold">Row 0 (L→R)</text>
+<text x="3246.63" y="4068" class="lbl-dim" font-size="14">(4th in chain)</text>
+<text x="3246.63" y="2904" class="lbl-dim" font-size="18" font-weight="bold">Row 1 (R→L)</text>
+<text x="3246.63" y="2926" class="lbl-dim" font-size="14">(3rd in chain)</text>
+<text x="3246.63" y="1762" class="lbl-dim" font-size="18" font-weight="bold">Row 2 (L→R)</text>
+<text x="3246.63" y="1784" class="lbl-dim" font-size="14">(2nd in chain)</text>
+<text x="3246.63" y="621" class="lbl-dim" font-size="18" font-weight="bold">Row 3 (R→L)</text>
+<text x="3246.63" y="643" class="lbl-dim" font-size="14">(1st in chain)</text>
+<text x="1583.315" y="-260" text-anchor="middle" font-size="34" font-weight="bold" fill="#212121" font-family="Helvetica Neue, Arial, sans-serif">Scan Chain Stitching — 3×4 Configuration</text>
+<text x="1583.315" y="-225" text-anchor="middle" font-size="20" fill="#757575" font-family="Helvetica Neue, Arial, sans-serif">Purples first, then top-down serpentine · 9 purple bits + 48 grid bits = 57 total</text>
+<text x="1583.315" y="-195" text-anchor="middle" font-size="18" fill="#90A4AE" font-family="Helvetica Neue, Arial, sans-serif">Scan Ctrl → Purple Left → Purple Top → Purple Right → Row 3 (R→L) → Row 2 (L→R) → Row 1 (R→L) → Row 0 (L→R) → Scan Ctrl</text>
+<circle cx="60" cy="4826.63" r="10" fill="#D32F2F" fill-opacity="0.9" stroke="white" stroke-width="1.5"/>
+<text x="80" y="4826.63" class="lbl-leg" font-size="18">Grid scan node (1 bit)</text>
+<circle cx="700" cy="4826.63" r="10" fill="#7B1FA2" fill-opacity="0.9" stroke="white" stroke-width="1.5"/>
+<text x="720" y="4826.63" class="lbl-leg" font-size="18">Purple scan node (3 bits)</text>
+<line x1="1330" y1="4826.63" x2="1355" y2="4826.63" stroke="#1565C0" stroke-width="4" stroke-linecap="round"/>
+<text x="1360" y="4826.63" class="lbl-leg" font-size="18">Intra-cell scan path</text>
+<line x1="1970" y1="4826.63" x2="1995" y2="4826.63" stroke="#E91E63" stroke-width="3.5" stroke-dasharray="8,4" stroke-linecap="round"/>
+<text x="2000" y="4826.63" class="lbl-leg" font-size="18">Inter-cell scan link</text>
+<line x1="2610" y1="4826.63" x2="2635" y2="4826.63" stroke="#7B1FA2" stroke-width="4" stroke-linecap="round"/>
+<text x="2640" y="4826.63" class="lbl-leg" font-size="18">Purple chain segment</text>
+<text x="1583.315" y="4876.63" text-anchor="middle" font-size="16" fill="#616161" font-family="Helvetica Neue, Arial, sans-serif">Bits 0–2: Purple Left · Bits 3–5: Purple Top · Bits 6–8: Purple Right · Bits 9–56: 12 cells × 4 nodes (G→B→R→T)</text>
+</svg>
