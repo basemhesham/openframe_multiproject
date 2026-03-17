@@ -18,7 +18,7 @@ module tb_orange;
     localparam PADS = 15;
 
     // DUT signals
-    wire scan_clk_out, scan_latch_out, scan_out;
+    wire scan_clk_out_e, scan_latch_out_e, scan_out_e;
 
     reg  [PADS-1:0]   pad_side_gpio_in;
     wire [PADS-1:0]   pad_side_gpio_out;
@@ -37,12 +37,21 @@ module tb_orange;
 
     orange_macro #(.PADS(PADS)) dut (
         .por_n               (por_n),
-        .scan_clk_in         (scan_clk),
-        .scan_latch_in       (scan_latch),
-        .scan_in             (scan_din),
-        .scan_clk_out        (scan_clk_out),
-        .scan_latch_out      (scan_latch_out),
-        .scan_out            (scan_out),
+        // Scan in from west side
+        .scan_clk_w          (scan_clk),
+        .scan_latch_w        (scan_latch),
+        .scan_in_w           (scan_din),
+        .scan_clk_out_w      (),
+        .scan_latch_out_w    (),
+        .scan_out_w          (),
+        // Scan out from east side
+        .scan_clk_e          (1'b0),
+        .scan_latch_e        (1'b0),
+        .scan_in_e           (1'b0),
+        .scan_clk_out_e      (scan_clk_out_e),
+        .scan_latch_out_e    (scan_latch_out_e),
+        .scan_out_e          (scan_out_e),
+        // GPIO
         .pad_side_gpio_in    (pad_side_gpio_in),
         .pad_side_gpio_out   (pad_side_gpio_out),
         .pad_side_gpio_oeb   (pad_side_gpio_oeb),
@@ -113,7 +122,6 @@ module tb_orange;
         // Test 4: MUX switching: toggle sel
         // =====================================================================
         $display("[4] MUX switching on sel toggle");
-        // Currently sel=1, switch back to 0
         shift_bit(1'b0);
         pulse_latch;
         #10;
@@ -129,22 +137,20 @@ module tb_orange;
         local_proj_gpio_dm = 45'h155555555;
         #10;
 
-        // Currently sel=0, so pad_dm should be chain_dm
         assert_eq_vec(pad_side_gpio_dm[44:0], 45'h1AAAAAAAAA, "pad_dm = chain_dm (sel=0)");
 
-        // Switch to local
         shift_bit(1'b1);
         pulse_latch;
         #10;
         assert_eq_vec(pad_side_gpio_dm[44:0], 45'h155555555, "pad_dm = local_dm (sel=1)");
 
         // =====================================================================
-        // Test 6: Scan chain feedthrough
+        // Test 6: Scan chain feedthrough on output side
         // =====================================================================
         $display("[6] Scan chain feedthrough");
         scan_latch = 1'b1;
         #1;
-        assert_eq(scan_latch_out, 1, "scan_latch passthrough");
+        assert_eq(scan_latch_out_e, 1, "scan_latch_out_e passthrough");
         scan_latch = 1'b0;
         #1;
 

@@ -10,7 +10,7 @@
     ],
     "VERILOG_DEFINES": "SKY130",
     "SYNTH_PARAMETERS": "PADS=15 PORTS=3",
-    "CLOCK_PORT": "scan_clk_in",
+    "CLOCK_PORT": "scan_clk_a",
     "CLOCK_PERIOD": 100,
     "FP_SIZING": "absolute",
     "DIE_AREA": "0 0 3066.63 50",

@@ -5,6 +5,10 @@
 // Contains a 1-bit scan node controlling project enable.
 // Daisy-chains sys_clk and sys_reset_n vertically (bottom to top) within
 // each column of the grid.
+//
+// Scan ports on both short sides (#S and #N). The wrapper picks direction:
+//   - Bottom-to-top chain: scan_in from #S, scan_out from #N
+//   - Top-to-bottom chain: scan_in from #N, scan_out from #S
 
 `default_nettype none
 
@@ -23,27 +27,41 @@ module green_macro (
     // POR for internal scan node
     input  wire por_n,
 
-    // Scan chain feedthrough
-    input  wire scan_clk_in,
-    input  wire scan_latch_in,
-    input  wire scan_in,
-    output wire scan_clk_out,
-    output wire scan_latch_out,
-    output wire scan_out
+    // Scan chain — South side (#S)
+    input  wire scan_clk_s,
+    input  wire scan_latch_s,
+    input  wire scan_in_s,
+    output wire scan_clk_out_s,
+    output wire scan_latch_out_s,
+    output wire scan_out_s,
+
+    // Scan chain — North side (#N)
+    input  wire scan_clk_n,
+    input  wire scan_latch_n,
+    input  wire scan_in_n,
+    output wire scan_clk_out_n,
+    output wire scan_latch_out_n,
+    output wire scan_out_n
 );
 
     // 1-bit scan node: proj_en
     wire proj_en;
 
     scan_macro_node #(.WIDTH(1)) u_node (
-        .por_n          (por_n),
-        .scan_clk_in    (scan_clk_in),
-        .scan_latch_in  (scan_latch_in),
-        .scan_in        (scan_in),
-        .scan_clk_out   (scan_clk_out),
-        .scan_latch_out (scan_latch_out),
-        .scan_out       (scan_out),
-        .ctrl_out       (proj_en)
+        .por_n           (por_n),
+        .scan_clk_a      (scan_clk_s),
+        .scan_latch_a    (scan_latch_s),
+        .scan_in_a       (scan_in_s),
+        .scan_clk_out_a  (scan_clk_out_s),
+        .scan_latch_out_a(scan_latch_out_s),
+        .scan_out_a      (scan_out_s),
+        .scan_clk_b      (scan_clk_n),
+        .scan_latch_b    (scan_latch_n),
+        .scan_in_b       (scan_in_n),
+        .scan_clk_out_b  (scan_clk_out_n),
+        .scan_latch_out_b(scan_latch_out_n),
+        .scan_out_b      (scan_out_n),
+        .ctrl_out        (proj_en)
     );
 
     // Buffer sys_clk and sys_reset_n upward to next green in column

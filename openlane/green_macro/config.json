@@ -9,7 +9,7 @@
         "dir::../../verilog/rtl/green_macro.v"
     ],
     "VERILOG_DEFINES": "SKY130",
-    "CLOCK_PORT": "scan_clk_in",
+    "CLOCK_PORT": "scan_clk_s",
     "CLOCK_PERIOD": 100,
     "FP_SIZING": "absolute",
     "DIE_AREA": "0 0 45 1031.66",

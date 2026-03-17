@@ -7,6 +7,10 @@
 //   - Green macro column chains for clock/reset distribution
 //   - Row-major serpentine scan chain with magic-word security
 //
+// All scan macros have dual-sided scan ports (in+out on both short sides).
+// The wrapper selects scan direction by connecting the appropriate side's
+// in/out and tying the unused side's inputs to 0.
+//
 // Pad assignment:
 //   [14:0]  = Right pads  (15) via Right Purple  <- bottom orange row chains
 //   [23:15] = Top pads    (9)  via Top Purple    <- right orange column chains
@@ -206,6 +210,12 @@ module openframe_project_wrapper #(
     // That is 4 scan nodes per cell.
     //
     // Grid scan indices start at 3 (after 3 purple nodes).
+    //
+    // Dual-sided scan: each macro has scan_in+scan_out on both short sides.
+    // We connect scan_in to one side and read scan_out from the other.
+    // The unused side's scan inputs are tied to 0 at the macro level (OR gate).
+    // Since the wrapper doesn't drive those inputs, they default to 0 via the
+    // generate block's wire declarations (undriven wires = 0 in simulation).
 
     localparam SC_GRID_BASE = 3; // After Purple Left(0), Top(1), Right(2)
 
@@ -252,6 +262,7 @@ module openframe_project_wrapper #(
 
                 // =============================================================
                 // Green Macro (scan node 0 of this cell)
+                // Scan direction: #S -> #N (south to north)
                 // =============================================================
                 green_macro u_green (
                     .sys_clk_in      (gclk[c][r]),
@@ -262,30 +273,48 @@ module openframe_project_wrapper #(
                     .proj_reset_n_out(proj_rst_n),
                     .proj_por_n_out  (proj_por_n),
                     .por_n           (por_n),
-                    .scan_clk_in     (sc_clk[SC_BASE]),
-                    .scan_latch_in   (sc_lat[SC_BASE]),
-                    .scan_in         (sc_dat[SC_BASE]),
-                    .scan_clk_out    (sc_clk[SC_BASE+1]),
-                    .scan_latch_out  (sc_lat[SC_BASE+1]),
-                    .scan_out        (sc_dat[SC_BASE+1])
+                    // Scan in from south side
+                    .scan_clk_s      (sc_clk[SC_BASE]),
+                    .scan_latch_s    (sc_lat[SC_BASE]),
+                    .scan_in_s       (sc_dat[SC_BASE]),
+                    .scan_clk_out_s  (),  // unused output direction
+                    .scan_latch_out_s(),
+                    .scan_out_s      (),
+                    // Scan out from north side
+                    .scan_clk_n      (1'b0),  // unused input direction
+                    .scan_latch_n    (1'b0),
+                    .scan_in_n       (1'b0),
+                    .scan_clk_out_n  (sc_clk[SC_BASE+1]),
+                    .scan_latch_out_n(sc_lat[SC_BASE+1]),
+                    .scan_out_n      (sc_dat[SC_BASE+1])
                 );
 
                 // =============================================================
-                // Bottom Orange (scan node 1, L->R row chain position = c)
+                // Bottom Orange (scan node 1, L->R row chain)
+                // Scan direction: #W -> #E (west to east)
                 // =============================================================
                 orange_macro #(.PADS(PADS)) u_bot_orange (
                     .por_n               (por_n),
-                    .scan_clk_in         (sc_clk[SC_BASE+1]),
-                    .scan_latch_in       (sc_lat[SC_BASE+1]),
-                    .scan_in             (sc_dat[SC_BASE+1]),
-                    .scan_clk_out        (sc_clk[SC_BASE+2]),
-                    .scan_latch_out      (sc_lat[SC_BASE+2]),
-                    .scan_out            (sc_dat[SC_BASE+2]),
+                    // Scan in from west side
+                    .scan_clk_w          (sc_clk[SC_BASE+1]),
+                    .scan_latch_w        (sc_lat[SC_BASE+1]),
+                    .scan_in_w           (sc_dat[SC_BASE+1]),
+                    .scan_clk_out_w      (),
+                    .scan_latch_out_w    (),
+                    .scan_out_w          (),
+                    // Scan out from east side
+                    .scan_clk_e          (1'b0),
+                    .scan_latch_e        (1'b0),
+                    .scan_in_e           (1'b0),
+                    .scan_clk_out_e      (sc_clk[SC_BASE+2]),
+                    .scan_latch_out_e    (sc_lat[SC_BASE+2]),
+                    .scan_out_e          (sc_dat[SC_BASE+2]),
+                    // GPIO
                     .pad_side_gpio_in    (bot_in[r][c+1]),
                     .pad_side_gpio_out   (bot_out[r][c+1]),
                     .pad_side_gpio_oeb   (bot_oeb[r][c+1]),
                     .pad_side_gpio_dm    (bot_dm[r][c+1]),
-                    .chain_side_gpio_in  (),  // broadcast; not needed upstream
+                    .chain_side_gpio_in  (),
                     .chain_side_gpio_out (bot_out[r][c]),
                     .chain_side_gpio_oeb (bot_oeb[r][c]),
                     .chain_side_gpio_dm  (bot_dm[r][c]),
@@ -296,16 +325,26 @@ module openframe_project_wrapper #(
                 );
 
                 // =============================================================
-                // Right Orange (scan node 2, B->T column chain position = r)
+                // Right Orange (scan node 2, B->T column chain)
+                // Scan direction: #W -> #E (using W=bottom, E=top for vertical)
                 // =============================================================
                 orange_macro #(.PADS(PADS)) u_rt_orange (
                     .por_n               (por_n),
-                    .scan_clk_in         (sc_clk[SC_BASE+2]),
-                    .scan_latch_in       (sc_lat[SC_BASE+2]),
-                    .scan_in             (sc_dat[SC_BASE+2]),
-                    .scan_clk_out        (sc_clk[SC_BASE+3]),
-                    .scan_latch_out      (sc_lat[SC_BASE+3]),
-                    .scan_out            (sc_dat[SC_BASE+3]),
+                    // Scan in from west/south side
+                    .scan_clk_w          (sc_clk[SC_BASE+2]),
+                    .scan_latch_w        (sc_lat[SC_BASE+2]),
+                    .scan_in_w           (sc_dat[SC_BASE+2]),
+                    .scan_clk_out_w      (),
+                    .scan_latch_out_w    (),
+                    .scan_out_w          (),
+                    // Scan out from east/north side
+                    .scan_clk_e          (1'b0),
+                    .scan_latch_e        (1'b0),
+                    .scan_in_e           (1'b0),
+                    .scan_clk_out_e      (sc_clk[SC_BASE+3]),
+                    .scan_latch_out_e    (sc_lat[SC_BASE+3]),
+                    .scan_out_e          (sc_dat[SC_BASE+3]),
+                    // GPIO
                     .pad_side_gpio_in    (rt_in[c][r+1]),
                     .pad_side_gpio_out   (rt_out[c][r+1]),
                     .pad_side_gpio_oeb   (rt_oeb[c][r+1]),
@@ -321,18 +360,28 @@ module openframe_project_wrapper #(
                 );
 
                 // =============================================================
-                // Top Orange (scan node 3, R->L row chain position = COLS-1-c)
+                // Top Orange (scan node 3, R->L row chain)
+                // Scan direction: #E -> #W (east to west, reverse)
                 // =============================================================
                 localparam integer TOP_CP = COLS - 1 - c;
 
                 orange_macro #(.PADS(PADS)) u_top_orange (
                     .por_n               (por_n),
-                    .scan_clk_in         (sc_clk[SC_BASE+3]),
-                    .scan_latch_in       (sc_lat[SC_BASE+3]),
-                    .scan_in             (sc_dat[SC_BASE+3]),
-                    .scan_clk_out        (sc_clk[SC_BASE+4]),
-                    .scan_latch_out      (sc_lat[SC_BASE+4]),
-                    .scan_out            (sc_dat[SC_BASE+4]),
+                    // Scan in from east side (R->L: predecessor on right)
+                    .scan_clk_w          (1'b0),
+                    .scan_latch_w        (1'b0),
+                    .scan_in_w           (1'b0),
+                    .scan_clk_out_w      (sc_clk[SC_BASE+4]),
+                    .scan_latch_out_w    (sc_lat[SC_BASE+4]),
+                    .scan_out_w          (sc_dat[SC_BASE+4]),
+                    // Scan out from west side
+                    .scan_clk_e          (sc_clk[SC_BASE+3]),
+                    .scan_latch_e        (sc_lat[SC_BASE+3]),
+                    .scan_in_e           (sc_dat[SC_BASE+3]),
+                    .scan_clk_out_e      (),
+                    .scan_latch_out_e    (),
+                    .scan_out_e          (),
+                    // GPIO
                     .pad_side_gpio_in    (top_in[r][TOP_CP+1]),
                     .pad_side_gpio_out   (top_out[r][TOP_CP+1]),
                     .pad_side_gpio_oeb   (top_oeb[r][TOP_CP+1]),
@@ -386,6 +435,7 @@ module openframe_project_wrapper #(
     // -----------------------------------------------------------------
     // Right Purple: PORTS=ROWS, 15 GPIOs -> Caravel gpio[14:0]
     // Receives bottom orange chain endpoints (bot_*[r][COLS])
+    // Scan direction: side_a -> side_b
     // -----------------------------------------------------------------
     wire [ROWS*PADS-1:0]     rp_tree_in;
     wire [ROWS*PADS-1:0]     rp_tree_out;
@@ -404,21 +454,27 @@ module openframe_project_wrapper #(
     endgenerate
 
     purple_macro #(.PADS(PADS), .PORTS(ROWS)) u_purple_right (
-        .por_n         (por_n),
-        .scan_clk_in   (sc_clk[2]),
-        .scan_latch_in (sc_lat[2]),
-        .scan_in       (sc_dat[2]),
-        .scan_clk_out  (sc_clk[3]),
-        .scan_latch_out(sc_lat[3]),
-        .scan_out      (sc_dat[3]),
-        .pad_gpio_in   (gpio_in[14:0]),
-        .pad_gpio_out  (rp_pad_out),
-        .pad_gpio_oeb  (rp_pad_oeb),
-        .pad_gpio_dm   (rp_pad_dm),
-        .tree_gpio_in  (rp_tree_in),
-        .tree_gpio_out (rp_tree_out),
-        .tree_gpio_oeb (rp_tree_oeb),
-        .tree_gpio_dm  (rp_tree_dm)
+        .por_n          (por_n),
+        .scan_clk_a     (sc_clk[2]),
+        .scan_latch_a   (sc_lat[2]),
+        .scan_in_a      (sc_dat[2]),
+        .scan_clk_out_a (),
+        .scan_latch_out_a(),
+        .scan_out_a     (),
+        .scan_clk_b     (1'b0),
+        .scan_latch_b   (1'b0),
+        .scan_in_b      (1'b0),
+        .scan_clk_out_b (sc_clk[3]),
+        .scan_latch_out_b(sc_lat[3]),
+        .scan_out_b     (sc_dat[3]),
+        .pad_gpio_in    (gpio_in[14:0]),
+        .pad_gpio_out   (rp_pad_out),
+        .pad_gpio_oeb   (rp_pad_oeb),
+        .pad_gpio_dm    (rp_pad_dm),
+        .tree_gpio_in   (rp_tree_in),
+        .tree_gpio_out  (rp_tree_out),
+        .tree_gpio_oeb  (rp_tree_oeb),
+        .tree_gpio_dm   (rp_tree_dm)
     );
 
     // -----------------------------------------------------------------
@@ -442,21 +498,27 @@ module openframe_project_wrapper #(
     endgenerate
 
     purple_macro #(.PADS(PADS), .PORTS(COLS)) u_purple_top (
-        .por_n         (por_n),
-        .scan_clk_in   (sc_clk[1]),
-        .scan_latch_in (sc_lat[1]),
-        .scan_in       (sc_dat[1]),
-        .scan_clk_out  (sc_clk[2]),
-        .scan_latch_out(sc_lat[2]),
-        .scan_out      (sc_dat[2]),
-        .pad_gpio_in   ({6'b0, gpio_in[23:15]}),
-        .pad_gpio_out  (tp_pad_out),
-        .pad_gpio_oeb  (tp_pad_oeb),
-        .pad_gpio_dm   (tp_pad_dm),
-        .tree_gpio_in  (tp_tree_in),
-        .tree_gpio_out (tp_tree_out),
-        .tree_gpio_oeb (tp_tree_oeb),
-        .tree_gpio_dm  (tp_tree_dm)
+        .por_n          (por_n),
+        .scan_clk_a     (sc_clk[1]),
+        .scan_latch_a   (sc_lat[1]),
+        .scan_in_a      (sc_dat[1]),
+        .scan_clk_out_a (),
+        .scan_latch_out_a(),
+        .scan_out_a     (),
+        .scan_clk_b     (1'b0),
+        .scan_latch_b   (1'b0),
+        .scan_in_b      (1'b0),
+        .scan_clk_out_b (sc_clk[2]),
+        .scan_latch_out_b(sc_lat[2]),
+        .scan_out_b     (sc_dat[2]),
+        .pad_gpio_in    ({6'b0, gpio_in[23:15]}),
+        .pad_gpio_out   (tp_pad_out),
+        .pad_gpio_oeb   (tp_pad_oeb),
+        .pad_gpio_dm    (tp_pad_dm),
+        .tree_gpio_in   (tp_tree_in),
+        .tree_gpio_out  (tp_tree_out),
+        .tree_gpio_oeb  (tp_tree_oeb),
+        .tree_gpio_dm   (tp_tree_dm)
     );
 
     // -----------------------------------------------------------------
@@ -480,21 +542,27 @@ module openframe_project_wrapper #(
     endgenerate
 
     purple_macro #(.PADS(PADS), .PORTS(ROWS)) u_purple_left (
-        .por_n         (por_n),
-        .scan_clk_in   (sc_clk[0]),
-        .scan_latch_in (sc_lat[0]),
-        .scan_in       (sc_dat[0]),
-        .scan_clk_out  (sc_clk[1]),
-        .scan_latch_out(sc_lat[1]),
-        .scan_out      (sc_dat[1]),
-        .pad_gpio_in   ({1'b0, gpio_in[37:24]}),
-        .pad_gpio_out  (lp_pad_out),
-        .pad_gpio_oeb  (lp_pad_oeb),
-        .pad_gpio_dm   (lp_pad_dm),
-        .tree_gpio_in  (lp_tree_in),
-        .tree_gpio_out (lp_tree_out),
-        .tree_gpio_oeb (lp_tree_oeb),
-        .tree_gpio_dm  (lp_tree_dm)
+        .por_n          (por_n),
+        .scan_clk_a     (sc_clk[0]),
+        .scan_latch_a   (sc_lat[0]),
+        .scan_in_a      (sc_dat[0]),
+        .scan_clk_out_a (),
+        .scan_latch_out_a(),
+        .scan_out_a     (),
+        .scan_clk_b     (1'b0),
+        .scan_latch_b   (1'b0),
+        .scan_in_b      (1'b0),
+        .scan_clk_out_b (sc_clk[1]),
+        .scan_latch_out_b(sc_lat[1]),
+        .scan_out_b     (sc_dat[1]),
+        .pad_gpio_in    ({1'b0, gpio_in[37:24]}),
+        .pad_gpio_out   (lp_pad_out),
+        .pad_gpio_oeb   (lp_pad_oeb),
+        .pad_gpio_dm    (lp_pad_dm),
+        .tree_gpio_in   (lp_tree_in),
+        .tree_gpio_out  (lp_tree_out),
+        .tree_gpio_oeb  (lp_tree_oeb),
+        .tree_gpio_dm   (lp_tree_dm)
     );
 
     // =========================================================================

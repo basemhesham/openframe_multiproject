@@ -73,10 +73,11 @@ Every grid position `[r][c]` contains a cluster of **4 macros + 1 user project**
 Never instantiated standalone. Always inside a host macro.
 
 **Function:**
-- WIDTH-bit shift register clocked by `scan_clk_in`.
-- Shifts in from `scan_in`; MSB exits as `scan_out`.
-- Shadow register captures shift_reg on `scan_latch_in` assertion, providing glitch-free `ctrl_out[WIDTH-1:0]`.
-- Physical repeater buffers on `scan_clk` and `scan_latch` for signal integrity across the chip (using `tech_clkbuf` and `tech_buf`).
+- WIDTH-bit shift register clocked by the merged scan clock.
+- Dual-sided scan ports: both sides (`_a` and `_b`) carry scan_clk, scan_latch, scan_in, and scan_out. Inputs are OR'd (only one side driven, other tied to 0); outputs are fanned out to both sides via buffers.
+- Shifts in from merged `scan_in`; MSB exits as `scan_out` on both sides.
+- Shadow register captures shift_reg on merged `scan_latch` assertion, providing glitch-free `ctrl_out[WIDTH-1:0]`.
+- Physical repeater buffers on scan_clk and scan_latch for signal integrity across the chip (using `tech_clkbuf` and `tech_buf`).
 - Shadow register reset by `por_n` only (not sys_reset_n) to guarantee safe power-up state while preserving scan configuration across system resets.
 - Shift register does not require reset (chain is locked on POR; no clocks or latches can reach it).
 
@@ -91,33 +92,43 @@ Never instantiated standalone. Always inside a host macro.
 **WIDTH=1 handling:** Uses a generate block to avoid illegal `shift_reg[-1:0]`:
 
 ```verilog
+wire scan_clk_merged   = scan_clk_a   | scan_clk_b;
+wire scan_latch_merged = scan_latch_a  | scan_latch_b;
+wire scan_in_merged    = scan_in_a     | scan_in_b;
+
 generate
     if (WIDTH == 1) begin : gen_w1
-        always @(posedge scan_clk_in or negedge por_n) begin
+        always @(posedge scan_clk_merged or negedge por_n) begin
             if (!por_n) shift_reg <= 1'b0;
-            else        shift_reg <= scan_in;
+            else        shift_reg <= scan_in_merged;
         end
     end else begin : gen_wn
-        always @(posedge scan_clk_in or negedge por_n) begin
+        always @(posedge scan_clk_merged or negedge por_n) begin
             if (!por_n) shift_reg <= {WIDTH{1'b0}};
-            else        shift_reg <= {shift_reg[WIDTH-2:0], scan_in};
+            else        shift_reg <= {shift_reg[WIDTH-2:0], scan_in_merged};
         end
     end
 endgenerate
 ```
 
-**Ports:**
+**Ports (dual-sided: `_a` and `_b`):**
 
-| Port           | Dir    | Width  | Description                                    |
-|----------------|--------|--------|------------------------------------------------|
-| por_n          | input  | 1      | Power-on reset (active low), resets shadow reg  |
-| scan_clk_in    | input  | 1      | Scan clock from predecessor                    |
-| scan_latch_in  | input  | 1      | Latch pulse from predecessor                   |
-| scan_in        | input  | 1      | Serial data from predecessor                   |
-| scan_clk_out   | output | 1      | Buffered scan clock to successor               |
-| scan_latch_out | output | 1      | Buffered latch to successor                    |
-| scan_out       | output | 1      | Serial data to successor (shift_reg MSB)       |
-| ctrl_out       | output | WIDTH  | Latched configuration output                   |
+| Port              | Dir    | Width  | Description                                    |
+|-------------------|--------|--------|------------------------------------------------|
+| por_n             | input  | 1      | Power-on reset (active low), resets shadow reg  |
+| scan_clk_a        | input  | 1      | Scan clock, side A                             |
+| scan_latch_a      | input  | 1      | Latch pulse, side A                            |
+| scan_in_a         | input  | 1      | Serial data in, side A                         |
+| scan_clk_out_a    | output | 1      | Buffered scan clock out, side A                |
+| scan_latch_out_a  | output | 1      | Buffered latch out, side A                     |
+| scan_out_a        | output | 1      | Serial data out, side A (shift_reg MSB)        |
+| scan_clk_b        | input  | 1      | Scan clock, side B                             |
+| scan_latch_b      | input  | 1      | Latch pulse, side B                            |
+| scan_in_b         | input  | 1      | Serial data in, side B                         |
+| scan_clk_out_b    | output | 1      | Buffered scan clock out, side B                |
+| scan_latch_out_b  | output | 1      | Buffered latch out, side B                     |
+| scan_out_b        | output | 1      | Serial data out, side B (shift_reg MSB)        |
+| ctrl_out          | output | WIDTH  | Latched configuration output                   |
 
 ### 4.2 green_macro
 
@@ -144,12 +155,20 @@ endgenerate
 | proj_reset_n_out  | output | 1     | Gated reset to project (left edge)         |
 | proj_por_n_out    | output | 1     | Buffered POR to project (left edge)        |
 | por_n             | input  | 1     | POR for internal scan_macro_node           |
-| scan_clk_in       | input  | 1     | Scan chain feedthrough                     |
-| scan_clk_out      | output | 1     | Scan chain feedthrough                     |
-| scan_latch_in     | input  | 1     | Scan chain feedthrough                     |
-| scan_latch_out    | output | 1     | Scan chain feedthrough                     |
-| scan_in           | input  | 1     | Scan chain feedthrough                     |
-| scan_out          | output | 1     | Scan chain feedthrough                     |
+| scan_clk_s        | input  | 1     | Scan clock, South side                     |
+| scan_latch_s      | input  | 1     | Scan latch, South side                     |
+| scan_in_s         | input  | 1     | Scan data in, South side                   |
+| scan_clk_out_s    | output | 1     | Scan clock out, South side                 |
+| scan_latch_out_s  | output | 1     | Scan latch out, South side                 |
+| scan_out_s        | output | 1     | Scan data out, South side                  |
+| scan_clk_n        | input  | 1     | Scan clock, North side                     |
+| scan_latch_n      | input  | 1     | Scan latch, North side                     |
+| scan_in_n         | input  | 1     | Scan data in, North side                   |
+| scan_clk_out_n    | output | 1     | Scan clock out, North side                 |
+| scan_latch_out_n  | output | 1     | Scan latch out, North side                 |
+| scan_out_n        | output | 1     | Scan data out, North side                  |
+
+**Side mapping:** South (`_s`) → scan_macro_node side A, North (`_n`) → side B. Wrapper drives scan from South, reads from North (bottom-to-top chain).
 
 **Clock/Reset distribution:** Green macros form vertical column chains, bottom to top. For a COLS x ROWS grid, there are COLS independent clock/reset columns, each ROWS deep.
 
@@ -170,12 +189,18 @@ endgenerate
 | Port                  | Dir    | Width  | Description                                   |
 |-----------------------|--------|--------|-----------------------------------------------|
 | por_n                 | input  | 1      | POR for internal scan_macro_node              |
-| scan_clk_in           | input  | 1      | Scan chain feedthrough                        |
-| scan_clk_out          | output | 1      | Scan chain feedthrough                        |
-| scan_latch_in         | input  | 1      | Scan chain feedthrough                        |
-| scan_latch_out        | output | 1      | Scan chain feedthrough                        |
-| scan_in               | input  | 1      | Scan chain feedthrough                        |
-| scan_out              | output | 1      | Scan chain feedthrough                        |
+| scan_clk_w            | input  | 1      | Scan clock, West side                         |
+| scan_latch_w          | input  | 1      | Scan latch, West side                         |
+| scan_in_w             | input  | 1      | Scan data in, West side                       |
+| scan_clk_out_w        | output | 1      | Scan clock out, West side                     |
+| scan_latch_out_w      | output | 1      | Scan latch out, West side                     |
+| scan_out_w            | output | 1      | Scan data out, West side                      |
+| scan_clk_e            | input  | 1      | Scan clock, East side                         |
+| scan_latch_e          | input  | 1      | Scan latch, East side                         |
+| scan_in_e             | input  | 1      | Scan data in, East side                       |
+| scan_clk_out_e        | output | 1      | Scan clock out, East side                     |
+| scan_latch_out_e      | output | 1      | Scan latch out, East side                     |
+| scan_out_e            | output | 1      | Scan data out, East side                      |
 | pad_side_gpio_in      | input  | 15     | From pad/successor (closer to Caravel)        |
 | pad_side_gpio_out     | output | 15     | To pad/successor                              |
 | pad_side_gpio_oeb     | output | 15     | To pad/successor                              |
@@ -188,6 +213,8 @@ endgenerate
 | local_proj_gpio_out   | input  | 15     | From local project                            |
 | local_proj_gpio_oeb   | input  | 15     | From local project                            |
 | local_proj_gpio_dm    | input  | 45     | From local project                            |
+
+**Side mapping:** West (`_w`) → scan_macro_node side A, East (`_e`) → side B. Bottom orange: scan W→E (L→R chain). Top orange: scan E→W (R→L chain, same macro with FN+MY placement). Right orange uses `orange_macro_v` with same `_w`/`_e` naming mapped to short sides.
 
 **Chain topology (3x3 example):**
 
@@ -233,12 +260,18 @@ Chain start tie-offs: `gpio_out=0`, `gpio_oeb={15{1'b1}}` (Hi-Z), `gpio_dm=0`.
 | Port              | Dir    | Width           | Description                              |
 |-------------------|--------|-----------------|------------------------------------------|
 | por_n             | input  | 1               | POR for internal scan_macro_node         |
-| scan_clk_in       | input  | 1               | Scan chain feedthrough                   |
-| scan_clk_out      | output | 1               | Scan chain feedthrough                   |
-| scan_latch_in     | input  | 1               | Scan chain feedthrough                   |
-| scan_latch_out    | output | 1               | Scan chain feedthrough                   |
-| scan_in           | input  | 1               | Scan chain feedthrough                   |
-| scan_out          | output | 1               | Scan chain feedthrough                   |
+| scan_clk_a        | input  | 1               | Scan clock, side A                       |
+| scan_latch_a      | input  | 1               | Scan latch, side A                       |
+| scan_in_a         | input  | 1               | Scan data in, side A                     |
+| scan_clk_out_a    | output | 1               | Scan clock out, side A                   |
+| scan_latch_out_a  | output | 1               | Scan latch out, side A                   |
+| scan_out_a        | output | 1               | Scan data out, side A                    |
+| scan_clk_b        | input  | 1               | Scan clock, side B                       |
+| scan_latch_b      | input  | 1               | Scan latch, side B                       |
+| scan_in_b         | input  | 1               | Scan data in, side B                     |
+| scan_clk_out_b    | output | 1               | Scan clock out, side B                   |
+| scan_latch_out_b  | output | 1               | Scan latch out, side B                   |
+| scan_out_b        | output | 1               | Scan data out, side B                    |
 | pad_gpio_in       | input  | 15              | From Caravel pads                        |
 | pad_gpio_out      | output | 15              | To Caravel pads                          |
 | pad_gpio_oeb      | output | 15              | To Caravel pads                          |
@@ -620,31 +653,33 @@ Signals per short edge:
 
 ### 10.4 Pin Placement by Edge
 
-**Bottom orange (horizontal, L->R chain):**
+All orange macros have **dual-sided scan ports** (scan_clk, scan_latch, scan_in, scan_out on both short sides `_w` and `_e`). The wrapper selects chain direction by connecting the appropriate side and tying the unused side's inputs to 0. This eliminates the need for separate hardened variants — the same `orange_macro_h` serves both bottom (L→R: W→E) and top (R→L: E→W, placed with FN+MY) positions.
+
+**Bottom orange (horizontal, L→R chain) — `orange_macro_h`:**
 
 | Edge          | Connects To                  | Signals                              |
 |---------------|------------------------------|--------------------------------------|
 | Top (long)    | Project bottom edge          | local_proj_* (GPIO + power)          |
-| Left (short)  | Chain predecessor            | chain_side_* + scan_in/clk_in/lat_in + por_n |
-| Right (short) | Chain successor / Purple     | pad_side_* + scan_out/clk_out/lat_out|
+| Left (short)  | Chain predecessor            | chain_side_* + scan_*_w + por_n      |
+| Right (short) | Chain successor / Purple     | pad_side_* + scan_*_e                |
 
-**Right orange (vertical, B->T chain):**
+**Right orange (vertical, B→T chain) — `orange_macro_v`:**
 
 | Edge           | Connects To                  | Signals                              |
 |----------------|------------------------------|--------------------------------------|
 | Left (long)    | Project right edge           | local_proj_* (GPIO + power)          |
-| Bottom (short) | Chain predecessor            | chain_side_* + scan_in/clk_in/lat_in + por_n |
-| Top (short)    | Chain successor / Purple     | pad_side_* + scan_out/clk_out/lat_out|
+| Bottom (short) | Chain predecessor            | chain_side_* + scan_*_w + por_n      |
+| Top (short)    | Chain successor / Purple     | pad_side_* + scan_*_e                |
 
-**Top orange (horizontal, R->L chain) — `orange_macro_h_top`:**
+**Top orange (horizontal, R→L chain) — `orange_macro_h` (FN+MY placement):**
 
 | Edge            | Connects To                  | Signals                              |
 |-----------------|------------------------------|--------------------------------------|
 | Bottom (long)   | Project top edge             | local_proj_* (GPIO + power)          |
-| Right (short)   | Chain predecessor + scan I/O | chain_side_* + scan_in/clk_in/lat_in + scan_out/clk_out/lat_out + por_n |
-| Left (short)    | Chain successor / Purple     | pad_side_*                           |
+| Right (short)   | Chain predecessor            | chain_side_* + scan_*_e (input side) + por_n |
+| Left (short)    | Chain successor / Purple     | pad_side_* + scan_*_w (output side)  |
 
-Note: The top orange uses a separate hardened variant (`orange_macro_h_top`) with **swapped short edges** compared to `orange_macro_h`. Since the GPIO chain flows R→L (opposite to bottom orange's L→R), the chain predecessor is on the **right** and the successor (toward Left Purple) is on the **left**. The pin_order.cfg reflects this: `#E` = chain_side + scan I/O, `#W` = pad_side. After FN placement, `#E` stays right (= predecessor side) and `#W` stays left (= Purple side). Both scan_in and scan_out are co-located on `#E` so the scan_macro_node sits near the right edge with short internal wires. Same RTL as `orange_macro_h`, different pin placement only.
+Note: The top orange reuses the same `orange_macro_h` with FN+MY placement orientation. The scan chain flows E→W (reversed): `scan_in_e` receives from predecessor, `scan_out_w` feeds to successor. The dual-sided scan ports make this possible without a separate pin placement variant.
 
 ## 11. Floorplan Analysis
 

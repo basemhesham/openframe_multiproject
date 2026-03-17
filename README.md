@@ -48,9 +48,8 @@ verilog/rtl/
 
 openlane/
   green_macro/                  # OpenLane config + pin_order for each macro
-  orange_macro_h/               # Horizontal orange (bottom, L→R chain)
-  orange_macro_h_top/           # Horizontal orange (top, R→L chain, swapped edges)
-  orange_macro_v/               # Vertical orange (right, B→T chain)
+  orange_macro_h/               # Horizontal orange (bottom & top, dual-sided scan)
+  orange_macro_v/               # Vertical orange (right, dual-sided scan)
   purple_macro_p3/              # Purple with PORTS=3 (Top Purple for 3-column grid)
   purple_macro_p4/              # Purple with PORTS=4 (Left/Right Purple for 4-row grid)
   project_macro/                # User project macro
@@ -121,7 +120,6 @@ Harden macros bottom-up, then the wrapper:
 # 1. Harden leaf macros (order doesn't matter among these):
 cf harden green_macro
 cf harden orange_macro_h
-cf harden orange_macro_h_top
 cf harden orange_macro_v
 cf harden purple_macro_p3
 cf harden purple_macro_p4

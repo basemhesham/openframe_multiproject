@@ -9,7 +9,7 @@
         "dir::../../verilog/rtl/orange_macro.v"
     ],
     "VERILOG_DEFINES": "SKY130",
-    "CLOCK_PORT": "scan_clk_in",
+    "CLOCK_PORT": "scan_clk_w",
     "CLOCK_PERIOD": 100,
     "FP_SIZING": "absolute",
     "DIE_AREA": "0 0 55 1031.66",

@@ -19,7 +19,7 @@ module tb_green;
     reg  sys_clk_in, sys_reset_n_in;
     wire sys_clk_out, sys_reset_n_out;
     wire proj_clk_out, proj_reset_n_out, proj_por_n_out;
-    wire scan_clk_out, scan_latch_out, scan_out;
+    wire scan_clk_out_n, scan_latch_out_n, scan_out_n;
 
     green_macro dut (
         .sys_clk_in      (sys_clk_in),
@@ -30,12 +30,20 @@ module tb_green;
         .proj_reset_n_out(proj_reset_n_out),
         .proj_por_n_out  (proj_por_n_out),
         .por_n           (por_n),
-        .scan_clk_in     (scan_clk),
-        .scan_latch_in   (scan_latch),
-        .scan_in         (scan_din),
-        .scan_clk_out    (scan_clk_out),
-        .scan_latch_out  (scan_latch_out),
-        .scan_out        (scan_out)
+        // Scan in from south side
+        .scan_clk_s      (scan_clk),
+        .scan_latch_s    (scan_latch),
+        .scan_in_s       (scan_din),
+        .scan_clk_out_s  (),
+        .scan_latch_out_s(),
+        .scan_out_s      (),
+        // Scan out from north side
+        .scan_clk_n      (1'b0),
+        .scan_latch_n    (1'b0),
+        .scan_in_n       (1'b0),
+        .scan_clk_out_n  (scan_clk_out_n),
+        .scan_latch_out_n(scan_latch_out_n),
+        .scan_out_n      (scan_out_n)
     );
 
     // Clocks
@@ -69,7 +77,7 @@ module tb_green;
         // =====================================================================
         $display("[2] Clock gated when proj_en=0");
         proj_clk_edges = 0;
-        #200;  // Wait for ~20 sys_clk cycles
+        #200;
         assert_eq(proj_clk_edges, 0, "no proj_clk edges when disabled");
 
         // =====================================================================
@@ -94,11 +102,10 @@ module tb_green;
         // =====================================================================
         $display("[5] Clock passes when enabled");
         proj_clk_edges = 0;
-        // Wait for ICG to latch the new GATE value
-        @(negedge sys_clk_in); #1; // ICG latches on low phase
+        @(negedge sys_clk_in); #1;
         @(posedge sys_clk_in); #1;
         proj_clk_edges = 0;
-        #200;  // ~20 sys_clk cycles
+        #200;
         if (proj_clk_edges < 10) begin
             $display("  FAIL: proj_clk_out not toggling — only %0d edges", proj_clk_edges);
             error_count = error_count + 1;
@@ -128,8 +135,6 @@ module tb_green;
         // Test 8: Column chain passthrough
         // =====================================================================
         $display("[8] Column chain passthrough");
-        // sys_clk_out and sys_reset_n_out should be buffered copies
-        // In behavioral mode, they just follow the inputs
         sys_reset_n_in = 1'b0;
         #1;
         assert_eq(sys_reset_n_out, 0, "sys_reset_n_out follows input low");
@@ -149,7 +154,7 @@ module tb_green;
         #10;
         assert_eq(proj_por_n_out, 1, "proj_por_n_out=1 after POR release");
 
-        // Need to re-enable project for next test
+        // Re-enable project for next test
         shift_bit(1'b1);
         pulse_latch;
         #10;
@@ -163,7 +168,7 @@ module tb_green;
         shift_bit(1'b0);
         pulse_latch;
         #10;
-        @(negedge sys_clk_in); #1; // Let ICG pick up new GATE
+        @(negedge sys_clk_in); #1;
         @(posedge sys_clk_in); #1;
         proj_clk_edges = 0;
         #200;

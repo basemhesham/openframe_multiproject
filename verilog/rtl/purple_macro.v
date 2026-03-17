@@ -10,6 +10,9 @@
 //   Top Purple:    PORTS=COLS, lower 9 of 15 -> Caravel gpio[23:15]
 //   Left Purple:   PORTS=ROWS, lower 14 of 15 -> Caravel gpio[37:24]
 //
+// Scan ports on both short sides (#W/#E for p3, #S/#N for p4).
+// The wrapper picks direction by connecting the appropriate side.
+//
 // Scan bits: 1 (master_en) + ceil(log2(PORTS)) (port_sel)
 
 `default_nettype none
@@ -21,13 +24,21 @@ module purple_macro #(
     // POR for internal scan node
     input  wire por_n,
 
-    // Scan chain feedthrough
-    input  wire scan_clk_in,
-    input  wire scan_latch_in,
-    input  wire scan_in,
-    output wire scan_clk_out,
-    output wire scan_latch_out,
-    output wire scan_out,
+    // Scan chain — Side A (West for p3 / South for p4)
+    input  wire scan_clk_a,
+    input  wire scan_latch_a,
+    input  wire scan_in_a,
+    output wire scan_clk_out_a,
+    output wire scan_latch_out_a,
+    output wire scan_out_a,
+
+    // Scan chain — Side B (East for p3 / North for p4)
+    input  wire scan_clk_b,
+    input  wire scan_latch_b,
+    input  wire scan_in_b,
+    output wire scan_clk_out_b,
+    output wire scan_latch_out_b,
+    output wire scan_out_b,
 
     // Pad side (to Caravel GPIOs)
     input  wire [PADS-1:0]   pad_gpio_in,
@@ -51,14 +62,20 @@ module purple_macro #(
     wire [SEL_BITS-1:0]   port_sel  = scan_ctrl[SEL_BITS-1:0];
 
     scan_macro_node #(.WIDTH(SCAN_WIDTH)) u_node (
-        .por_n          (por_n),
-        .scan_clk_in    (scan_clk_in),
-        .scan_latch_in  (scan_latch_in),
-        .scan_in        (scan_in),
-        .scan_clk_out   (scan_clk_out),
-        .scan_latch_out (scan_latch_out),
-        .scan_out       (scan_out),
-        .ctrl_out       (scan_ctrl)
+        .por_n           (por_n),
+        .scan_clk_a      (scan_clk_a),
+        .scan_latch_a    (scan_latch_a),
+        .scan_in_a       (scan_in_a),
+        .scan_clk_out_a  (scan_clk_out_a),
+        .scan_latch_out_a(scan_latch_out_a),
+        .scan_out_a      (scan_out_a),
+        .scan_clk_b      (scan_clk_b),
+        .scan_latch_b    (scan_latch_b),
+        .scan_in_b       (scan_in_b),
+        .scan_clk_out_b  (scan_clk_out_b),
+        .scan_latch_out_b(scan_latch_out_b),
+        .scan_out_b      (scan_out_b),
+        .ctrl_out        (scan_ctrl)
     );
 
     // Inbound broadcast: buffer pad input and fan out to all chain ports
