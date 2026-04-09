@@ -15,7 +15,8 @@
         "dir::../../verilog/rtl/scan_macro_node.v",
         "dir::../../verilog/rtl/purple_macro_p3.v"
     ],
-
+    "PNR_SDC_FILE": "dir::pnr.sdc",
+    "SIGNOFF_SDC_FILE": "dir::signoff.sdc",
     "VERILOG_DEFINES": "SKY130",
     "SYNTH_PARAMETERS": "PADS=15 PORTS=3",
     "CLOCK_PORT": "scan_clk_a",
