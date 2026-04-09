@@ -18,6 +18,10 @@
 module scan_controller_macro #(
     parameter [7:0] MAGIC_WORD = 8'hA5
 )(
+`ifdef USE_POWER_PINS
+    inout vccd1,
+    inout vssd1,
+`endif
     input  wire por_n,
     input  wire sys_reset_n,
 

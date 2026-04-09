@@ -118,7 +118,11 @@ module openframe_project_wrapper #(
     wire chain_scan_clk, chain_scan_din, chain_scan_latch, chain_scan_dout;
     wire scan_dout_wire;
 
-    scan_controller_macro #(.MAGIC_WORD(MAGIC_WORD)) u_scan_ctrl (
+    scan_controller_macro u_scan_ctrl (
+    `ifdef USE_POWER_PINS
+                    .vccd1      (vccd1),
+                    .vssd1      (vssd1),
+                `endif
         .por_n           (por_n),
         .sys_reset_n     (sys_reset_n),
         .pad_scan_clk    (gpio_in[40]),
@@ -265,6 +269,10 @@ module openframe_project_wrapper #(
                 // Scan direction: #S -> #N (south to north)
                 // =============================================================
                 green_macro u_green (
+                `ifdef USE_POWER_PINS
+                    .vccd1      (vccd1),
+                    .vssd1      (vssd1),
+                `endif
                     .sys_clk_in      (gclk[c][r]),
                     .sys_reset_n_in  (grst[c][r]),
                     .sys_clk_out     (gclk[c][r+1]),
@@ -293,7 +301,11 @@ module openframe_project_wrapper #(
                 // Bottom Orange (scan node 1, L->R row chain)
                 // Scan direction: #W -> #E (west to east)
                 // =============================================================
-                orange_macro #(.PADS(PADS)) u_bot_orange (
+                orange_macro_h u_bot_orange (
+                `ifdef USE_POWER_PINS
+                    .vccd1      (vccd1),
+                    .vssd1      (vssd1),
+                `endif
                     .por_n               (por_n),
                     // Scan in from west side
                     .scan_clk_w          (sc_clk[SC_BASE+1]),
@@ -328,7 +340,11 @@ module openframe_project_wrapper #(
                 // Right Orange (scan node 2, B->T column chain)
                 // Scan direction: #W -> #E (using W=bottom, E=top for vertical)
                 // =============================================================
-                orange_macro #(.PADS(PADS)) u_rt_orange (
+                orange_macro_v u_rt_orange (
+                `ifdef USE_POWER_PINS
+                    .vccd1      (vccd1),
+                    .vssd1      (vssd1),
+                `endif
                     .por_n               (por_n),
                     // Scan in from west/south side
                     .scan_clk_w          (sc_clk[SC_BASE+2]),
@@ -365,7 +381,11 @@ module openframe_project_wrapper #(
                 // =============================================================
                 localparam integer TOP_CP = COLS - 1 - c;
 
-                orange_macro #(.PADS(PADS)) u_top_orange (
+                orange_macro_h u_top_orange (
+                `ifdef USE_POWER_PINS
+                    .vccd1      (vccd1),
+                    .vssd1      (vssd1),
+                `endif
                     .por_n               (por_n),
                     // Scan in from east side (R->L: predecessor on right)
                     .scan_clk_w          (1'b0),
@@ -453,7 +473,11 @@ module openframe_project_wrapper #(
         end
     endgenerate
 
-    purple_macro #(.PADS(PADS), .PORTS(ROWS)) u_purple_right (
+    purple_macro_p4 u_purple_right (
+    `ifdef USE_POWER_PINS
+                    .vccd1      (vccd1),
+                    .vssd1      (vssd1),
+     `endif
         .por_n          (por_n),
         .scan_clk_a     (sc_clk[2]),
         .scan_latch_a   (sc_lat[2]),
@@ -497,7 +521,11 @@ module openframe_project_wrapper #(
         end
     endgenerate
 
-    purple_macro #(.PADS(PADS), .PORTS(COLS)) u_purple_top (
+    purple_macro_p3 u_purple_top (
+    `ifdef USE_POWER_PINS
+                    .vccd1      (vccd1),
+                    .vssd1      (vssd1),
+      `endif
         .por_n          (por_n),
         .scan_clk_a     (sc_clk[1]),
         .scan_latch_a   (sc_lat[1]),
@@ -541,7 +569,11 @@ module openframe_project_wrapper #(
         end
     endgenerate
 
-    purple_macro #(.PADS(PADS), .PORTS(ROWS)) u_purple_left (
+    purple_macro_p4 u_purple_left (
+    `ifdef USE_POWER_PINS
+                    .vccd1      (vccd1),
+                    .vssd1      (vssd1),
+     `endif
         .por_n          (por_n),
         .scan_clk_a     (sc_clk[0]),
         .scan_latch_a   (sc_lat[0]),

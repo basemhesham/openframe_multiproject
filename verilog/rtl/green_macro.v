@@ -13,6 +13,10 @@
 `default_nettype none
 
 module green_macro (
+`ifdef USE_POWER_PINS
+    inout vccd1,
+    inout vssd1,
+`endif
     // System clock/reset column chain (bottom to top)
     input  wire sys_clk_in,
     input  wire sys_reset_n_in,

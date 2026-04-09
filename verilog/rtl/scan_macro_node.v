@@ -21,6 +21,10 @@
 module scan_macro_node #(
     parameter WIDTH = 1
 )(
+`ifdef USE_POWER_PINS
+    inout vccd1,
+    inout vssd1,
+`endif
     input  wire             por_n,
 
     // Side A scan ports
