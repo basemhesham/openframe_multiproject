@@ -1,33 +1,38 @@
 {
-    "DESIGN_NAME": "orange_macro",
-    "DESIGN_IS_CORE": 0,
+    "DESIGN_NAME": "orange_macro_v",
+    "PDN_MULTILAYER": false,
+    
+    "GRT_ADJUSTMENT": 0.0,
+    
     "VERILOG_FILES": [
         "dir::../../verilog/rtl/tech_lib/tech_buf.v",
         "dir::../../verilog/rtl/tech_lib/tech_clkbuf.v",
         "dir::../../verilog/rtl/tech_lib/tech_clkgate.v",
         "dir::../../verilog/rtl/scan_macro_node.v",
-        "dir::../../verilog/rtl/orange_macro.v"
+        "dir::../../verilog/rtl/orange_macro_v.v"
     ],
+    "RT_MAX_LAYER": "met4",
+    "PNR_SDC_FILE": "dir::pnr.sdc",
+    "SIGNOFF_SDC_FILE": "dir::signoff.sdc",
     "VERILOG_DEFINES": "SKY130",
     "CLOCK_PORT": "scan_clk_w",
     "CLOCK_PERIOD": 100,
     "FP_SIZING": "absolute",
     "DIE_AREA": "0 0 55 1031.66",
-    "FP_PIN_ORDER_CFG": "dir::pin_order.cfg",
+    "IO_PIN_ORDER_CFG": "dir::pin_order.cfg",
     "FP_CORE_UTIL": 25,
-    "PL_TARGET_DENSITY": 0.30,
-    "RT_MAX_LAYER": "met4",
-    "FP_IO_MIN_DISTANCE": 1,
+    "PL_TARGET_DENSITY_PCT": 0.1,
+    "IO_PIN_MIN_DISTANCE": 1,
     "MAX_TRANSITION_CONSTRAINT": 1.5,
     "MAX_FANOUT_CONSTRAINT": 10,
-    "SYNTH_BUFFERING": 0,
+    "SYNTH_ABC_BUFFERING": false,
     "RUN_HEURISTIC_DIODE_INSERTION": 1,
     "HEURISTIC_ANTENNA_THRESHOLD": 110,
-    "GRT_REPAIR_ANTENNAS": 1,
+    "RUN_ANTENNA_REPAIR": true,
     "MAGIC_DEF_LABELS": 0,
     "VDD_NETS": ["vccd1"],
     "GND_NETS": ["vssd1"],
-    "RUN_CVC": 1,
+
     "pdk::sky130*": {
         "scl::sky130_fd_sc_hd": {
             "CLOCK_PERIOD": 100
