@@ -1,6 +1,4 @@
 
-
-
   {
     "DESIGN_NAME": "purple_macro_p4",
     "DESIGN_IS_CORE": 0,
@@ -11,8 +9,13 @@
         "dir::../../verilog/rtl/scan_macro_node.v",
         "dir::../../verilog/rtl/purple_macro_p4.v"
     ],
+    
+    "DESIGN_REPAIR_MAX_SLEW_PCT": 30,
+    "DESIGN_REPAIR_MAX_CAP_PCT": 30,
     "VERILOG_DEFINES": "SKY130",
     "SYNTH_PARAMETERS": "PADS=15 PORTS=4",
+    "PNR_SDC_FILE": "dir::pnr.sdc",
+    "SIGNOFF_SDC_FILE": "dir::signoff.sdc",
     "CLOCK_PORT": "scan_clk_a",
     "CLOCK_PERIOD": 100,
     "FP_SIZING": "absolute",
