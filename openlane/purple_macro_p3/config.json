@@ -1,13 +1,21 @@
 {
-    "DESIGN_NAME": "purple_macro",
+    "DESIGN_NAME": "purple_macro_p3",
     "DESIGN_IS_CORE": 0,
+    
+    "FP_IO_HLAYER": "met1",
+    
+    "GRT_ADJUSTMENT": 0.1,
+    "IO_PIN_H_LENGTH": 0.6,
+    "IO_PIN_V_LENGTH": 0.6,
+    
     "VERILOG_FILES": [
         "dir::../../verilog/rtl/tech_lib/tech_buf.v",
         "dir::../../verilog/rtl/tech_lib/tech_clkbuf.v",
         "dir::../../verilog/rtl/tech_lib/tech_clkgate.v",
         "dir::../../verilog/rtl/scan_macro_node.v",
-        "dir::../../verilog/rtl/purple_macro.v"
+        "dir::../../verilog/rtl/purple_macro_p3.v"
     ],
+
     "VERILOG_DEFINES": "SKY130",
     "SYNTH_PARAMETERS": "PADS=15 PORTS=3",
     "CLOCK_PORT": "scan_clk_a",
@@ -16,7 +24,7 @@
     "DIE_AREA": "0 0 3066.63 50",
     "FP_PIN_ORDER_CFG": "dir::pin_order.cfg",
     "FP_CORE_UTIL": 20,
-    "PL_TARGET_DENSITY": 0.25,
+    "PL_TARGET_DENSITY": 0.2,
     "RT_MAX_LAYER": "met4",
     "FP_IO_MIN_DISTANCE": 1,
     "MAX_TRANSITION_CONSTRAINT": 1.5,
