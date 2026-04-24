@@ -1,120 +1,95 @@
-#=============================================================
-# project_macro — PnR Constraints
-#
-# Applies during: Synthesis → Placement → CTS → Routing
-#
-# All I/O delays account for two layers:
-#   1. OpenFrame wrapper external boundary (board + pad delays
-#      from the wrapper-level SDC, ext_delay = 4 ns)
-#   2. Internal infrastructure (purple + orange macros, measured
-#      from wrapper-level post-PnR STA)
-#
-# HOW TO USE THIS FILE:
-#   1. Find your grid position in the wrapper config.json
-#      (e.g. gen_row[2].gen_col[1].u_proj = Row 2, Col 1)
-#   2. Look up your clock latency in Section 5.1 of the guide.
-#   3. Replace the two <<...>> placeholders below.
-#   4. Leave everything else unchanged.
-#=============================================================
+#===========================================================================#
+# PROJECT MACRO PNR
+#===========================================================================#
 
-set clk_port clk
+#---------------------------------------------------------------------------#
+# 1. ENVIRONMENT & VARIABLES
+#---------------------------------------------------------------------------#
+# External Delays (Outside the OpenFrame Chip)
 
-create_clock [get_ports $clk_port] \
-    -name clk \
-    -period $::env(CLOCK_PERIOD)
+set OUT_EXT_DELAY    22.0  
 
-set_propagated_clock [get_clocks {clk}]
+#---------------------------------------------------------------------------#
+# 2. CLOCK DEFINITIONS
+#---------------------------------------------------------------------------#
+# The CLOCK_PERIOD variable below retrieves its value from the "CLOCK_PERIOD" 
+# setting defined in the config.json file.
 
-# ── Clock non-idealities (PnR — pessimistic) ──────────────
-set_clock_uncertainty 0.15 [get_clocks {clk}]
+create_clock -name clk -period $::env(CLOCK_PERIOD) [get_ports {clk}]
+
+set_propagated_clock [all_clocks]
+
+#---------------------------------------------------------------------------#
+# 3. CLOCK LATENCY & NON-IDEALITIES
+#---------------------------------------------------------------------------#
+# Clock Latencies based on Grid extremes (Min from Row0/Col0, Max from Row3/Col0)
+set clk_max_latency 4.48
+set clk_min_latency 0.32
+
+set_clock_latency -source -max $clk_max_latency [get_clocks {clk}]
+set_clock_latency -source -min $clk_min_latency [get_clocks {clk}]
+puts "\[INFO\]: Setting clock latency range: $clk_min_latency : $clk_max_latency"
+
+set_clock_uncertainty 0.1 [all_clocks]
+
+#---------------------------------------------------------------------------#
+# 4. DESIGN LIMITS & TIMING DERATES
+#---------------------------------------------------------------------------#
 set_max_transition    0.75 [current_design]
-set_max_fanout        16   [current_design]
+set_max_fanout        20  [current_design]
 
-set_timing_derate -early [expr {1 - 0.07}]
-set_timing_derate -late  [expr {1 + 0.07}]
+# Timing Derates (Accounting for PVT variations, 7%)
+set_timing_derate -early 0.93
+set_timing_derate -late  1.07
 
-# ── Clock source latency ──────────────────────────────────
-# Measured propagation from the external clock source to your
-# macro's clk port. Includes: board + Caravel pad buffer +
-# green column chain + ICG cell.
-#
-# *** REPLACE WITH YOUR VALUES FROM SECTION 5.1 ***
-set_clock_latency -source -max 10.305 [get_clocks {clk}]
-set_clock_latency -source -min 6.200 [get_clocks {clk}]
+#---------------------------------------------------------------------------#
+# 5. INPUT DELAYS
+#---------------------------------------------------------------------------#
+# Max Input: 4.0 (External) + 4.90 (Internal OpenFrame Muxes) = 8.90 ns
+# Min Input: 4.0 (External) + 1.20 (Internal OpenFrame Fast Path) = 5.20 ns
+set in_max_delay 8.90
+set in_min_delay 5.20
 
-set_input_transition 0.80 [get_ports $clk_port]
+puts "\[INFO\]: Setting max input delay to: $in_max_delay"
+puts "\[INFO\]: Setting min input delay to: $in_min_delay"
 
-# ── Reset and POR ─────────────────────────────────────────
-set_input_delay [expr {$::env(CLOCK_PERIOD) * 0.5}] \
-    -clock [get_clocks {clk}] [get_ports {reset_n por_n}]
+set all_macro_inputs [get_ports {gpio_bot_in[*] gpio_rt_in[*] gpio_top_in[*]}]
 
-# ── GPIO input delays ─────────────────────────────────────
-# Total path: external board (4 ns) + Caravel pad buffer
-# (4.55/1.26 ns) + purple broadcast buffer + orange local
-# buffer → YOUR gpio_*_in port.
-# Values differ per edge (different purple macro distance).
-# They are the same for all 12 project locations.
-#
-# Bottom edge (gpio_bot_in) → via Right Purple + Bottom Orange
-#   max = 8.55 + 6.57 = 15.12 ns  (slow corner)
-#   min = 5.26 + 1.82 =  7.08 ns  (fast corner)
-set_input_delay -max 15.12 \
-    -clock [get_clocks {clk}] [get_ports {gpio_bot_in[*]}]
-set_input_delay -min 7.08 \
-    -clock [get_clocks {clk}] [get_ports {gpio_bot_in[*]}]
+set_input_delay -max $in_max_delay -clock [get_clocks {clk}] $all_macro_inputs
+set_input_delay -min $in_min_delay -clock [get_clocks {clk}] $all_macro_inputs
 
-# Right edge (gpio_rt_in) → via Top Purple + Right Orange
-#   max = 8.55 + 6.50 = 15.05 ns
-#   min = 5.26 + 1.94 =  7.20 ns
-set_input_delay -max 15.05 \
-    -clock [get_clocks {clk}] [get_ports {gpio_rt_in[*]}]
-set_input_delay -min 7.20 \
-    -clock [get_clocks {clk}] [get_ports {gpio_rt_in[*]}]
+#---------------------------------------------------------------------------#
+# 6. OUTPUT DELAYS
+#---------------------------------------------------------------------------#
+# Max Output: OUT_EXT_DELAY + 9.71 (Internal OpenFrame Long Path)
+# Min Output: OUT_EXT_DELAY + 2.72 (Internal OpenFrame Fast Path)
+set out_max_delay [expr $OUT_EXT_DELAY + 9.71]
+set out_min_delay [expr $OUT_EXT_DELAY + 2.72]
 
-# Top edge (gpio_top_in) → via Left Purple + Top Orange
-#   max = 8.55 + 5.70 = 14.25 ns
-#   min = 5.26 + 0.96 =  6.22 ns
-set_input_delay -max 14.25 \
-    -clock [get_clocks {clk}] [get_ports {gpio_top_in[*]}]
-set_input_delay -min 6.22 \
-    -clock [get_clocks {clk}] [get_ports {gpio_top_in[*]}]
+puts "\[INFO\]: Setting max output delay to: $out_max_delay"
+puts "\[INFO\]: Setting min output delay to: $out_min_delay"
 
-set_input_transition -max 0.38 [get_ports {gpio_bot_in[*]}]
-set_input_transition -min 0.05 [get_ports {gpio_bot_in[*]}]
-set_input_transition -max 0.38 [get_ports {gpio_rt_in[*]}]
-set_input_transition -min 0.05 [get_ports {gpio_rt_in[*]}]
-set_input_transition -max 0.38 [get_ports {gpio_top_in[*]}]
-set_input_transition -min 0.05 [get_ports {gpio_top_in[*]}]
+set all_macro_outputs [get_ports {gpio_bot_out[*] gpio_bot_oeb[*] gpio_bot_dm[*] \
+                                  gpio_rt_out[*] gpio_rt_oeb[*] gpio_rt_dm[*] \
+                                  gpio_top_out[*] gpio_top_oeb[*] gpio_top_dm[*]}]
 
-# ── GPIO output delays ────────────────────────────────────
-# Total path: YOUR gpio_*_out → orange sel-gate + orange MUX
-# chain (9.61 ns) + purple mux → OpenFrame gpio_out port →
-# external board (4 ns) + receiving device setup (9.12 ns).
-# The same for all 12 project locations and all three edges.
-#
-#   gpio_*_out: max = 9.61 + 13.12 = 22.73 ns
-#               min = 2.92 +  7.90 = 10.82 ns
-#   gpio_*_oeb: max = 9.81 + 13.32 = 23.13 ns  (+0.2 ns margin)
-#               min = 2.92 +  6.34 =  9.26 ns
-set_output_delay -max 22.73 \
-    -clock [get_clocks {clk}] \
-    [get_ports {gpio_bot_out[*] gpio_rt_out[*] gpio_top_out[*]}]
-set_output_delay -min 10.82 \
-    -clock [get_clocks {clk}] \
-    [get_ports {gpio_bot_out[*] gpio_rt_out[*] gpio_top_out[*]}]
+set_output_delay -max $out_max_delay -clock [get_clocks {clk}] $all_macro_outputs
+set_output_delay -min $out_min_delay -clock [get_clocks {clk}] $all_macro_outputs
 
-set_output_delay -max 23.13 \
-    -clock [get_clocks {clk}] \
-    [get_ports {gpio_bot_oeb[*] gpio_rt_oeb[*] gpio_top_oeb[*]}]
-set_output_delay -min 9.26 \
-    -clock [get_clocks {clk}] \
-    [get_ports {gpio_bot_oeb[*] gpio_rt_oeb[*] gpio_top_oeb[*]}]
+#---------------------------------------------------------------------------#
+# 7. INPUT TRANSITION & OUTPUT LOAD
+#---------------------------------------------------------------------------#
+# Data Inputs Transition
+set_input_transition -max 0.35 $all_macro_inputs
+set_input_transition -min 0.02 $all_macro_inputs
 
-set_output_delay -max 22.73 \
-    -clock [get_clocks {clk}] \
-    [get_ports {gpio_bot_dm[*] gpio_rt_dm[*] gpio_top_dm[*]}]
-set_output_delay -min 10.82 \
-    -clock [get_clocks {clk}] \
-    [get_ports {gpio_bot_dm[*] gpio_rt_dm[*] gpio_top_dm[*]}]
+# Clock Input Transition
+set_input_transition -max 0.65 [get_ports {clk}]
+set_input_transition -min 0.25 [get_ports {clk}]
 
-set_load 0.19 [all_outputs]
+# Output Load
+set_load 0.19 $all_macro_outputs
+#---------------------------------------------------------------------------#
+# 8. TIMING EXCEPTIONS (False Paths)
+#---------------------------------------------------------------------------#
+set_false_path -from [get_ports {reset_n por_n}]
