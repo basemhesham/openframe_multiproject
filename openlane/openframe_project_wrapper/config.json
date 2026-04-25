@@ -1,94 +1,278 @@
 {
     "DESIGN_NAME": "openframe_project_wrapper",
     "VERILOG_DEFINES": "PnR SKY130",
+
+    "//": "=== RTL source files (all synthesised except project_macro blackbox) ===",
     "VERILOG_FILES": [
+        "dir::../../verilog/rtl/openframe_project_wrapper.v",
         "dir::../../verilog/rtl/openframe_project_netlists.v",
-        "dir::../../verilog/rtl/openframe_project_wrapper.v"
+        "dir::../../verilog/rtl/green_macro.v",
+        "dir::../../verilog/rtl/orange_macro.v",
+        "dir::../../verilog/rtl/purple_macro.v",
+        "dir::../../verilog/rtl/scan_controller_macro.v",
+        "dir::../../verilog/rtl/scan_macro_node.v",
+        "dir::../../verilog/rtl/tech_lib/*.v"
     ],
-    "VERILOG_FILES_BLACKBOX": [
-        "dir::../../verilog/gl/green_macro.v",
-        "dir::../../verilog/gl/orange_macro.v",
-        "dir::../../verilog/gl/purple_macro.v",
-        "dir::../../verilog/gl/project_macro.v",
-        "dir::../../verilog/gl/scan_controller_macro.v",
-        "dir::../../verilog/gl/vccd1_connection.v",
-        "dir::../../verilog/gl/vssd1_connection.v"
-    ],
-    "EXTRA_LEFS": [
-        "dir::../../lef/green_macro.lef",
-        "dir::../../lef/orange_macro_h.lef",
-        "dir::../../lef/orange_macro_v.lef",
-        "dir::../../lef/purple_macro_p4.lef",
-        "dir::../../lef/purple_macro_p3.lef",
-        "dir::../../lef/project_macro.lef",
-        "dir::../../lef/scan_controller_macro.lef",
-        "dir::../../lef/vccd1_connection.lef",
-        "dir::../../lef/vssd1_connection.lef"
-    ],
-    "EXTRA_GDS_FILES": [
-        "dir::../../gds/green_macro.gds",
-        "dir::../../gds/orange_macro_h.gds",
-        "dir::../../gds/orange_macro_v.gds",
-        "dir::../../gds/purple_macro_p4.gds",
-        "dir::../../gds/purple_macro_p3.gds",
-        "dir::../../gds/project_macro.gds",
-        "dir::../../gds/scan_controller_macro.gds",
-        "dir::../../gds/vccd1_connection.gds",
-        "dir::../../gds/vssd1_connection.gds"
-    ],
-    "MAX_TRANSITION_CONSTRAINT": 0.5,
-    "ERROR_ON_NL_ASSIGN_STATEMENTS": 0,
-    "QUIT_ON_SYNTH_CHECKS": 0,
-    "FP_PDN_CHECK_NODES": 0,
-    "SYNTH_ELABORATE_ONLY": 1,
-    "PL_RANDOM_GLB_PLACEMENT": 1,
-    "SYNTH_USE_PG_PINS_DEFINES": "USE_POWER_PINS",
-    "PL_RESIZER_DESIGN_OPTIMIZATIONS": 0,
-    "PL_RESIZER_TIMING_OPTIMIZATIONS": 0,
-    "GLB_RESIZER_TIMING_OPTIMIZATIONS": 0,
-    "GLB_RESIZER_DESIGN_OPTIMIZATIONS": 0,
-    "PL_RESIZER_BUFFER_INPUT_PORTS": 0,
-    "RUN_CTS": 0,
-    "FP_PDN_ENABLE_RAILS": 0,
-    "GRT_REPAIR_ANTENNAS": 0,
-    "RUN_HEURISTIC_DIODE_INSERTION": 0,
-    "RUN_FILL_INSERTION": 0,
-    "RUN_TAP_DECAP_INSERTION": 0,
-    "FP_PDN_VPITCH": 40,
-    "FP_PDN_HPITCH": 40,
-    "FP_PDN_VOFFSET": 18.43,
-    "FP_PDN_HOFFSET": 22.83,
-    "MAGIC_ZEROIZE_ORIGIN": 0,
+
+"STA_THREADS":1,
+"MACROS": {
+    "project_macro_0_0": {
+        "instances": { 
+            "gen_row[0].gen_col[0].gen_proj.genblk1.u_proj": { "location": [160, 100], "orientation": "N" } 
+        },
+        "gds": ["dir::../../gds/project_macro_0_0.gds"],
+        "lef": ["dir::../../lef/project_macro_0_0.lef"],
+        "nl": ["dir::../../verilog/gl/project_macro_0_0.v"],
+        "lib": { "*": "dir::../../lib/project_macro_0_0.lib" },
+        "spef": {
+            "min_*": ["dir::../../spef/multicorner/project_macro_0_0.min.spef"],
+            "nom_*": ["dir::../../spef/multicorner/project_macro_0_0.nom.spef"],
+            "max_*": ["dir::../../spef/multicorner/project_macro_0_0.max.spef"]
+        }
+    },
+    
+    
+     "project_macro_0_1": {
+        "gds": ["dir::../../gds/project_macro_0_1.gds"],
+        "lef": ["dir::../../lef/project_macro_0_1.lef"],
+        "nl": ["dir::../../verilog/gl/project_macro_0_1.v"],
+        "lib": { "*": "dir::../../lib/project_macro_0_1.lib" },
+        "spef": {
+            "min_*": ["dir::../../spef/multicorner/project_macro_0_1.min.spef"],
+            "nom_*": ["dir::../../spef/multicorner/project_macro_0_1.nom.spef"],
+            "max_*": ["dir::../../spef/multicorner/project_macro_0_1.max.spef"]
+        },
+        "instances": { "gen_row[0].gen_col[1].gen_proj.genblk1.u_proj": { "location": [1140, 100], "orientation": "N" } }
+    },
+    
+    
+    "project_macro_0_2": {
+        "gds": ["dir::../../gds/project_macro_0_2.gds"],
+        "lef": ["dir::../../lef/project_macro_0_2.lef"],
+        "nl": ["dir::../../verilog/gl/project_macro_0_2.v"],
+        "spef": {
+            "min_*": ["dir::../../spef/multicorner/project_macro_0_2.min.spef"],
+            "nom_*": ["dir::../../spef/multicorner/project_macro_0_2.nom.spef"],
+            "max_*": ["dir::../../spef/multicorner/project_macro_0_2.max.spef"]
+        },
+        "lib": { "*": "dir::../../lib/project_macro_0_2.lib" },
+        "instances": { "gen_row[0].gen_col[2].gen_proj.genblk1.u_proj": { "location": [2120, 100], "orientation": "N" } }
+    },
+    
+    
+    
+    "project_macro_1_0": {
+        "gds": ["dir::../../gds/project_macro_1_0.gds"],
+        "lef": ["dir::../../lef/project_macro_1_0.lef"],
+        "nl": ["dir::../../verilog/gl/project_macro_1_0.v"],
+        "spef": {
+            "min_*": ["dir::../../spef/multicorner/project_macro_1_0.min.spef"],
+            "nom_*": ["dir::../../spef/multicorner/project_macro_1_0.nom.spef"],
+            "max_*": ["dir::../../spef/multicorner/project_macro_1_0.max.spef"]
+        },
+        "lib": { "*": "dir::../../lib/project_macro_1_0.lib" },
+        "instances": { "gen_row[1].gen_col[0].gen_proj.genblk1.u_proj": { "location": [160, 1241.66], "orientation": "N" } }
+    },
+    
+    
+    
+    "project_macro_1_1": {
+        "gds": ["dir::../../gds/project_macro_1_1.gds"],
+        "lef": ["dir::../../lef/project_macro_1_1.lef"],
+        "nl": ["dir::../../verilog/gl/project_macro_1_1.v"],
+        "spef": {
+            "min_*": ["dir::../../spef/multicorner/project_macro_1_1.min.spef"],
+            "nom_*": ["dir::../../spef/multicorner/project_macro_1_1.nom.spef"],
+            "max_*": ["dir::../../spef/multicorner/project_macro_1_1.max.spef"]
+        },
+        "lib": { "*": "dir::../../lib/project_macro_1_1.lib" },
+        "instances": { "gen_row[1].gen_col[1].gen_proj.genblk1.u_proj": { "location": [1140, 1241.66], "orientation": "N" } }
+    },
+    
+    
+    "project_macro_1_2": {
+        "gds": ["dir::../../gds/project_macro_1_2.gds"],
+        "lef": ["dir::../../lef/project_macro_1_2.lef"],
+        "nl": ["dir::../../verilog/gl/project_macro_1_2.v"],
+        "spef": {
+            "min_*": ["dir::../../spef/multicorner/project_macro_1_2.min.spef"],
+            "nom_*": ["dir::../../spef/multicorner/project_macro_1_2.nom.spef"],
+            "max_*": ["dir::../../spef/multicorner/project_macro_1_2.max.spef"]
+        },
+        "lib": { "*": "dir::../../lib/project_macro_1_2.lib" },
+        "instances": { "gen_row[1].gen_col[2].gen_proj.genblk1.u_proj": { "location": [2120, 1241.66], "orientation": "N" } }
+    },
+    
+    
+    
+    "project_macro_2_0": {
+        "gds": ["dir::../../gds/project_macro_2_0.gds"],
+        "lef": ["dir::../../lef/project_macro_2_0.lef"],
+        "nl": ["dir::../../verilog/gl/project_macro_2_0.v"],
+        "spef": {
+            "min_*": ["dir::../../spef/multicorner/project_macro_2_0.min.spef"],
+            "nom_*": ["dir::../../spef/multicorner/project_macro_2_0.nom.spef"],
+            "max_*": ["dir::../../spef/multicorner/project_macro_2_0.max.spef"]
+        },
+        "lib": { "*": "dir::../../lib/project_macro_2_0.lib" },
+        "instances": { "gen_row[2].gen_col[0].gen_proj.genblk1.u_proj": { "location": [160, 2383.32], "orientation": "N" } }
+    },
+    
+    
+    
+    "project_macro_2_1": {
+        "gds": ["dir::../../gds/project_macro_2_1.gds"],
+        "lef": ["dir::../../lef/project_macro_2_1.lef"],
+        "nl": ["dir::../../verilog/gl/project_macro_2_1.v"],
+        "spef": {
+            "min_*": ["dir::../../spef/multicorner/project_macro_2_1.min.spef"],
+            "nom_*": ["dir::../../spef/multicorner/project_macro_2_1.nom.spef"],
+            "max_*": ["dir::../../spef/multicorner/project_macro_2_1.max.spef"]
+        },
+        "lib": { "*": "dir::../../lib/project_macro_2_1.lib" },
+        "instances": { "gen_row[2].gen_col[1].gen_proj.genblk1.u_proj": { "location": [1140, 2383.32], "orientation": "N" } }
+    },
+    
+    
+    
+    "project_macro_2_2": {
+        "gds": ["dir::../../gds/project_macro_2_2.gds"],
+        "lef": ["dir::../../lef/project_macro_2_2.lef"],
+        "nl": ["dir::../../verilog/gl/project_macro_2_2.v"],
+        "spef": {
+            "min_*": ["dir::../../spef/multicorner/project_macro_2_2.min.spef"],
+            "nom_*": ["dir::../../spef/multicorner/project_macro_2_2.nom.spef"],
+            "max_*": ["dir::../../spef/multicorner/project_macro_2_2.max.spef"]
+        },
+        "lib": { "*": "dir::../../lib/project_macro_2_2.lib" },
+        "instances": { "gen_row[2].gen_col[2].gen_proj.genblk1.u_proj": { "location": [2120, 2383.32], "orientation": "N" } }
+    },
+    
+    
+    
+    "project_macro_3_0": {
+        "gds": ["dir::../../gds/project_macro_3_0.gds"],
+        "lef": ["dir::../../lef/project_macro_3_0.lef"],
+        "nl": ["dir::../../verilog/gl/project_macro_3_0.v"],
+        "spef": {
+            "min_*": ["dir::../../spef/multicorner/project_macro_3_0.min.spef"],
+            "nom_*": ["dir::../../spef/multicorner/project_macro_3_0.nom.spef"],
+            "max_*": ["dir::../../spef/multicorner/project_macro_3_0.max.spef"]
+        },
+        "lib": { "*": "dir::../../lib/project_macro_3_0.lib" },
+        "instances": { "gen_row[3].gen_col[0].gen_proj.genblk1.u_proj": { "location": [160, 3524.98], "orientation": "N" } }
+    },
+    
+    
+    
+    "project_macro_3_1": {
+        "gds": ["dir::../../gds/project_macro_3_1.gds"],
+        "lef": ["dir::../../lef/project_macro_3_1.lef"],
+        "nl": ["dir::../../verilog/gl/project_macro_3_1.v"],
+        "spef": {
+            "min_*": ["dir::../../spef/multicorner/project_macro_3_1.min.spef"],
+            "nom_*": ["dir::../../spef/multicorner/project_macro_3_1.nom.spef"],
+            "max_*": ["dir::../../spef/multicorner/project_macro_3_1.max.spef"]
+        },
+        "lib": { "*": "dir::../../lib/project_macro_3_1.lib" },
+        "instances": { "gen_row[3].gen_col[1].gen_proj.genblk1.u_proj": { "location": [1140, 3524.98], "orientation": "N" } }
+    },
+    
+    
+    "project_macro_3_2": {
+        "gds": ["dir::../../gds/project_macro_3_2.gds"],
+        "lef": ["dir::../../lef/project_macro_3_2.lef"],
+        "nl": ["dir::../../verilog/gl/project_macro_3_2.v"],
+        "spef": {
+            "min_*": ["dir::../../spef/multicorner/project_macro_3_2.min.spef"],
+            "nom_*": ["dir::../../spef/multicorner/project_macro_3_2.nom.spef"],
+            "max_*": ["dir::../../spef/multicorner/project_macro_3_2.max.spef"]
+        },
+        "lib": { "*": "dir::../../lib/project_macro_3_2.lib" },
+        "instances": { "gen_row[3].gen_col[2].gen_proj.genblk1.u_proj": { "location": [2120, 3524.98], "orientation": "N" } }
+    },
+    
+    
+    "vccd1_connection": {
+        "instances": { 
+            "vccd1_connection": { "location": [3122.515, 4327.51], "orientation": "N" } 
+        },
+        "gds": ["dir::../../gds/vccd1_connection.gds"],
+        "lef": ["dir::../../lef/vccd1_connection.lef"],
+        "nl": ["dir::../../verilog/gl/vccd1_connection.v"]
+    },
+    "vssd1_connection": {
+        "instances": { 
+            "vssd1_connection": { "location": [3122.515, 2088.51], "orientation": "N" } 
+        },
+        "gds": ["dir::../../gds/vssd1_connection.gds"],
+        "lef": ["dir::../../lef/vssd1_connection.lef"],
+        "nl": ["dir::../../verilog/gl/vssd1_connection.v"]
+    }
+},
+     "RUN_IRDROP_REPORT": false,
+     "RUN_LINTER": 0,
+     "PL_TARGET_DENSITY": 0.4,
+     "GRT_ADJUSTMENT": 0.1,
+     "GRT_ANTENNA_REPAIR_ITERS": 10,
+    "GRT_ANTENNA_REPAIR_MARGIN": 15,
+    "RUN_POST_GRT_RESIZER_TIMING": true,
+    "DEFAULT_CORNER": "max_ss_100C_1v60",
+      "DESIGN_REPAIR_MAX_SLEW_PCT": 30,
+    "DESIGN_REPAIR_MAX_CAP_PCT": 30,
+
+    "//": "=== Timing constraints ===",
+    "PNR_SDC_FILE": "dir::base.sdc",
+    "SIGNOFF_SDC_FILE": "dir::signoff.sdc",
+    "MAX_TRANSITION_CONSTRAINT": 1.5,
+
+    "//": "=== Flatten hardening strategy — full synthesis with all optimisations enabled ===",
+    "SYNTH_ELABORATE_ONLY": false,
+    "QUIT_ON_SYNTH_CHECKS": false,
+    "ERROR_ON_NL_ASSIGN_STATEMENTS": false,
+    "ERROR_ON_SYNTH_CHECKS": false,
+    "RUN_POST_GPL_DESIGN_REPAIR": true,
+    "RUN_POST_CTS_RESIZER_TIMING": true,
+    "DESIGN_REPAIR_BUFFER_INPUT_PORTS": true,
+    "PDN_ENABLE_RAILS": true,
+    "RUN_ANTENNA_REPAIR": true,
+    "RUN_FILL_INSERTION": true,
+    "RUN_TAP_ENDCAP_INSERTION": true,
+    "RUN_CTS": true,
+
+    "//": "=== PDN configuration (LibreLane parameter names — no FP_ prefix) ===",
+    "PDN_CFG": "dir::pdn_cfg.tcl",
+    "PDN_VPITCH": 40,
+    "PDN_HPITCH": 40,
+    "PDN_VOFFSET": 18.43,
+    "PDN_HOFFSET": 22.83,
+    "PDN_VWIDTH": 6.4,
+    "PDN_HWIDTH": 6.4,
+    "PDN_HSPACING": 3.2,
+    "PDN_VSPACING": 3.2,
+    "PDN_CORE_RING": true,
+    "PDN_CORE_RING_VWIDTH": 20,
+    "PDN_CORE_RING_HWIDTH": 20,
+    "PDN_CORE_RING_VOFFSET": -4,
+    "PDN_CORE_RING_HOFFSET": -4,
+    "PDN_CORE_RING_VSPACING": 2.4,
+    "PDN_CORE_RING_HSPACING": 2.4,
+    "ERROR_ON_PDN_VIOLATIONS": false,
+
+    "//": "=== Fixed configurations for OpenFrame — do NOT edit below this line ===",
     "FP_SIZING": "absolute",
-    "RUN_CVC": 0,
-    "FP_PDN_CORE_RING": 1,
-    "FP_PDN_CORE_RING_VWIDTH": 20,
-    "FP_PDN_CORE_RING_HWIDTH": 20,
-    "FP_PDN_CORE_RING_VOFFSET": -4,
-    "FP_PDN_CORE_RING_HOFFSET": -4,
-    "FP_PDN_CORE_RING_VSPACING": 2.4,
-    "FP_PDN_CORE_RING_HSPACING": 2.4,
-    "FP_PDN_VWIDTH": 6.4,
-    "FP_PDN_HWIDTH": 6.4,
-    "FP_PDN_HSPACING": 3.2,
-    "FP_PDN_VSPACING": 3.2,
-    "VDD_NETS": ["vccd1"],
-    "GND_NETS": ["vssd1"],
     "DIE_AREA": "0 0 3166.63 4766.630",
     "CORE_AREA": "40 40 3126.63 4726.630",
-    "RUN_IRDROP_REPORT": 0,
-    "FP_PDN_CFG": "dir::pdn_cfg.tcl",
     "FP_DEF_TEMPLATE": "dir::fixed_dont_change/openframe_project_wrapper.def",
-    "MACRO_PLACEMENT_CFG": "dir::macro.cfg",
-    "RUN_LINTER": 0,
-    "RUN_LVS": 0,
-    "MAGIC_DEF_LABELS": 0,
-    "MAGIC_EXT_USE_GDS": true,
+
+    "VDD_NETS": ["vccd1"],
+    "GND_NETS": ["vssd1"],
+
     "FP_TEMPLATE_COPY_POWER_PINS": true,
     "FP_TEMPLATE_MATCH_MODE": "permissive",
-    "FP_TEMPLATE_PINS": [
-        "vccd1", "vssd1", "vccd", "vssd", "vccd2", "vssd2",
-        "vssa", "vdda", "vssa1", "vdda1", "vssa2", "vdda2",
-        "vddio", "vssio"
-    ]
+
+    "MAGIC_DEF_LABELS": 0,
+    "MAGIC_ZEROIZE_ORIGIN": 0,
+    "MAGIC_EXT_USE_GDS": true
 }
+
