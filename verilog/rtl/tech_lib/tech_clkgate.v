@@ -10,7 +10,7 @@ module tech_clkgate (
 );
 
 `ifdef SKY130
-    (* dont_touch = "true" *) sky130_fd_sc_hd__dlclkp_1 _icg (.CLK(CLK), .GATE(GATE), .GCLK(GCLK));
+    (* dont_touch = "true" *) sky130_fd_sc_hd__dlclkp_4 _icg (.CLK(CLK), .GATE(GATE), .GCLK(GCLK));
 `elsif GF180
     (* dont_touch = "true" *) gf180mcu_fd_sc_mcu7t5v0__icg _icg (.CLK(CLK), .GATE(GATE), .GCLK(GCLK));
 `else
