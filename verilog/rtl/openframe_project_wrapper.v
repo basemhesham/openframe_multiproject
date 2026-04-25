@@ -399,28 +399,49 @@ module openframe_project_wrapper #(
                 // =============================================================
                 // Project Macro
                 // =============================================================
-                project_macro u_proj (
-                `ifdef USE_POWER_PINS
-                    .vccd1      (vccd1),
-                    .vssd1      (vssd1),
-                `endif
-                    .clk         (proj_clk),
-                    .reset_n     (proj_rst_n),
-                    .por_n       (proj_por_n),
-                    .gpio_bot_in (proj_bot_in),
-                    .gpio_bot_out(proj_bot_out),
-                    .gpio_bot_oeb(proj_bot_oeb),
-                    .gpio_bot_dm (proj_bot_dm),
-                    .gpio_rt_in  (proj_rt_in_full[8:0]),
-                    .gpio_rt_out (proj_rt_out),
-                    .gpio_rt_oeb (proj_rt_oeb),
-                    .gpio_rt_dm  (proj_rt_dm),
-                    .gpio_top_in (proj_top_in_full[13:0]),
-                    .gpio_top_out(proj_top_out),
-                    .gpio_top_oeb(proj_top_oeb),
+                 
+`define PROJ_PORTS \
+                `ifdef USE_POWER_PINS \
+                    .vccd1       (vccd1),        \
+                    .vssd1       (vssd1),        \
+                `endif \
+                    .clk         (proj_clk),          \
+                    .reset_n     (proj_rst_n),         \
+                    .por_n       (proj_por_n),         \
+                    .gpio_bot_in (proj_bot_in),        \
+                    .gpio_bot_out(proj_bot_out),       \
+                    .gpio_bot_oeb(proj_bot_oeb),       \
+                    .gpio_bot_dm (proj_bot_dm),        \
+                    .gpio_rt_in  (proj_rt_in_full[8:0]),\
+                    .gpio_rt_out (proj_rt_out),        \
+                    .gpio_rt_oeb (proj_rt_oeb),        \
+                    .gpio_rt_dm  (proj_rt_dm),         \
+                    .gpio_top_in (proj_top_in_full[13:0]),\
+                    .gpio_top_out(proj_top_out),       \
+                    .gpio_top_oeb(proj_top_oeb),       \
                     .gpio_top_dm (proj_top_dm)
-                );
-
+                    
+                                     
+            begin : gen_proj
+            case ({2'(r), 2'(c)}) 
+                    {2'd0, 2'd0}: project_macro_0_0 u_proj (`PROJ_PORTS);
+                    {2'd0, 2'd1}: project_macro_0_1 u_proj (`PROJ_PORTS);
+                    {2'd0, 2'd2}: project_macro_0_2 u_proj (`PROJ_PORTS);
+                    
+                    {2'd1, 2'd0}: project_macro_1_0 u_proj (`PROJ_PORTS);
+                    {2'd1, 2'd1}: project_macro_1_1 u_proj (`PROJ_PORTS);
+                    {2'd1, 2'd2}: project_macro_1_2 u_proj (`PROJ_PORTS);
+                    
+                    {2'd2, 2'd0}: project_macro_2_0 u_proj (`PROJ_PORTS);
+                    {2'd2, 2'd1}: project_macro_2_1 u_proj (`PROJ_PORTS);
+                    {2'd2, 2'd2}: project_macro_2_2 u_proj (`PROJ_PORTS);
+                    
+                    {2'd3, 2'd0}: project_macro_3_0 u_proj (`PROJ_PORTS);
+                    {2'd3, 2'd1}: project_macro_3_1 u_proj (`PROJ_PORTS);
+                    {2'd3, 2'd2}: project_macro_3_2 u_proj (`PROJ_PORTS); 
+        default: ;
+    endcase
+end
             end // gen_col
         end // gen_row
     endgenerate
