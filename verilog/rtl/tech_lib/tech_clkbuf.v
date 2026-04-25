@@ -9,7 +9,7 @@ module tech_clkbuf (
 );
 
 `ifdef SKY130
-    (* dont_touch = "true" *) sky130_fd_sc_hd__clkbuf_4 _buf (.X(X), .A(A));
+    (* dont_touch = "true" *) sky130_fd_sc_hd__clkbuf_8 _buf (.X(X), .A(A));
 `elsif GF180
     (* dont_touch = "true" *) gf180mcu_fd_sc_mcu7t5v0__clkbuf_4 _buf (.Z(X), .I(A));
 `else
