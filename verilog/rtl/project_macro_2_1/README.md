@@ -1,0 +1,1 @@
+This project implements a PID-based temperature control system using a temperature sensor over I²C, with both I²C master and slave interfaces. Based on temperature feedback, the controller generates a PWM signal to smoothly regulate a DC fan. UART support enables communication and monitoring with a host system.
