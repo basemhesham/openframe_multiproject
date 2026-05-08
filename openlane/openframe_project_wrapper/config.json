@@ -12,9 +12,11 @@
         "dir::../../verilog/rtl/purple_macro.v",
         "dir::../../verilog/rtl/scan_controller_macro.v",
         "dir::../../verilog/rtl/scan_macro_node.v",
-        "dir::../../verilog/rtl/tech_lib/*.v"
+        "dir::../../verilog/rtl/tech_lib/tech_buf.v",
+        "dir::../../verilog/rtl/tech_lib/tech_clkbuf.v",
+        "dir::../../verilog/rtl/tech_lib/tech_clkgate.v"
     ],
-    "STA_THREADS": 2,
+
     "RUN_LINTER": 0,
 
     "//_04": "=========================================================",
@@ -40,9 +42,9 @@
     "//_11": "=== Antenna Repair Configurations                     ===",
     "//_12": "=========================================================",
     "RUN_ANTENNA_REPAIR": true,
-    "GRT_ANTENNA_REPAIR_ITERS": 15,
+    "GRT_ANTENNA_ITERS": 15,
     "DRT_ANTENNA_REPAIR_ITERS": 15,
-    "GRT_ANTENNA_REPAIR_MARGIN": 5,
+    "GRT_ANTENNA_MARGIN": 5,
 
     "//_13": "=========================================================",
     "//_14": "=== Placement, Routing & CTS Strategies               ===",
@@ -72,21 +74,21 @@
     "PDN_MACRO_CONNECTIONS": [
         ".*gen_proj.*u_proj vccd1 vssd1 vccd1 vssd1"
     ],
-    "PDN_VPITCH": 40,
-    "PDN_HPITCH": 40,
-    "PDN_VOFFSET": 18.43,
-    "PDN_HOFFSET": 22.83,
-    "PDN_VWIDTH": 6.4,
-    "PDN_HWIDTH": 6.4,
-    "PDN_HSPACING": 3.2,
-    "PDN_VSPACING": 3.2,
-    "PDN_CORE_RING": true,
-    "PDN_CORE_RING_VWIDTH": 20,
-    "PDN_CORE_RING_HWIDTH": 20,
-    "PDN_CORE_RING_VOFFSET": -4,
-    "PDN_CORE_RING_HOFFSET": -4,
-    "PDN_CORE_RING_VSPACING": 2.4,
-    "PDN_CORE_RING_HSPACING": 2.4,
+    "FP_PDN_VPITCH": 40,
+    "FP_PDN_HPITCH": 40,
+    "FP_PDN_VOFFSET": 18.43,
+    "FP_PDN_HOFFSET": 22.83,
+    "FP_PDN_VWIDTH": 6.4,
+    "FP_PDN_HWIDTH": 6.4,
+    "FP_PDN_HSPACING": 3.2,
+    "FP_PDN_VSPACING": 3.2,
+    "FP_PDN_CORE_RING": true,
+    "FP_PDN_CORE_RING_VWIDTH": 20,
+    "FP_PDN_CORE_RING_HWIDTH": 20,
+    "FP_PDN_CORE_RING_VOFFSET": -4,
+    "FP_PDN_CORE_RING_HOFFSET": -4,
+    "FP_PDN_CORE_RING_VSPACING": 2.4,
+    "FP_PDN_CORE_RING_HSPACING": 2.4,
 
     "//_22": "=========================================================",
     "//_23": "=== Floorplan (Fixed for OpenFrame)                   ===",
@@ -101,8 +103,7 @@
     "//_27": "=========================================================",
     "MAGIC_DEF_LABELS": 0,
     "MAGIC_ZEROIZE_ORIGIN": 0,
-    "MAGIC_EXT_USE_GDS": false,
-    "MAGIC_LEF_WRITE_USE_GDS": false,
+    "MAGIC_EXT_USE_GDS": true,
 
     "//_28": "=========================================================",
     "//_29": "=== Macros Definitions & Instances                    ===",
@@ -276,4 +277,5 @@
     "vccd1_connection",
     "vssd1_connection"
 ]
+    
 }
