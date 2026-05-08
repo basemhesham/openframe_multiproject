@@ -74,7 +74,7 @@ module project_macro (
         .rst_n(reset_n),
         .cs_n(gpio_bot_in[0]),
         .mosi(gpio_bot_in[1]),
-        .miso(gpio_bot_out[0])
+        .miso(gpio_bot_out[3])
     );
     // ============================================================
 
@@ -84,19 +84,30 @@ module project_macro (
     // when a project IS selected, its pads are ready for digital I/O
     // without needing to reconfigure dm via the scan chain.
 
-    // Bottom: 15 GPIOs, all input
-    assign gpio_bot_out[14:1] = 15'b0;
+    // ------------------------------------------------------------
+    // Bottom GPIO Configuration (15 bits)
+    // ------------------------------------------------------------
+    
+    // Assign only the used output bit, others to 0
+    assign gpio_bot_out[2:0]   = 3'b0; 
+    assign gpio_bot_out[14:4]  = 11'b0;
 
-    assign gpio_bot_oeb[0] = 1'b0;
-    assign gpio_bot_oeb[14:1] = {14{1'b1}};
+    // OEB: 0 = Output, 1 = Input
+    // Bit 3 is Output (0), all other bits (including 0, 1) are Input (1)
+    assign gpio_bot_oeb = 15'b111111111110111; 
 
-    // Right: 9 GPIOs, all input
-    assign gpio_rt_out = 9'b0;
-    assign gpio_rt_oeb = {9{1'b1}};
+    // ------------------------------------------------------------
+    // Right (9 bits) & Top (14 bits) - Safe Defaults
+    // ------------------------------------------------------------
+    assign gpio_rt_out  = 9'b0;
+    assign gpio_rt_oeb  = {9{1'b1}};
 
-    // Top: 14 GPIOs, all input
     assign gpio_top_out = 14'b0;
     assign gpio_top_oeb = {14{1'b1}};
+
+    // ------------------------------------------------------------
+    // Drive Modes (3'b110 = Strong Digital Push-Pull)
+    // ------------------------------------------------------------
 
     // Drive mode: 3'b110 = strong digital push-pull (see mode table above)
     genvar i;
