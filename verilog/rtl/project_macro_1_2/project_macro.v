@@ -181,11 +181,13 @@ module project_macro (
 
     // ----------------------------------------------------------------
     // GPIO output assignments
-    // gpio_bot_out[0] = MISO (output)
-    // gpio_bot_out[14:1] = low (unused)
+    // gpio_bot_out[3] = MISO (output)
+    // All other pins are safe inputs driven low to avoid floating
     // ----------------------------------------------------------------
-    assign gpio_bot_out    = {14'b0, shift_out[31]};
-    assign gpio_bot_oeb    = {14'h3FFF, 1'b0};   // [0]=output, [14:1]=input
+    assign gpio_bot_out    = {11'b0, shift_out[31], 3'b0};
+    
+    // OEB: Bit 3 is output (0), all other bits are input (1)
+    assign gpio_bot_oeb    = 15'b111111111110111;
 
     // Right and top: all safe inputs, driven low
     assign gpio_rt_out     = 9'b0;
