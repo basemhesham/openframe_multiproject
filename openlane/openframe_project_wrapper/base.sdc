@@ -68,4 +68,4 @@ set_load -max $MAX_CAP [all_outputs]
 #---------------------------------------------------------------------------#
 set_false_path -from [get_ports {por*}]
 set_false_path -from [get_ports {resetb*}]
-
+set_false_path -from [get_ports {gpio_in[39]}]
