@@ -77,4 +77,4 @@ set_input_transition -max $MAX_TRAN [all_inputs]
 #---------------------------------------------------------------------------#
 set_false_path -from [get_ports {por*}]
 set_false_path -from [get_ports {resetb*}]
-
+set_false_path -from [get_ports {gpio_in[39]}]
