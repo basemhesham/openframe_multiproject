@@ -236,6 +236,27 @@ module openframe_project_wrapper #(
     // Since the wrapper doesn't drive those inputs, they default to 0 via the
     // generate block's wire declarations (undriven wires = 0 in simulation).
 
+`define PROJ_PORTS \
+                `ifdef USE_POWER_PINS \
+                    .vccd1       (vccd1),        \
+                    .vssd1       (vssd1),        \
+                `endif \
+                    .clk         (proj_clk),          \
+                    .reset_n     (proj_rst_n),         \
+                    .por_n       (proj_por_n),         \
+                    .gpio_bot_in (proj_bot_in),        \
+                    .gpio_bot_out(proj_bot_out),       \
+                    .gpio_bot_oeb(proj_bot_oeb),       \
+                    .gpio_bot_dm (proj_bot_dm),        \
+                    .gpio_rt_in  (proj_rt_in_full[8:0]),\
+                    .gpio_rt_out (proj_rt_out),        \
+                    .gpio_rt_oeb (proj_rt_oeb),        \
+                    .gpio_rt_dm  (proj_rt_dm),         \
+                    .gpio_top_in (proj_top_in_full[13:0]),\
+                    .gpio_top_out(proj_top_out),       \
+                    .gpio_top_oeb(proj_top_oeb),       \
+                    .gpio_top_dm (proj_top_dm)
+                    
     localparam SC_GRID_BASE = 3; // After Purple Left(0), Top(1), Right(2)
 
     generate
@@ -309,10 +330,12 @@ module openframe_project_wrapper #(
                 );
 
                 // Green gates reset with proj_en; synchronize that final
-                // project reset so enabling a slot releases reset on proj_clk.
+                // project reset on the ungated local source clock. Keeping
+                // these flops off proj_clk avoids CTS register/macro split
+                // buffers on every gated project clock subtree.
                 reset_synchronizer u_proj_reset_sync (
                     .masterrst_n(proj_rst_n),
-                    .clk        (proj_clk),
+                    .clk        (gclk[c][r]),
                     .rst_n      (proj_rst_n_raw)
                 );
 
@@ -338,9 +361,9 @@ module openframe_project_wrapper #(
                     .scan_out_e          (sc_dat[SC_BASE+2]),
                     // GPIO
                     .pad_side_gpio_in    (bot_in[r][COLS]),
-                    .pad_side_gpio_out   (bot_out[r][COLS]),
-                    .pad_side_gpio_oeb   (bot_oeb[r][COLS]),
-                    .pad_side_gpio_dm    (bot_dm[r][COLS]),
+                    .pad_side_gpio_out   (bot_out[r][c+1]),
+                    .pad_side_gpio_oeb   (bot_oeb[r][c+1]),
+                    .pad_side_gpio_dm    (bot_dm[r][c+1]),
                     .chain_side_gpio_in  (),
                     .chain_side_gpio_out (bot_out[r][c]),
                     .chain_side_gpio_oeb (bot_oeb[r][c]),
@@ -373,9 +396,9 @@ module openframe_project_wrapper #(
                     .scan_out_e          (sc_dat[SC_BASE+3]),
                     // GPIO
                     .pad_side_gpio_in    (rt_in[c][ROWS]),
-                    .pad_side_gpio_out   (rt_out[c][ROWS]),
-                    .pad_side_gpio_oeb   (rt_oeb[c][ROWS]),
-                    .pad_side_gpio_dm    (rt_dm[c][ROWS]),
+                    .pad_side_gpio_out   (rt_out[c][r+1]),
+                    .pad_side_gpio_oeb   (rt_oeb[c][r+1]),
+                    .pad_side_gpio_dm    (rt_dm[c][r+1]),
                     .chain_side_gpio_in  (),
                     .chain_side_gpio_out (rt_out[c][r]),
                     .chain_side_gpio_oeb (rt_oeb[c][r]),
@@ -410,9 +433,9 @@ module openframe_project_wrapper #(
                     .scan_out_e          (),
                     // GPIO
                     .pad_side_gpio_in    (top_in[r][COLS]),
-                    .pad_side_gpio_out   (top_out[r][COLS]),
-                    .pad_side_gpio_oeb   (top_oeb[r][COLS]),
-                    .pad_side_gpio_dm    (top_dm[r][COLS]),
+                    .pad_side_gpio_out   (top_out[r][TOP_CP+1]),
+                    .pad_side_gpio_oeb   (top_oeb[r][TOP_CP+1]),
+                    .pad_side_gpio_dm    (top_dm[r][TOP_CP+1]),
                     .chain_side_gpio_in  (),
                     .chain_side_gpio_out (top_out[r][TOP_CP]),
                     .chain_side_gpio_oeb (top_oeb[r][TOP_CP]),
@@ -426,29 +449,8 @@ module openframe_project_wrapper #(
                 // =============================================================
                 // Project Macro
                 // =============================================================
-                 
-`define PROJ_PORTS \
-                `ifdef USE_POWER_PINS \
-                    .vccd1       (vccd1),        \
-                    .vssd1       (vssd1),        \
-                `endif \
-                    .clk         (proj_clk),          \
-                    .reset_n     (proj_rst_n),         \
-                    .por_n       (proj_por_n),         \
-                    .gpio_bot_in (proj_bot_in),        \
-                    .gpio_bot_out(proj_bot_out),       \
-                    .gpio_bot_oeb(proj_bot_oeb),       \
-                    .gpio_bot_dm (proj_bot_dm),        \
-                    .gpio_rt_in  (proj_rt_in_full[8:0]),\
-                    .gpio_rt_out (proj_rt_out),        \
-                    .gpio_rt_oeb (proj_rt_oeb),        \
-                    .gpio_rt_dm  (proj_rt_dm),         \
-                    .gpio_top_in (proj_top_in_full[13:0]),\
-                    .gpio_top_out(proj_top_out),       \
-                    .gpio_top_oeb(proj_top_oeb),       \
-                    .gpio_top_dm (proj_top_dm)
-                    
-                                     
+                
+                                                         
             begin : gen_proj
             case ({2'(r), 2'(c)}) 
                     {2'd0, 2'd0}: project_macro_0_0 u_proj (`PROJ_PORTS);

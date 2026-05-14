@@ -65,49 +65,47 @@ module project_macro (
 
     // ============================================================
     // USER LOGIC GOES HERE — Replace the safe tie-offs below
-    NTT_Top_Wrapper NTT_Top_Wrapper(
-    `ifdef USE_POWER_PINS
-        .vccd1(vccd1),
-        .vssd1(vssd1),
-    `endif
-        .clk(clk),
-        .rst_n(reset_n),
-        .cs_n(gpio_bot_in[0]),
-        .mosi(gpio_bot_in[1]),
-        .miso(gpio_bot_out[3])
-    );
     // ============================================================
 
-    // Safe defaults: all pads configured as inputs (oeb=1) driving zero.
-    // Even if accidentally enabled, outputs are low — no floating or
-    // contention risk. dm=3'b110 (strong push-pull) is chosen so that
-    // when a project IS selected, its pads are ready for digital I/O
-    // without needing to reconfigure dm via the scan chain.
+    wire spi_csn  = gpio_bot_in[0];
+    wire spi_sck  = gpio_bot_in[1];
+    wire spi_mosi = gpio_bot_in[2];
+    wire spi_miso;
+    wire irq;
 
-    // ------------------------------------------------------------
-    // Bottom GPIO Configuration (15 bits)
-    // ------------------------------------------------------------
-    
-    // Assign only the used output bit, others to 0
-    assign gpio_bot_out[2:0]   = 3'b0; 
-    assign gpio_bot_out[14:4]  = 11'b0;
+    tpm_top u_tpm (
+        .clk      (clk),
+        .rstn     (reset_n),
+        .spi_csn  (spi_csn),
+        .spi_sck  (spi_sck),
+        .spi_mosi (spi_mosi),
+        .spi_miso (spi_miso),
+        .irq      (irq)
+    );
 
-    // OEB: 0 = Output, 1 = Input
-    // Bit 3 is Output (0), all other bits (including 0, 1) are Input (1)
-    assign gpio_bot_oeb = 15'b111111111110111; 
+    // Map outputs to GPIOs
+    assign gpio_bot_out[3] = spi_miso;
+    assign gpio_bot_out[4] = irq;
 
-    // ------------------------------------------------------------
-    // Right (9 bits) & Top (14 bits) - Safe Defaults
-    // ------------------------------------------------------------
-    assign gpio_rt_out  = 9'b0;
-    assign gpio_rt_oeb  = {9{1'b1}};
+    // Define OEB (Output Enable Bar): 0=output, 1=input
+    assign gpio_bot_oeb[0] = 1'b1; // spi_csn
+    assign gpio_bot_oeb[1] = 1'b1; // spi_sck
+    assign gpio_bot_oeb[2] = 1'b1; // spi_mosi
+    assign gpio_bot_oeb[3] = 1'b0; // spi_miso
+    assign gpio_bot_oeb[4] = 1'b0; // irq
 
+    // Tie off remaining bottom GPIOs (5..14)
+    assign gpio_bot_out[2:0]   = 3'b0;
+    assign gpio_bot_out[14:5]  = 10'b0;
+    assign gpio_bot_oeb[14:5]  = {10{1'b1}};
+
+    // Right: 9 GPIOs, all input
+    assign gpio_rt_out = 9'b0;
+    assign gpio_rt_oeb = {9{1'b1}};
+
+    // Top: 14 GPIOs, all input
     assign gpio_top_out = 14'b0;
     assign gpio_top_oeb = {14{1'b1}};
-
-    // ------------------------------------------------------------
-    // Drive Modes (3'b110 = Strong Digital Push-Pull)
-    // ------------------------------------------------------------
 
     // Drive mode: 3'b110 = strong digital push-pull (see mode table above)
     genvar i;

@@ -64,50 +64,85 @@ module project_macro (
 );
 
     // ============================================================
-    // USER LOGIC GOES HERE — Replace the safe tie-offs below
-    NTT_Top_Wrapper NTT_Top_Wrapper(
-    `ifdef USE_POWER_PINS
-        .vccd1(vccd1),
-        .vssd1(vssd1),
-    `endif
-        .clk(clk),
-        .rst_n(reset_n),
-        .cs_n(gpio_bot_in[0]),
-        .mosi(gpio_bot_in[1]),
-        .miso(gpio_bot_out[3])
-    );
+    // USER LOGIC GOES HERE
     // ============================================================
 
-    // Safe defaults: all pads configured as inputs (oeb=1) driving zero.
-    // Even if accidentally enabled, outputs are low — no floating or
-    // contention risk. dm=3'b110 (strong push-pull) is chosen so that
-    // when a project IS selected, its pads are ready for digital I/O
-    // without needing to reconfigure dm via the scan chain.
-
-    // ------------------------------------------------------------
-    // Bottom GPIO Configuration (15 bits)
-    // ------------------------------------------------------------
+    // SPI Signals (sampled from Top GPIOs)
+    // Top 0: CS_N (Input)
+    // Top 1: SCLK (Input)
+    // Top 2: MOSI (Input)
+    // Top 3: MISO (Output)
     
-    // Assign only the used output bit, others to 0
-    assign gpio_bot_out[2:0]   = 3'b0; 
-    assign gpio_bot_out[14:4]  = 11'b0;
+    wire spi_cs_n = gpio_top_in[0];
+    wire spi_sclk = gpio_top_in[1];
+    wire spi_mosi = gpio_top_in[2];
+    wire spi_miso;
 
-    // OEB: 0 = Output, 1 = Input
-    // Bit 3 is Output (0), all other bits (including 0, 1) are Input (1)
-    assign gpio_bot_oeb = 15'b111111111110111; 
+    assign gpio_top_out[3] = spi_miso;
+    assign gpio_top_oeb[3] = 1'b0; // Output
 
-    // ------------------------------------------------------------
-    // Right (9 bits) & Top (14 bits) - Safe Defaults
-    // ------------------------------------------------------------
-    assign gpio_rt_out  = 9'b0;
-    assign gpio_rt_oeb  = {9{1'b1}};
+    // Rest of Top GPIOs as inputs
+    assign gpio_top_out[2:0] = 3'b0;
+    assign gpio_top_out[13:4] = 10'b0;
+    assign gpio_top_oeb[2:0] = 3'b111;
+    assign gpio_top_oeb[13:4] = {10{1'b1}};
 
-    assign gpio_top_out = 14'b0;
-    assign gpio_top_oeb = {14{1'b1}};
+    // Systolic Wrapper Signals
+    wire [7:0]  spi_addr;
+    wire [63:0] spi_din;
+    wire [63:0] wrapper_dout;
+    wire [7:0]  spi_data_we;
+    wire [7:0]  spi_weight_we;
+    wire        spi_start;
+    wire [15:0] spi_data_len;
+    wire [3:0]  spi_col_mask;
+    wire        wrapper_busy;
+    wire        wrapper_done;
 
-    // ------------------------------------------------------------
-    // Drive Modes (3'b110 = Strong Digital Push-Pull)
-    // ------------------------------------------------------------
+    simple_spi u_spi (
+        .clk(clk),
+        .rst_n(reset_n),
+        .cs_n(spi_cs_n),
+        .sclk(spi_sclk),
+        .mosi(spi_mosi),
+        .miso(spi_miso),
+        .addr(spi_addr),
+        .din(spi_din),
+        .dout(wrapper_dout),
+        .data_we(spi_data_we),
+        .weight_we(spi_weight_we),
+        .start(spi_start),
+        .data_len(spi_data_len),
+        .col_mask(spi_col_mask),
+        .busy(wrapper_busy),
+        .done(wrapper_done)
+    );
+
+    systolic_wrapper u_wrapper (
+        .clk(clk),
+        .rst_n(reset_n),
+        .ext_data_we(spi_data_we),
+        .ext_data_addr(spi_addr),
+        .ext_data_di(spi_din),
+        .ext_data_do(), // Not used externally
+        .ext_weight_we(spi_weight_we),
+        .ext_weight_addr(spi_addr),
+        .ext_weight_di(spi_din),
+        .ext_weight_do(), // Not used externally
+        .ext_output_addr(spi_addr),
+        .ext_output_do(wrapper_dout),
+        .start(spi_start),
+        .data_len(spi_data_len),
+        .col_mask(spi_col_mask),
+        .busy(wrapper_busy),
+        .done(wrapper_done)
+    );
+
+    // Bottom & Right: safe defaults
+    assign gpio_bot_out = 15'b0;
+    assign gpio_bot_oeb = {15{1'b1}};
+    assign gpio_rt_out = 9'b0;
+    assign gpio_rt_oeb = {9{1'b1}};
 
     // Drive mode: 3'b110 = strong digital push-pull (see mode table above)
     genvar i;

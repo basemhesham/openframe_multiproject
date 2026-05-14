@@ -65,49 +65,39 @@ module project_macro (
 
     // ============================================================
     // USER LOGIC GOES HERE — Replace the safe tie-offs below
-    NTT_Top_Wrapper NTT_Top_Wrapper(
-    `ifdef USE_POWER_PINS
-        .vccd1(vccd1),
-        .vssd1(vssd1),
-    `endif
-        .clk(clk),
-        .rst_n(reset_n),
-        .cs_n(gpio_bot_in[0]),
-        .mosi(gpio_bot_in[1]),
-        .miso(gpio_bot_out[3])
-    );
     // ============================================================
 
-    // Safe defaults: all pads configured as inputs (oeb=1) driving zero.
-    // Even if accidentally enabled, outputs are low — no floating or
-    // contention risk. dm=3'b110 (strong push-pull) is chosen so that
-    // when a project IS selected, its pads are ready for digital I/O
-    // without needing to reconfigure dm via the scan chain.
+    // TRNG outputs
+    wire q1, q2, q3;
 
-    // ------------------------------------------------------------
-    // Bottom GPIO Configuration (15 bits)
-    // ------------------------------------------------------------
-    
-    // Assign only the used output bit, others to 0
-    assign gpio_bot_out[2:0]   = 3'b0; 
-    assign gpio_bot_out[14:4]  = 11'b0;
+    // Enable TRNG (always ON)
+    wire en = 1'b1;
 
-    // OEB: 0 = Output, 1 = Input
-    // Bit 3 is Output (0), all other bits (including 0, 1) are Input (1)
-    assign gpio_bot_oeb = 15'b111111111110111; 
+    // Instantiate TRNG
+    trng_top u_trng (
+        .clk(clk),
+        .en(en),
+        .q1(q1),
+        .q2(q2),
+        .q3(q3)
+    );
 
-    // ------------------------------------------------------------
-    // Right (9 bits) & Top (14 bits) - Safe Defaults
-    // ------------------------------------------------------------
-    assign gpio_rt_out  = 9'b0;
-    assign gpio_rt_oeb  = {9{1'b1}};
+    // Bottom GPIO mapping
+    assign gpio_bot_out[0] = q1;
+    assign gpio_bot_out[1] = q2;
+    assign gpio_bot_out[2] = q3;
+    assign gpio_bot_out[14:3] = 12'b0;
 
+    assign gpio_bot_oeb[2:0] = 3'b000;
+    assign gpio_bot_oeb[14:3] = 12'hFFF;
+
+    // Right GPIOs (keep as inputs)
+    assign gpio_rt_out = 9'b0;
+    assign gpio_rt_oeb = {9{1'b1}};
+
+    // Top GPIOs (keep as inputs)
     assign gpio_top_out = 14'b0;
     assign gpio_top_oeb = {14{1'b1}};
-
-    // ------------------------------------------------------------
-    // Drive Modes (3'b110 = Strong Digital Push-Pull)
-    // ------------------------------------------------------------
 
     // Drive mode: 3'b110 = strong digital push-pull (see mode table above)
     genvar i;
