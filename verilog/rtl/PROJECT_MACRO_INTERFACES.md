@@ -9,10 +9,10 @@
 | **[0,0]** | [Q-PULSE](https://github.com/ASIC-hub/si-sprint26-project-q-pulse) | si-sprint26-project-q-pulse | 1D CNN ECG arrhythmia classifier | `bot_in[1]`, `bot_out[0]` |
 | **[0,1]** | [ProxCore](https://github.com/ASIC-hub/si-sprint26-project-visiontram) | si-sprint26-project-visiontram | LiDAR-based obstacle detection & emergency braking co-processor | `bot_in[3:0]`, `bot_out[5:4]` |
 | **[0,2]** | [TraceGuard-X](https://github.com/ASIC-hub/si-sprint26-project-traceguard-x) | si-sprint26-project-traceguard-x | Field-programmable anomaly-detection ASIC for industrial networks | `bot_in[0]`, `bot_out[9:1]`, `rt_out[7:0]` |
-| **[1,0]** | [NeuralTram](https://github.com/ASIC-hub/si-sprint26-project-neuraltram) | si-sprint26-project-neuraltram | 4×4 systolic array INT8 matrix multiplier | `top_in[2:0]`, `top_out[3]` |
+| **[1,0]** | [HARTS](https://github.com/yomnahisham/harts) | harts | Hardware real-time scheduler with UART/APB control, external IRQs, timer, queues, and scan debug | `rt_in[2:0]`, `rt_out[5:3]`, `bot_in[7:0]` |
 | **[1,1]** | [NTT-Engine](https://github.com/ASIC-hub/si-sprint26-project-digitrons/) | si-sprint26-project-digitrons | NTT hardware accelerator for post-quantum cryptography | `bot_in[1:0]`, `bot_out[3]` |
 | **[1,2]** | [Cryptic](https://github.com/ASIC-hub/si-sprint26-project-cryptic-shazli-and-malak) | si-sprint26-project-cryptic | BLAKE2s-256 single-block hash accelerator via SPI | `bot_in[2:0]`, `bot_out[3]` |
-| **[2,0]** | [HARTS](https://github.com/yomnahisham/harts) | harts | Hardware real-time scheduler with UART/APB control, external IRQs, timer, queues, and scan debug | `rt_in[2:0]`, `rt_out[5:3]`, `bot_in[7:0]` |
+| **[2,0]** | [NeuralTram](https://github.com/ASIC-hub/si-sprint26-project-neuraltram) | si-sprint26-project-neuraltram | 4x4 systolic array INT8 matrix multiplier | `top_in[2:0]`, `top_out[3]` |
 | **[2,1]** | [I2C-UART](https://github.com/ASIC-hub/si-sprint26-project-I2C_controller) | si-sprint26-project-I2C_controller | PID temperature controller with I²C master/slave and UART | `top_in/out[0:1]`, `top_in[2]`, `top_in/out[3]`, `top_out[4]` |
 | **[2,2]** | Micro-TPM | project_macro_2_2 | SPI-accessible TPM-style security processor with TRNG, PCRs, SHA-256, and HMAC | `bot_in[2:0]`, `bot_out[4:3]` |
 | **[3,0]** | [XtraRandom](https://github.com/ASIC-hub/si-sprint26-project-aast-26-27) | si-sprint26-project-aast-26-27 | Thermal-jitter True Random Number Generator (TRNG) | `bot_out[2:0]` |
@@ -29,10 +29,10 @@
   - [\[0,0\] Q-PULSE — ECG Arrhythmia Classifier](#00-q-pulse-ecg-arrhythmia-classifier)
   - [\[0,1\] ProxCore — Proximity Safety Co-Processor](#01-proxcore-proximity-safety-co-processor)
   - [\[0,2\] TraceGuard-X — Anomaly Detection ASIC](#02-traceguard-x-anomaly-detection-asic)
-  - [\[1,0\] NeuralTram — Systolic Array](#10-neuraltram-systolic-array)
+  - [\[1,0\] HARTS — Hardware Real-Time Scheduler](#10-harts--hardware-real-time-scheduler)
   - [\[1,1\] NTT-Engine — Number Theoretic Transform Accelerator](#11-ntt-engine-number-theoretic-transform-accelerator)
   - [\[1,2\] Cryptic — BLAKE2s Hash Accelerator](#12-cryptic-blake2s-hash-accelerator)
-  - [\[2,0\] HARTS — Hardware Real-Time Scheduler](#20-harts--hardware-real-time-scheduler)
+  - [\[2,0\] NeuralTram — Systolic Array](#20-neuraltram-systolic-array)
   - [\[2,1\] I2C-UART Controller — Dual-I2C Bridge](#21-i2c-uart-controller-dual-i2c-bridge)
   - [\[2,2\] Micro-TPM — SPI Security Processor](#22-micro-tpm--spi-security-processor)
   - [\[3,0\] XtraRandom — Stochastic Entropy Primitive](#30-xtrarandom-stochastic-entropy-primitive)
@@ -240,64 +240,73 @@ bot_out[1]◄┤ uart_tx  │◄─────│  AC Engine   │◄───�
 
 ---
 
-### [1,0] NeuralTram — Systolic Array
+### [1,0] HARTS — Hardware Real-Time Scheduler
 
-The participant opted for a standardized SPI interface to communicate with a 4×4 matrix multiplier. All connections are localized on the Top edge for easy wiring.
+HARTS is a hardware real-time scheduling coprocessor. The host configures and queries it through a UART-to-APB bridge, while the scheduler core manages a 16-task table, ready priority queue, sleep queue, tick timer, and external interrupt handling. A scan chain exposes selected internal scheduler status for debug.
 
 #### Interface & GPIO Mapping
 
 | Property | Value |
 | :--- | :--- |
-| **Interface** | SPI Slave (Top Edge) |
-| `gpio_top_in[0]` | `CS_N` — Input (SPI Chip Select) |
-| `gpio_top_in[1]` | `SCLK` — Input (SPI Clock) |
-| `gpio_top_in[2]` | `MOSI` — Input (SPI Data In) |
-| `gpio_top_out[3]` | `MISO` — Output (SPI Data Out) |
+| **Interface** | UART/APB control + external IRQ inputs + scan debug |
+| `gpio_rt_in[0]` | `uart_rx` — Input (host command stream) |
+| `gpio_rt_in[1]` | `scan_en` — Input |
+| `gpio_rt_in[2]` | `scan_in` — Input |
+| `gpio_rt_out[3]` | `uart_tx` — Output (host response stream) |
+| `gpio_rt_out[4]` | `irq_n` — Output (active-low host interrupt) |
+| `gpio_rt_out[5]` | `scan_out` — Output |
+| `gpio_bot_in[7:0]` | `ext_irq[7:0]` — External interrupt inputs |
+
+The RTL instantiates `hw_scheduler_top` with `UART_DIVISOR=16'd11`, matching the wrapper comment for a 20 MHz clock and 115200 baud with 16x oversampling. The UART bridge converts host frames into APB3 accesses, which feed the HARTS APB slave and scheduler control path.
 
 #### Reset Behavior
 
-The core utilizes the gated `reset_n` signal from the Green Macro directly. This signal clears both the SPI decoder (`u_spi`) and the systolic FSM within the wrapper (`u_wrapper`), ensuring the transformation state machine and memory pointers are initialized only when the project is active. On reset deassertion, the internal MUX defaults to "SPI Access" mode to facilitate data and weight loading.
+The wrapper passes the gated OpenFrame reset directly into the scheduler as `rst_n`. This reset initializes the UART/APB bridge, APB slave response path, control unit, timer, priority queue, sleep queue, interrupt controller, task table, and scan chain. The `por_n` input is not used directly by this project wrapper.
 
 ```verilog
 // project_macro.v
-.rst_n(reset_n), // Gated system reset for SPI and Wrapper
+hw_scheduler_top #(
+    .UART_DIVISOR(16'd11)
+) u_harts (
+    .clk   (clk),
+    .rst_n (reset_n),
+    ...
+);
 ```
 
 #### Drive Modes & OEB Control
 
 | Signal | OEB | Drive Mode | Notes |
 | :--- | :--- | :--- | :--- |
-| `gpio_top_oeb[3]` (`miso`) | `1'b0` (Output) | `3'b110` Strong push-pull | Consistent timing and drive strength across chip |
-| `gpio_top_oeb[2:0]` (SPI bus) | `1'b1` (Inputs) | `3'b110` (default) | All top bank pins |
+| `gpio_rt_oeb[2:0]` (`uart_rx`, `scan_en`, `scan_in`) | `3'b111` (Inputs) | `3'b110` (default) | Host UART and scan inputs |
+| `gpio_rt_oeb[5:3]` (`uart_tx`, `irq_n`, `scan_out`) | `3'b000` (Outputs) | `3'b110` Strong push-pull | UART response, host interrupt, scan output |
+| `gpio_rt_oeb[8:6]` | `3'b111` (Hi-Z) | `3'b110` (default) | Unused right GPIOs |
+| `gpio_bot_oeb[14:0]` | All `1'b1` (Inputs/Hi-Z) | `3'b110` (default) | Bottom `[7:0]` are `ext_irq`; `[14:8]` unused |
+| `gpio_top_oeb[13:0]` | All `1'b1` (Hi-Z) | `3'b110` (default) | Top GPIOs unused |
 
 #### Block Diagram
 
 ```text
            PROJECT MACRO [1,0]
-        ┌──────────────────────────────────────────────────────────────┐
-        │                                                              │
-        │  top_in[0] (CS_N)  ──┐                                       │
-        │  top_in[1] (SCLK)  ──┼──────┐                                │
-        │  top_in[2] (MOSI)  ──┼──────┼──────┐                         │
-        │                      ▼      ▼      ▼                         │
-        │                ┌─────────────────────────┐                   │
-        │                │       simple_spi        │                   │
-        │                │         (u_spi)         │──────────┐        │
-        │                └────┬───────────────▲────┘          │        │
-        │   (addr, din, we,   │               │ (dout, busy,  │        │
-        │    start, config)   │               │  done)        │        │
-        │                ┌────▼───────────────┴────┐          │        │
-        │                │     systolic_wrapper    │          │        │
-        │                │       (u_wrapper)       │          │        │
-        │                └────────────┬────────────┘          │        │
-        │                             │ (4x4 Matrix Op)       │        │
-        │                ┌────────────▼────────────┐          │        │
-        │                │      systolic_array     │          │        │
-        │                └─────────────────────────┘          │        │
-        │                                                     │        │
-        │  top_out[3] (MISO) ◄────────────────────────────────┘        │
-        │                                                              │
-        └──────────────────────────────────────────────────────────────┘
+        +------------------------------------------------------------+
+        |                                                            |
+rt_in[0] uart_rx  ----> uart_apb_master ---- APB ---- harts_apb_slave|
+rt_out[3] uart_tx <----        |                         |           |
+        |                     locked                     v           |
+        |                                           control_unit      |
+bot_in[7:0] ext_irq ----> interrupt_ctrl                 |           |
+        |                                                |           |
+        |             +----------------------------------+----+      |
+        |             |                  |                    |      |
+        |        priority_queue     sleep_queue             timer    |
+        |             |                  |                    |      |
+rt_out[4] irq_n <-----+------------------+--------------------+      |
+        |                                                            |
+rt_in[1] scan_en  ----+                                            |
+rt_in[2] scan_in  ----+--> scan_chain --> rt_out[5] scan_out        |
+        |                                                            |
+        | reset_n -> rst_n for UART/APB, queues, timer, IRQ, scan    |
+        +------------------------------------------------------------+
 ```
 
 ---
@@ -425,73 +434,64 @@ bot_out[3] (MISO) ◄───────────────────�
 
 ---
 
-### [2,0] HARTS — Hardware Real-Time Scheduler
+### [2,0] NeuralTram — Systolic Array
 
-HARTS is a hardware real-time scheduling coprocessor. The host configures and queries it through a UART-to-APB bridge, while the scheduler core manages a 16-task table, ready priority queue, sleep queue, tick timer, and external interrupt handling. A scan chain exposes selected internal scheduler status for debug.
+The participant opted for a standardized SPI interface to communicate with a 4×4 matrix multiplier. All connections are localized on the Top edge for easy wiring.
 
 #### Interface & GPIO Mapping
 
 | Property | Value |
 | :--- | :--- |
-| **Interface** | UART/APB control + external IRQ inputs + scan debug |
-| `gpio_rt_in[0]` | `uart_rx` — Input (host command stream) |
-| `gpio_rt_in[1]` | `scan_en` — Input |
-| `gpio_rt_in[2]` | `scan_in` — Input |
-| `gpio_rt_out[3]` | `uart_tx` — Output (host response stream) |
-| `gpio_rt_out[4]` | `irq_n` — Output (active-low host interrupt) |
-| `gpio_rt_out[5]` | `scan_out` — Output |
-| `gpio_bot_in[7:0]` | `ext_irq[7:0]` — External interrupt inputs |
-
-The RTL instantiates `hw_scheduler_top` with `UART_DIVISOR=16'd11`, matching the wrapper comment for a 20 MHz clock and 115200 baud with 16x oversampling. The UART bridge converts host frames into APB3 accesses, which feed the HARTS APB slave and scheduler control path.
+| **Interface** | SPI Slave (Top Edge) |
+| `gpio_top_in[0]` | `CS_N` — Input (SPI Chip Select) |
+| `gpio_top_in[1]` | `SCLK` — Input (SPI Clock) |
+| `gpio_top_in[2]` | `MOSI` — Input (SPI Data In) |
+| `gpio_top_out[3]` | `MISO` — Output (SPI Data Out) |
 
 #### Reset Behavior
 
-The wrapper passes the gated OpenFrame reset directly into the scheduler as `rst_n`. This reset initializes the UART/APB bridge, APB slave response path, control unit, timer, priority queue, sleep queue, interrupt controller, task table, and scan chain. The `por_n` input is not used directly by this project wrapper.
+The core utilizes the gated `reset_n` signal from the Green Macro directly. This signal clears both the SPI decoder (`u_spi`) and the systolic FSM within the wrapper (`u_wrapper`), ensuring the transformation state machine and memory pointers are initialized only when the project is active. On reset deassertion, the internal MUX defaults to "SPI Access" mode to facilitate data and weight loading.
 
 ```verilog
 // project_macro.v
-hw_scheduler_top #(
-    .UART_DIVISOR(16'd11)
-) u_harts (
-    .clk   (clk),
-    .rst_n (reset_n),
-    ...
-);
+.rst_n(reset_n), // Gated system reset for SPI and Wrapper
 ```
 
 #### Drive Modes & OEB Control
 
 | Signal | OEB | Drive Mode | Notes |
 | :--- | :--- | :--- | :--- |
-| `gpio_rt_oeb[2:0]` (`uart_rx`, `scan_en`, `scan_in`) | `3'b111` (Inputs) | `3'b110` (default) | Host UART and scan inputs |
-| `gpio_rt_oeb[5:3]` (`uart_tx`, `irq_n`, `scan_out`) | `3'b000` (Outputs) | `3'b110` Strong push-pull | UART response, host interrupt, scan output |
-| `gpio_rt_oeb[8:6]` | `3'b111` (Hi-Z) | `3'b110` (default) | Unused right GPIOs |
-| `gpio_bot_oeb[14:0]` | All `1'b1` (Inputs/Hi-Z) | `3'b110` (default) | Bottom `[7:0]` are `ext_irq`; `[14:8]` unused |
-| `gpio_top_oeb[13:0]` | All `1'b1` (Hi-Z) | `3'b110` (default) | Top GPIOs unused |
+| `gpio_top_oeb[3]` (`miso`) | `1'b0` (Output) | `3'b110` Strong push-pull | Consistent timing and drive strength across chip |
+| `gpio_top_oeb[2:0]` (SPI bus) | `1'b1` (Inputs) | `3'b110` (default) | All top bank pins |
 
 #### Block Diagram
 
 ```text
            PROJECT MACRO [2,0]
-        +------------------------------------------------------------+
-        |                                                            |
-rt_in[0] uart_rx  ----> uart_apb_master ---- APB ---- harts_apb_slave|
-rt_out[3] uart_tx <----        |                         |           |
-        |                     locked                     v           |
-        |                                           control_unit      |
-bot_in[7:0] ext_irq ----> interrupt_ctrl                 |           |
-        |                                                |           |
-        |             +----------------------------------+----+      |
-        |             |                  |                    |      |
-        |        priority_queue     sleep_queue             timer    |
-        |             |                  |                    |      |
-rt_out[4] irq_n <-----+------------------+--------------------+      |
-        |                                                            |
-rt_in[1] scan_en  ----+                                            |
-rt_in[2] scan_in  ----+--> scan_chain --> rt_out[5] scan_out        |
-        |                                                            |
-        | reset_n -> rst_n for UART/APB, queues, timer, IRQ, scan    |
-        +------------------------------------------------------------+
+        ┌──────────────────────────────────────────────────────────────┐
+        │                                                              │
+        │  top_in[0] (CS_N)  ──┐                                       │
+        │  top_in[1] (SCLK)  ──┼──────┐                                │
+        │  top_in[2] (MOSI)  ──┼──────┼──────┐                         │
+        │                      ▼      ▼      ▼                         │
+        │                ┌─────────────────────────┐                   │
+        │                │       simple_spi        │                   │
+        │                │         (u_spi)         │──────────┐        │
+        │                └────┬───────────────▲────┘          │        │
+        │   (addr, din, we,   │               │ (dout, busy,  │        │
+        │    start, config)   │               │  done)        │        │
+        │                ┌────▼───────────────┴────┐          │        │
+        │                │     systolic_wrapper    │          │        │
+        │                │       (u_wrapper)       │          │        │
+        │                └────────────┬────────────┘          │        │
+        │                             │ (4x4 Matrix Op)       │        │
+        │                ┌────────────▼────────────┐          │        │
+        │                │      systolic_array     │          │        │
+        │                └─────────────────────────┘          │        │
+        │                                                     │        │
+        │  top_out[3] (MISO) ◄────────────────────────────────┘        │
+        │                                                              │
+        └──────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -736,10 +736,10 @@ bot_out[4] done_processing <--------------------------+              |
 | **[0,0]** | 1D CNN | Bottom | UART | ECG Arrhythmia Classifier |
 | **[0,1]** | FIR Filter | Bottom | UART + SPI | Proximity Safety Co-Processor |
 | **[0,2]** | Aho-Corasick | Bottom + Right | UART + Parallel | Anomaly Detection ASIC |
-| **[1,0]** | Systolic Array | Top | SPI Slave | INT8 Matrix Multiplier |
+| **[1,0]** | HARTS Scheduler | Right + Bottom | UART/APB + IRQ + Scan | Hardware Real-Time Scheduling |
 | **[1,1]** | NTT Engine | Bottom | SPI Slave | Lattice-Based Cryptography |
 | **[1,2]** | BLAKE2s Hash | Bottom | SPI Slave | Cryptographic Accelerator |
-| **[2,0]** | HARTS Scheduler | Right + Bottom | UART/APB + IRQ + Scan | Hardware Real-Time Scheduling |
+| **[2,0]** | Systolic Array | Top | SPI Slave | INT8 Matrix Multiplier |
 | **[2,1]** | I2C Bridge | Top | I2C + UART | Dual-I2C Controller |
 | **[2,2]** | Micro-TPM | Bottom | SPI Slave + IRQ | TPM-style Random, PCR, and HMAC Services |
 | **[3,0]** | TRNG | Bottom | Protocol-Less | Stochastic Entropy Primitive |
