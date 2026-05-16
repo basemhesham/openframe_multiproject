@@ -330,12 +330,13 @@ module openframe_project_wrapper #(
                 );
 
                 // Green gates reset with proj_en; synchronize that final
-                // project reset on the ungated local source clock. Keeping
-                // these flops off proj_clk avoids CTS register/macro split
-                // buffers on every gated project clock subtree.
+                // project reset on the same gated clock used by the project.
+                // This keeps reset deassertion aligned with the receiving
+                // macro flops and avoids async removal checks against a
+                // different clock-tree latency.
                 reset_synchronizer u_proj_reset_sync (
                     .masterrst_n(proj_rst_n),
-                    .clk        (gclk[c][r]),
+                    .clk        (proj_clk),
                     .rst_n      (proj_rst_n_raw)
                 );
 
