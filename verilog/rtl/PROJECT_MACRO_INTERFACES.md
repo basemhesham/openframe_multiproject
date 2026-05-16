@@ -17,6 +17,7 @@
 | **[2,2]** | Micro-TPM | project_macro_2_2 | SPI-accessible TPM-style security processor with TRNG, PCRs, SHA-256, and HMAC | `bot_in[2:0]`, `bot_out[4:3]` |
 | **[3,0]** | [XtraRandom](https://github.com/ASIC-hub/si-sprint26-project-aast-26-27) | si-sprint26-project-aast-26-27 | Thermal-jitter True Random Number Generator (TRNG) | `bot_out[2:0]` |
 | **[3,1]** | [NanoNPU](https://github.com/ASIC-hub/si-sprint26-project-nanonpu) | si-sprint26-project-nanonpu | UART/APB-controlled 4x4 systolic-array neural processing unit | `bot_in[0]`, `bot_out[4:1]` |
+| **[3,2]** | [Silicon-Sprint-Proj-1](https://github.com/shalan/Silicon-Sprint-Proj-1) | Silicon-Sprint-Proj-1 | USB CDC, FLL/RC oscillator, nc_sercom, and ADPoR monitor test chip | `bot_in[0,2,11]`, `bot_in/out[3:4]`, `bot_out[1,5:10,12]`, `rt_in/out[7:2]` |
 
 ---
 
@@ -37,6 +38,7 @@
   - [\[2,2\] Micro-TPM — SPI Security Processor](#22-micro-tpm--spi-security-processor)
   - [\[3,0\] XtraRandom — Stochastic Entropy Primitive](#30-xtrarandom-stochastic-entropy-primitive)
   - [\[3,1\] NanoNPU — Neural Processing Unit](#31-nanonpu--neural-processing-unit)
+  - [\[3,2\] Silicon-Sprint-Proj-1 — USB CDC, Clock, and Serial Test Chip](#32-silicon-sprint-proj-1--usb-cdc-clock-and-serial-test-chip)
 - [Summary Table for Integration](#summary-table-for-integration)
 
 ---
@@ -729,6 +731,85 @@ bot_out[4] done_processing <--------------------------+              |
 
 ---
 
+### [3,2] Silicon-Sprint-Proj-1 — USB CDC, Clock, and Serial Test Chip
+
+This project integrates a UART-to-APB debug bridge, USB CDC data path, fractional-N DLL/FLL clocking block, two RC oscillator monitor paths, an all-digital power-on-reset monitor, and an `nc_sercom` multi-protocol serial peripheral. The copied RTL source set is the project's synthesis source list: project glue, UART/APB bridge, USB CDC core, nc_sercom RTL, and black-box stubs for the hard macros.
+
+#### Interface & GPIO Mapping
+
+| Property | Value |
+| :--- | :--- |
+| **Interface** | UART/APB control, USB CDC, clock monitor outputs, and nc_sercom USART/SPI/I2C pads |
+| `gpio_bot_in[0]` | `uart_rx` — Input (host UART to APB bridge) |
+| `gpio_bot_out[1]` | `uart_tx` — Output (APB bridge UART response) |
+| `gpio_bot_in[2]` | `xclk` — Input (12 MHz APB/reference clock) |
+| `gpio_bot_in/out[3]` | `usb_dp` — Bidirectional USB D+ |
+| `gpio_bot_in/out[4]` | `usb_dm` — Bidirectional USB D- |
+| `gpio_bot_out[5]` | `usb_pu` — Output (external USB D+ pull-up enable) |
+| `gpio_bot_out[6]` | `fll_mon` — Output (FLL monitor clock) |
+| `gpio_bot_out[7]` | `rc16m_mon` — Output (16 MHz RC oscillator monitor) |
+| `gpio_bot_out[8]` | `rc500k_mon` — Output (500 kHz RC oscillator monitor) |
+| `gpio_bot_out[9]` | `usb_configured` — Output (USB CDC configured status) |
+| `gpio_bot_out[10]` | `clk48m_mon` — Output (48 MHz USB clock monitor) |
+| `gpio_bot_in[11]` | `ext_rst_n` — Input (external active-low reset) |
+| `gpio_bot_out[12]` | `adpor_mon` — Output (all-digital PoR monitor) |
+| `gpio_rt_in/out[7:2]` | `sercom_pad[5:0]` — Bidirectional nc_sercom USART/SPI/I2C pads |
+
+#### Reset Behavior
+
+The wrapper first combines the OpenFrame gated reset with the raw power-on reset. The external reset input on `gpio_bot_in[11]` is then synchronized into the `xclk` domain and ANDed into the local reset used by the UART/APB bridge, USB CDC path, FLL control, status logic, and nc_sercom block.
+
+```verilog
+// project_macro.v
+wire sys_rst_n = reset_n & por_n;
+wire rst_n = sys_rst_n & ext_rst_sync;
+```
+
+The USB CDC block also observes the APB-controlled `usb_rst_n` bit. The `por_macro` instance is self-contained and exposes only its monitor output on `gpio_bot_out[12]`.
+
+#### Drive Modes & OEB Control
+
+| Signal | OEB | Drive Mode | Notes |
+| :--- | :--- | :--- | :--- |
+| `gpio_bot_oeb[0]` (`uart_rx`) | `1'b1` (Input) | `3'b001` Input only | Host UART input |
+| `gpio_bot_oeb[1]` (`uart_tx`) | `1'b0` (Output) | `3'b110` Strong push-pull | UART response output |
+| `gpio_bot_oeb[2]` (`xclk`) | `1'b1` (Input) | `3'b001` Input only | External 12 MHz reference/APB clock |
+| `gpio_bot_oeb[3:4]` (`usb_dp`, `usb_dm`) | `~tx_en` | APB-controlled USB drive mode | Bidirectional USB data pins |
+| `gpio_bot_oeb[5]` (`usb_pu`) | `~dp_pu` | APB-controlled | Enables external USB pull-up |
+| `gpio_bot_oeb[6:8]` (`fll_mon`, `rc16m_mon`, `rc500k_mon`) | Inverse monitor enables | `3'b110` Strong push-pull | Clock monitor outputs |
+| `gpio_bot_oeb[9]` (`usb_configured`) | `1'b0` (Output) | `3'b110` Strong push-pull | USB configured status |
+| `gpio_bot_oeb[10]` (`clk48m_mon`) | `~clk48m_mon_en` | `3'b110` Strong push-pull | 48 MHz monitor output |
+| `gpio_bot_oeb[11]` (`ext_rst_n`) | `1'b1` (Input) | `3'b110` | External reset input |
+| `gpio_bot_oeb[12]` (`adpor_mon`) | `1'b0` (Output) | `3'b110` Strong push-pull | ADPoR monitor |
+| `gpio_rt_oeb[7:2]` (`sercom_pad[5:0]`) | `~sercom_pad_oe` | `3'b110` Strong digital | Runtime-configurable serial pads |
+| Bottom `[14:13]`, Right `[1:0]`, Right `[8]`, Top | OEB=1 (Hi-Z) | `3'b110` | Spares/unused |
+
+#### Block Diagram
+
+```text
+           PROJECT MACRO [3,2]
+        +----------------------------------------------------------------+
+        |                                                                |
+bot_in[0] uart_rx  ----> uart_apb_sys ---- APB splitter ----+           |
+bot_out[1] uart_tx <----       |                            |           |
+        |                      |                            v           |
+bot_in[2] xclk ----------------+----> clk_ctrl / status / usb_fifo      |
+        |                      |                            |           |
+        |                      |                            v           |
+        |          fll_top + RC oscillators ---- monitors --> bot[6:10] |
+        |                                                                |
+bot[3:4] usb_dp/dm <---------- usb_cdc <---------- apb_usb_fifo         |
+bot_out[5] usb_pu <------------+                                         |
+        |                                                                |
+rt[7:2] sercom_pad[5:0] <----> nc_sercom ---- irq/status over APB       |
+        |                                                                |
+bot_in[11] ext_rst_n -> xclk sync -> rst_n for APB/USB/FLL/nc_sercom    |
+bot_out[12] adpor_mon <------- por_macro monitor                         |
+        +----------------------------------------------------------------+
+```
+
+---
+
 ## Summary Table for Integration
 
 | Project Slot | Logic Type | Primary Bank | Communication | Key Feature |
@@ -744,3 +825,4 @@ bot_out[4] done_processing <--------------------------+              |
 | **[2,2]** | Micro-TPM | Bottom | SPI Slave + IRQ | TPM-style Random, PCR, and HMAC Services |
 | **[3,0]** | TRNG | Bottom | Protocol-Less | Stochastic Entropy Primitive |
 | **[3,1]** | NanoNPU | Bottom | UART/APB | 4x4 Systolic-Array Neural Processing Unit |
+| **[3,2]** | Mixed-signal test chip | Bottom + Right | UART/APB + USB CDC + USART/SPI/I2C | FLL/RC clock monitors and serial/USB test fabric |
