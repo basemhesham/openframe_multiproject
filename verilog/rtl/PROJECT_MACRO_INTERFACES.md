@@ -6,7 +6,7 @@
 
 | Slot | Project | Repository | Description | Used I/Os |
 | :---: | :--- | :--- | :--- | :--- |
-| **[0,0]** | [Q-PULSE](https://github.com/ASIC-hub/si-sprint26-project-q-pulse) | si-sprint26-project-q-pulse | 1D CNN ECG arrhythmia classifier | `bot_in[1]`, `bot_out[0]` |
+| **[0,0]** | [Q-PULSE](https://github.com/ASIC-hub/si-sprint26-project-q-pulse) | si-sprint26-project-q-pulse | 1D CNN ECG arrhythmia classifier with UART control/data path and ADC preprocessing mode | `bot_in[1]`, `bot_out[0]` |
 | **[0,1]** | [ProxCore](https://github.com/ASIC-hub/si-sprint26-project-visiontram) | si-sprint26-project-visiontram | LiDAR-based obstacle detection & emergency braking co-processor | `bot_in[3:0]`, `bot_out[5:4]` |
 | **[0,2]** | [TraceGuard-X](https://github.com/ASIC-hub/si-sprint26-project-traceguard-x) | si-sprint26-project-traceguard-x | Field-programmable anomaly-detection ASIC for industrial networks | `bot_in[0]`, `bot_out[9:1]`, `rt_out[7:0]` |
 | **[1,0]** | [HARTS](https://github.com/yomnahisham/harts) | harts | Hardware real-time scheduler with UART/APB control, external IRQs, timer, queues, and scan debug | `rt_in[2:0]`, `rt_out[5:3]`, `bot_in[7:0]` |
@@ -14,8 +14,8 @@
 | **[1,2]** | [Cryptic](https://github.com/ASIC-hub/si-sprint26-project-cryptic-shazli-and-malak) | si-sprint26-project-cryptic | BLAKE2s-256 single-block hash accelerator via SPI | `bot_in[2:0]`, `bot_out[3]` |
 | **[2,0]** | [NeuralTram](https://github.com/ASIC-hub/si-sprint26-project-neuraltram) | si-sprint26-project-neuraltram | 4x4 systolic array INT8 matrix multiplier | `top_in[2:0]`, `top_out[3]` |
 | **[2,1]** | [I2C-UART](https://github.com/ASIC-hub/si-sprint26-project-I2C_controller) | si-sprint26-project-I2C_controller | PID temperature controller with I²C master/slave and UART | `top_in/out[0:1]`, `top_in[2]`, `top_in/out[3]`, `top_out[4]` |
-| **[2,2]** | Micro-TPM | project_macro_2_2 | SPI-accessible TPM-style security processor with TRNG, PCRs, SHA-256, and HMAC | `bot_in[2:0]`, `bot_out[4:3]` |
-| **[3,0]** | [XtraRandom](https://github.com/ASIC-hub/si-sprint26-project-aast-26-27) | si-sprint26-project-aast-26-27 | Thermal-jitter True Random Number Generator (TRNG) | `bot_out[2:0]` |
+| **[2,2]** | [Micro-TPM](https://github.com/ASIC-hub/si-sprint26-project-custom_tpm) | si-sprint26-project-custom_tpm | SPI-accessible TPM-style security processor with TRNG, PCRs, SHA-256, and HMAC | `bot_in[2:0]`, `bot_out[4:3]` |
+| **[3,0]** | [AegisDSP](https://github.com/ASIC-hub/si-sprint26-project-aegisdsp) | si-sprint26-project-aegisdsp | Mixed-signal access-control ASIC with IR motion detection, I2C microphone sound detection, SPI status readout, and alarm/status GPIOs | `rt_in[2:0]`, `rt_out[8:3]`, `top_in[1:0]`, `top_in/out[3:2]` |
 | **[3,1]** | [NanoNPU](https://github.com/ASIC-hub/si-sprint26-project-nanonpu) | si-sprint26-project-nanonpu | UART/APB-controlled 4x4 systolic-array neural processing unit | `bot_in[0]`, `bot_out[4:1]` |
 | **[3,2]** | [Silicon-Sprint-Proj-1](https://github.com/shalan/Silicon-Sprint-Proj-1) | Silicon-Sprint-Proj-1 | USB CDC, FLL/RC oscillator, nc_sercom, and ADPoR monitor test chip | `bot_in[0,2,11]`, `bot_in/out[3:4]`, `bot_out[1,5:10,12]`, `rt_in/out[7:2]` |
 
@@ -36,7 +36,7 @@
   - [\[2,0\] NeuralTram — Systolic Array](#20-neuraltram-systolic-array)
   - [\[2,1\] I2C-UART Controller — Dual-I2C Bridge](#21-i2c-uart-controller-dual-i2c-bridge)
   - [\[2,2\] Micro-TPM — SPI Security Processor](#22-micro-tpm--spi-security-processor)
-  - [\[3,0\] XtraRandom — Stochastic Entropy Primitive](#30-xtrarandom-stochastic-entropy-primitive)
+  - [\[3,0\] AegisDSP — Access-Control Sensor Fusion ASIC](#30-aegisdsp--access-control-sensor-fusion-asic)
   - [\[3,1\] NanoNPU — Neural Processing Unit](#31-nanonpu--neural-processing-unit)
   - [\[3,2\] Silicon-Sprint-Proj-1 — USB CDC, Clock, and Serial Test Chip](#32-silicon-sprint-proj-1--usb-cdc-clock-and-serial-test-chip)
 - [Summary Table for Integration](#summary-table-for-integration)
@@ -75,23 +75,34 @@ By utilizing the gated reset from the Green Macro, a single `reset_n` input at t
 
 ### [0,0] Q-PULSE — ECG Arrhythmia Classifier
 
-The design uses a UART-based communication bridge to feed a 1D CNN inference engine. It focuses on minimal pin usage to handle complex data (187 samples per window).
+Q-PULSE is an ECG arrhythmia classifier built around a TinyECG 1D CNN. The current `ecg_wrapper` supports two ingestion paths: a UART packet path for CSR writes and direct sample loading, and an ADC preprocessing path through `ADC_Big_Wrap` for filtered/conditioned ECG samples. At the OpenFrame project boundary, the current `project_macro.v` still exposes only the UART RX/TX pins; the ADC-side wrapper ports (`adc_valid`, `adc_data`, `adc_ready`) are internal to `ecg_wrapper` and are not mapped to project GPIOs in this slot wrapper.
 
 #### Interface & GPIO Mapping
 
 | Property | Value |
 | :--- | :--- |
-| **Interface** | UART (13-bit CSR Packet Protocol) |
-| `gpio_bot_in[1]` | `rx` — Input |
-| `gpio_bot_out[0]` | `uart_tx_w` — Output |
+| **OpenFrame Interface** | UART packet interface on bottom GPIOs |
+| **Core Modes** | UART sample mode or ADC preprocessing mode, selected by CSR control bit `[0]` |
+| `gpio_bot_in[1]` | `rx` — Input, host UART to Q-PULSE |
+| `gpio_bot_out[0]` | `uart_tx_w` — Output, Q-PULSE UART response |
+| `ecg_wrapper.adc_valid` | Core-level ADC sample-valid input, not mapped to OpenFrame GPIO |
+| `ecg_wrapper.adc_data[7:0]` | Core-level ADC sample input, not mapped to OpenFrame GPIO |
+| `ecg_wrapper.adc_ready` | Core-level ADC ready output, not mapped to OpenFrame GPIO |
+
+The UART RX bridge assembles two UART bytes into one 16-bit packet. Packets with bit `[15]=1` update CSR registers; packets with bit `[15]=0` feed sample data into the CNN when UART mode is selected.
 
 #### Reset Behavior
 
-The participant handles the reset by logically ANDing the gated `reset_n` and the global `por_n` into the core's `arst_n` signal. Additionally, a **Soft Reset** is implemented via Bit [12] of the UART packet for remote core recovery.
+The project wrapper logically ANDs the gated `reset_n` and raw `por_n` before driving `ecg_wrapper.arst_n`. Inside `ecg_wrapper`, CSR control bit `[2]` provides a soft reset for the HLS core, and the ADC preprocessing path can assert `clear` on threshold alarms. The TinyECG HLS core reset is therefore gated by wrapper reset, soft reset, and ADC-clear conditions.
 
 ```verilog
 // project_macro.v
 .arst_n(reset_n & por_n), // Asynchronous reset for the core
+```
+
+```verilog
+// ecg_wrapper.v
+.ap_rst_n(arst_n & !engine_soft_reset & !clear)
 ```
 
 #### Drive Modes & OEB Control
@@ -100,7 +111,7 @@ The participant handles the reset by logically ANDing the gated `reset_n` and th
 | :--- | :--- | :--- | :--- |
 | `gpio_bot_out[0]` (TX) | `1'b0` (Output) | `3'b110` Strong push-pull | Reliable serial TX |
 | `gpio_bot_in[1]` (RX) | `1'b1` (Input) | `3'b001` Input only | Serial RX |
-| All unused GPIOs | — | `3'b001` Input only | Explicitly set by participant |
+| Bottom `[14:1]`, Right, Top | OEB=1 (Hi-Z) | `3'b001` Input only | Unused/reserved at the OpenFrame boundary |
 
 #### Block Diagram
 
@@ -113,11 +124,16 @@ The participant handles the reset by logically ANDing the gated `reset_n` and th
 bot_in[1]─────►│ UART RX  │─────►│ UART-to-AXIS │          │
         │      │ Receiver │      │    Bridge    │          │
         │      └──────────┘      └──────┬───────┘          │
-        │                               │ (ECG Samples)    │
-        │      ┌──────────┐      ┌──────▼───────┐          │
-        │      │ UART TX  │◄─────│   TinyECG    │          │
-bot_out[0]◄────┤  Bridge  │◄─────│ (1D CNN Core)│          │
-        │      └──────────┘      └──────────────┘          │
+        │                               │ (CSR/Data)       │
+        │  adc_valid/data               │                  │
+        │  (not GPIO mapped) ───►┌──────▼───────┐          │
+        │                        │ ADC_Big_Wrap │          │
+        │                        │ preprocessing│          │
+        │      ┌──────────┐      └──────┬───────┘          │
+        │      │ UART TX  │◄─────┌──────▼───────┐          │
+bot_out[0]◄────┤  Bridge  │◄─────│   TinyECG    │          │
+        │      └──────────┘      │ (1D CNN Core)│          │
+        │                        └──────────────┘          │
         └──────────────────────────────────────────────────┘
 ```
 
@@ -615,51 +631,86 @@ bot_out[4] irq <------------------+                       ^         |
 
 ---
 
-### [3,0] XtraRandom — Stochastic Entropy Primitive
+### [3,0] AegisDSP — Access-Control Sensor Fusion ASIC
 
-A True Random Number Generator (TRNG) utilizing thermal jitter to produce a multi-bit stochastic stream. The design is protocol-less and configured for continuous operation.
+AegisDSP combines a 1-bit IR motion path with an I2C microphone sound detector. Either motion or sound asserts the alarm and drives the internal two-state FSM into `ALARM` for a 5-second hold interval. A lightweight SPI status stream exposes the alarm and debug flags without consuming the bottom GPIO bank.
 
 #### Interface & GPIO Mapping
 
 | Property | Value |
 | :--- | :--- |
-| **Interface** | Clock-driven synchronous (Protocol-Less) |
-| `gpio_bot_out[0]` | `q1` — Output (Entropy bit 0) |
-| `gpio_bot_out[1]` | `q2` — Output (Entropy bit 1) |
-| `gpio_bot_out[2]` | `q3` — Output (Entropy bit 2) |
+| **Interface** | SPI status slave + IR input + open-drain I2C microphone bus |
+| `gpio_rt_in[0]` / Caravel `gpio[15]` | `spi_sclk` — Input |
+| `gpio_rt_in[1]` / Caravel `gpio[16]` | `spi_cs_n` — Input, active low |
+| `gpio_rt_in[2]` / Caravel `gpio[17]` | `spi_mosi` — Input |
+| `gpio_rt_out[3]` / Caravel `gpio[18]` | `spi_miso` — Output while selected, Hi-Z when `spi_cs_n=1` |
+| `gpio_rt_out[4]` / Caravel `gpio[19]` | `alarm` — Output |
+| `gpio_rt_out[5]` / Caravel `gpio[20]` | `motion_active` — Output |
+| `gpio_rt_out[6]` / Caravel `gpio[21]` | `sound_active` — Output |
+| `gpio_rt_out[7]` / Caravel `gpio[22]` | `i2c_error` — Output |
+| `gpio_rt_out[8]` / Caravel `gpio[23]` | `fsm_state` — Output, `0=IDLE`, `1=ALARM` |
+| `gpio_top_in[0]` / Caravel `gpio[24]` | `ir_in` — Input, 1-bit digital IR sensor |
+| `gpio_top_in[1]` / Caravel `gpio[25]` | `ir_sample_valid` — Input, one-cycle strobe per IR sample |
+| `gpio_top_in/out[2]` / Caravel `gpio[26]` | `mic_i2c_scl` — Bidirectional open-drain I2C SCL |
+| `gpio_top_in/out[3]` / Caravel `gpio[27]` | `mic_i2c_sda` — Bidirectional open-drain I2C SDA |
+| `gpio_bot[14:0]` / Caravel `gpio[14:0]` | Unused, held as high-impedance inputs |
 
 #### Reset Behavior
 
-In the current RTL implementation, the TRNG core is "always ON" (`en=1'b1`) and does not utilize the gated `reset_n` or `por_n` signals for its internal logic.
+The wrapper combines the gated project reset with the raw power-on reset before feeding the access-control core. This reset clears the IR filter state, I2C controller, adaptive sound detector, alarm FSM, and SPI status shift registers.
 
 ```verilog
 // project_macro.v
-wire en = 1'b1; // Always enabled
-u_trng (.clk(clk), .en(en), ...);
+wire macro_rst_n = reset_n & por_n;
+
+access_control_top u_access_control_top (
+    .clk   (clk),
+    .rst_n (macro_rst_n),
+    ...
+);
+```
+
+The SPI status byte is shifted MSB-first on `gpio_rt_out[3]` when `spi_cs_n` is low:
+
+```verilog
+{3'b000, fsm_state, i2c_error, sound_active, motion_active, alarm}
 ```
 
 #### Drive Modes & OEB Control
 
 | Signal | OEB | Drive Mode | Notes |
 | :--- | :--- | :--- | :--- |
-| `gpio_bot_oeb[2:0]` | `3'b000` (All outputs) | `3'b110` Strong push-pull | Ensures clear signal transitions and stochastic integrity |
-| All other bottom GPIOs | High-impedance | — | — |
+| `gpio_rt_oeb[2:0]` (`spi_sclk`, `spi_cs_n`, `spi_mosi`) | `3'b111` (Inputs) | `3'b001` Input only | Host-driven SPI inputs |
+| `gpio_rt_oeb[3]` (`spi_miso`) | `spi_cs_n` | `3'b110` Strong push-pull | Drives only while the SPI slave is selected |
+| `gpio_rt_oeb[8:4]` (`alarm`, status flags) | `5'b00000` (Outputs) | `3'b110` Strong push-pull | Direct debug/status outputs |
+| `gpio_top_oeb[1:0]` (`ir_in`, `ir_sample_valid`) | `2'b11` (Inputs) | `3'b001` Input only | Digital IR sample path |
+| `gpio_top_oeb[2]` (`mic_i2c_scl`) | `mic_scl_release` | `3'b101` Open-drain | Drive low or release to external pull-up |
+| `gpio_top_oeb[3]` (`mic_i2c_sda`) | `mic_sda_release` | `3'b101` Open-drain | Drive low or release to external pull-up |
+| Bottom `[14:0]`, Top `[13:4]` | OEB=1 (Hi-Z) | `3'b001` Input only | Unused/reserved GPIOs |
 
 #### Block Diagram
 
 ```text
            PROJECT MACRO [3,0]
-        ┌──────────────────────────────────────────────────────────────┐
-        │                                                              │
-        │                        ┌──────────────────┐                  │
-        │                        │     trng_top     │                  │
-        │                        │     (u_trng)     │                  │
-  CLK ──┼───────────────────────►│                  ├───► bot_out[0] (q1)
-        │                        │                  ├───► bot_out[1] (q2)
-        │         1'b1 (en) ────►│                  ├───► bot_out[2] (q3)
-        │                        └──────────────────┘                  │
-        │                                                              │
-        └──────────────────────────────────────────────────────────────┘
+        +------------------------------------------------------------+
+        |                                                            |
+top_in[0] ir_in ----------> ir_dsp_core ---- motion_active --> rt[5]|
+top_in[1] sample_valid --->       |                         |       |
+        |                         |                         v       |
+        |                         +----------------------> alarm -> rt[4]
+        |                                                   ^       |
+top[2] mic_i2c_scl <----> sound_detector / I2C master -----+       |
+top[3] mic_i2c_sda <----> 16-bit sound level + EMA threshold        |
+        |                         |                         |       |
+        |                         +---- sound_active ------> rt[6]  |
+        |                         +---- i2c_error ---------> rt[7]  |
+        |                                                            |
+rt[0] spi_sclk ----+                                             rt[8]
+rt[1] spi_cs_n ----+--> SPI status shifter <-- fsm_state ----------+
+rt[2] spi_mosi ----+       status byte -> rt[3] spi_miso            |
+        |                                                            |
+        | macro_rst_n = reset_n & por_n                              |
+        +------------------------------------------------------------+
 ```
 
 ---
@@ -814,7 +865,7 @@ bot_out[12] adpor_mon <------- por_macro monitor                         |
 
 | Project Slot | Logic Type | Primary Bank | Communication | Key Feature |
 | :---: | :--- | :---: | :--- | :--- |
-| **[0,0]** | 1D CNN | Bottom | UART | ECG Arrhythmia Classifier |
+| **[0,0]** | 1D CNN + ADC preprocessing | Bottom | UART; ADC mode inside wrapper | ECG arrhythmia classifier with UART control and ADC-conditioned sample path |
 | **[0,1]** | FIR Filter | Bottom | UART + SPI | Proximity Safety Co-Processor |
 | **[0,2]** | Aho-Corasick | Bottom + Right | UART + Parallel | Anomaly Detection ASIC |
 | **[1,0]** | HARTS Scheduler | Right + Bottom | UART/APB + IRQ + Scan | Hardware Real-Time Scheduling |
@@ -823,6 +874,6 @@ bot_out[12] adpor_mon <------- por_macro monitor                         |
 | **[2,0]** | Systolic Array | Top | SPI Slave | INT8 Matrix Multiplier |
 | **[2,1]** | I2C Bridge | Top | I2C + UART | Dual-I2C Controller |
 | **[2,2]** | Micro-TPM | Bottom | SPI Slave + IRQ | TPM-style Random, PCR, and HMAC Services |
-| **[3,0]** | TRNG | Bottom | Protocol-Less | Stochastic Entropy Primitive |
+| **[3,0]** | Sensor fusion / FSM | Right + Top | SPI status + I2C + IR GPIO | IR/microphone access-control alarm with status readout |
 | **[3,1]** | NanoNPU | Bottom | UART/APB | 4x4 Systolic-Array Neural Processing Unit |
 | **[3,2]** | Mixed-signal test chip | Bottom + Right | UART/APB + USB CDC + USART/SPI/I2C | FLL/RC clock monitors and serial/USB test fabric |
