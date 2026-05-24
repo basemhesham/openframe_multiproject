@@ -3,6 +3,8 @@ module NTT_RAM #(
     parameter ADDR_WIDTH = 8  
 )(
     input  wire clk,
+    input  wire rst_n,           
+    
     input  wire ena,
     input  wire wea,
     input  wire [ADDR_WIDTH-1:0] addra,
@@ -17,19 +19,16 @@ module NTT_RAM #(
 );
 
     reg [DATA_WIDTH-1:0] ram [0:(1<<ADDR_WIDTH)-1];
+    integer i;
 
     always @(posedge clk) begin
         if (ena) begin
-            if (wea) begin
-                ram[addra] <= dina;
-            end
+            if (wea) ram[addra] <= dina;
             douta <= ram[addra];
         end
         
         if (enb) begin
-            if (web) begin
-                ram[addrb] <= dinb;
-            end
+            if (web) ram[addrb] <= dinb;
             doutb <= ram[addrb];
         end
     end

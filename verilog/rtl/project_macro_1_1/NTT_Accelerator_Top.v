@@ -8,7 +8,6 @@ module NTT_Accelerator_Top #(
     input  wire start,
     input  wire mode,
     
-    // Memory access ports (Exposed for external SPI loading)
     input  wire ext_ram_we,
     input  wire [ADDR_WIDTH-1:0] ext_ram_addr,
     input  wire [DATA_WIDTH-1:0] ext_ram_data_in,
@@ -25,7 +24,6 @@ module NTT_Accelerator_Top #(
     wire [DATA_WIDTH-1:0] twiddle_factor;
     wire busy;
 
-    // Multiplexer logic: Give RAM control to external SPI ONLY when NOT busy
     assign muxed_addr_a = busy ? ram_addr_a : ext_ram_addr;
     assign muxed_din_a  = busy ? ubu_out_a  : ext_ram_data_in;
     assign muxed_we_a   = busy ? ram_we     : ext_ram_we;
@@ -34,17 +32,19 @@ module NTT_Accelerator_Top #(
 
     Twiddle_ROM #(
         .DATA_WIDTH(DATA_WIDTH), 
-        .ADDR_WIDTH(7)
+        .ADDR_WIDTH(8)
     ) rom_inst (
+        .mode(mode),
         .addr(twiddle_addr),
         .twiddle(twiddle_factor)
     );
 
-    NTT_RAM #(
+NTT_RAM #(
         .DATA_WIDTH(DATA_WIDTH), 
         .ADDR_WIDTH(ADDR_WIDTH)
     ) memory_inst (
         .clk(clk),
+        .rst_n(rst_n),       
         .ena(1'b1), 
         .wea(muxed_we_a), 
         .addra(muxed_addr_a), 
@@ -79,6 +79,7 @@ module NTT_Accelerator_Top #(
         .clk(clk), 
         .rst_n(rst_n), 
         .start(start), 
+        .mode(mode),
         .ubu_done(ubu_done),
         .ram_addr_a(ram_addr_a), 
         .ram_addr_b(ram_addr_b), 
