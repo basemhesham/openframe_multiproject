@@ -4,20 +4,20 @@
 
 ## Project Overview
 
-| Slot | Project | Repository | Description | Used I/Os |
-| :---: | :--- | :--- | :--- | :--- |
-| **[0,0]** | [Q-PULSE](https://github.com/ASIC-hub/si-sprint26-project-q-pulse) | si-sprint26-project-q-pulse | 1D CNN ECG arrhythmia classifier with UART control/data path and ADC preprocessing mode | `bot_in[1]`, `bot_out[0]` |
-| **[0,1]** | [ProxCore](https://github.com/ASIC-hub/si-sprint26-project-visiontram) | si-sprint26-project-visiontram | LiDAR-based obstacle detection & emergency braking co-processor | `bot_in[3:0]`, `bot_out[5:4]` |
-| **[0,2]** | [TraceGuard-X](https://github.com/ASIC-hub/si-sprint26-project-traceguard-x) | si-sprint26-project-traceguard-x | Field-programmable anomaly-detection ASIC for industrial networks | `bot_in[0]`, `bot_out[9:1]`, `rt_out[7:0]` |
-| **[1,0]** | [HARTS](https://github.com/yomnahisham/harts) | harts | Hardware real-time scheduler with UART/APB control, external IRQs, timer, queues, and scan debug | `rt_in[2:0]`, `rt_out[5:3]`, `bot_in[7:0]` |
-| **[1,1]** | [NTT-Engine](https://github.com/ASIC-hub/si-sprint26-project-digitrons/) | si-sprint26-project-digitrons | NTT hardware accelerator for post-quantum cryptography | `bot_in[1:0]`, `bot_out[3]` |
-| **[1,2]** | [Cryptic](https://github.com/ASIC-hub/si-sprint26-project-cryptic-shazli-and-malak) | si-sprint26-project-cryptic | BLAKE2s-256 single-block hash accelerator via SPI | `bot_in[2:0]`, `bot_out[3]` |
-| **[2,0]** | [NeuralTram](https://github.com/ASIC-hub/si-sprint26-project-neuraltram) | si-sprint26-project-neuraltram | 4x4 systolic array INT8 matrix multiplier | `top_in[2:0]`, `top_out[3]` |
-| **[2,1]** | [I2C-UART](https://github.com/ASIC-hub/si-sprint26-project-I2C_controller) | si-sprint26-project-I2C_controller | PID temperature controller with I²C master/slave and UART | `top_in/out[0:1]`, `top_in[2]`, `top_in/out[3]`, `top_out[4]` |
-| **[2,2]** | [Micro-TPM](https://github.com/ASIC-hub/si-sprint26-project-custom_tpm) | si-sprint26-project-custom_tpm | SPI-accessible TPM-style security processor with TRNG, PCRs, SHA-256, and HMAC | `bot_in[2:0]`, `bot_out[4:3]` |
-| **[3,0]** | [AegisDSP](https://github.com/ASIC-hub/si-sprint26-project-aegisdsp) | si-sprint26-project-aegisdsp | Mixed-signal access-control ASIC with IR motion detection, I2C microphone sound detection, SPI status readout, and alarm/status GPIOs | `rt_in[2:0]`, `rt_out[8:3]`, `top_in[1:0]`, `top_in/out[3:2]` |
-| **[3,1]** | [NanoNPU](https://github.com/ASIC-hub/si-sprint26-project-nanonpu) | si-sprint26-project-nanonpu | UART/APB-controlled 4x4 systolic-array neural processing unit | `bot_in[0]`, `bot_out[4:1]` |
-| **[3,2]** | [Silicon-Sprint-Proj-1](https://github.com/shalan/Silicon-Sprint-Proj-1) | Silicon-Sprint-Proj-1 | USB CDC, FLL/RC oscillator, nc_sercom, and ADPoR monitor test chip | `bot_in[0,2,11]`, `bot_in/out[3:4]`, `bot_out[1,5:10,12]`, `rt_in/out[7:2]` |
+| Slot | Project | Description | Used I/Os |
+| :---: | :--- | :--- | :--- |
+| **[0,0]** | [Q-PULSE](https://github.com/ASIC-hub/si-sprint26-project-q-pulse) | 1D CNN ECG arrhythmia classifier with UART control/data path and ADC preprocessing mode | `bot_in[1]`, `bot_out[0]` |
+| **[0,1]** | [ProxCore](https://github.com/ASIC-hub/si-sprint26-project-visiontram) | LiDAR-based obstacle detection & emergency braking co-processor | `bot_in[3:0]`, `bot_out[5:4]` |
+| **[0,2]** | [TraceGuard-X](https://github.com/ASIC-hub/si-sprint26-project-traceguard-x) | Field-programmable anomaly-detection ASIC for industrial networks | `bot_in[0]`, `bot_out[9:1]`, `rt_out[7:0]` |
+| **[1,0]** | [HARTS](https://github.com/yomnahisham/harts) | Hardware real-time scheduler with UART/APB control, external IRQs, timer, queues, and scan debug | `rt_in[2:0]`, `rt_out[5:3]`, `bot_in[7:0]` |
+| **[1,1]** | [NTT-Engine](https://github.com/ASIC-hub/si-sprint26-project-digitrons/) | NTT hardware accelerator for post-quantum cryptography | `bot_in[1:0]`, `bot_out[3]` |
+| **[1,2]** | [Cryptic](https://github.com/ASIC-hub/si-sprint26-project-cryptic-shazli-and-malak) | BLAKE2s-256 single-block hash accelerator via SPI | `bot_in[2:0]`, `bot_out[3]` |
+| **[2,0]** | [NeuralTram](https://github.com/ASIC-hub/si-sprint26-project-neuraltram) | 4x4 systolic array INT8 matrix multiplier | `top_in[2:0]`, `top_out[3]` |
+| **[2,1]** | [I2C-UART](https://github.com/ASIC-hub/si-sprint26-project-I2C_controller) | PID temperature controller with I²C master/slave and UART | `top_in/out[0:1]`, `top_in[2]`, `top_in/out[3]`, `top_out[4]` |
+| **[2,2]** | [Micro-TPM](https://github.com/ASIC-hub/si-sprint26-project-custom_tpm) | SPI-accessible TPM-style security processor with TRNG, PCRs, SHA-256, and HMAC | `bot_in[2:0]`, `bot_out[4:3]` |
+| **[3,0]** | [AegisDSP](https://github.com/ASIC-hub/si-sprint26-project-aegisdsp) | Mixed-signal access-control ASIC with IR motion detection, I2C microphone sound detection, SPI status readout, and alarm/status GPIOs | `rt_in[2:0]`, `rt_out[8:3]`, `top_in[1:0]`, `top_in/out[3:2]` |
+| **[3,1]** | [NanoNPU](https://github.com/ASIC-hub/si-sprint26-project-nanonpu) | UART/APB-controlled 4x4 systolic-array neural processing unit | `bot_in[0]`, `bot_out[4:1]` |
+| **[3,2]** | [Silicon-Sprint-Proj-1](https://github.com/shalan/Silicon-Sprint-Proj-1) | USB CDC, FLL/RC oscillator, nc_sercom, and ADPoR monitor test chip | `bot_in[0,2,11]`, `bot_in/out[3:4]`, `bot_out[1,5:10,12]`, `rt_in/out[7:2]` |
 
 ---
 
